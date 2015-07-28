@@ -60,20 +60,6 @@
   :bind ("C-;" . company-complete-common)
   )
 
-;; == function-args ==
-(use-package function-args
-  :ensure t
-  :defer t
-  :init
-  (add-hook 'c-mode-hook 'function-args-mode)
-  (add-hook 'c++-mode-hook 'function-args-mode)
-  :config
-  (fa-config-default)
-  (bind-key "M-o" 'fa-show c-mode-map)
-  (bind-key "M-o" 'fa-show c++-mode-map)
-  )
-
-
 ;; === Syntax Highlighting ===
 
 ;; == MATLAB ==
