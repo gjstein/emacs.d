@@ -1,2 +1,13 @@
-/elpa/archives/gnu/archive-contents
-/elpa/irony-20150716.2230/.dir-locals.el
+# Packages (elpa)
+elpa
+python-mode-6.1.3
+
+# Completion Engines
+irony
+semanticdb
+
+# Auto-Created Files
+.smex-items
+auto-save-list
+recentf
+srecode-map.el
