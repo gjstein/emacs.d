@@ -11,7 +11,7 @@
 
   ;; Supress warning
   (setq ad-redefinition-action 'accept)
-  
+
   :config
   ;; Key bindings
   (bind-key "<tab>" 'helm-execute-persistent-action helm-map) ; rebind TAB to run persistant action

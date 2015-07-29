@@ -37,7 +37,6 @@
 
 ;; === Programming & Coding Functions ===
 (load-file "~/.emacs.d/config/coding.el")
-;(load-file "~/.emacs.d/config/cppconfig.el")
 
 ;; === org-mode ===
 (load-file "~/.emacs.d/config/gs_org.el")

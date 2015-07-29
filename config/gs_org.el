@@ -18,7 +18,9 @@
      ))
   ;; Syntax hilight in #+begin_src blocks
   (setq org-src-fontify-natively t)
-  
+
+  :defer t
+  :config
   ;; Custom functions for emacs & org mode
   (load-file "~/.emacs.d/config/bh-org.el")
   

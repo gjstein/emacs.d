@@ -1,9 +1,8 @@
 
 
-;; === Code Completion ===
+;; === GTAGS ===
 
 ;; == gtags && helm-gtags ==
-
 (use-package helm-gtags
   :ensure t
   :defer t
@@ -22,6 +21,9 @@
   (bind-key "C-c <" 'helm-gtags-previous-history helm-gtags-mode-map)
   (bind-key "C-c >" 'helm-gtags-next-history helm-gtags-mode-map)
   )
+
+
+;; === Code Completion ===
 
 ;; == irony-mode ==
 (use-package irony
@@ -49,7 +51,7 @@
   :defer t
   :init (add-hook 'after-init-hook 'global-company-mode)
   :config
-  (use-package company-irony :ensure t)
+  (use-package company-irony :ensure t :defer t)
   (setq company-idle-delay              nil
 	company-minimum-prefix-length   2
 	company-show-numbers            t
@@ -65,6 +67,7 @@
 ;; == MATLAB ==
 (use-package matlab-mode
   :ensure t
+  :defer t
   :config (matlab-cedet-setup)
   )
 
@@ -72,5 +75,18 @@
 ;; === Tools === 
 
 ;; == magit == 
-(use-package magit 
-  :ensure t)
+(use-package magit
+  :ensure t
+  :defer t
+  :bind ("C-x g" . magit-status)
+  )
+
+(use-package python-mode
+  :ensure t
+  :init
+
+  ;; Force the window configuration to remain the same even when comands are run
+  ;; Must manually open the buffer in another window  
+  ;; (setq py-keep-windows-configuration 'force)
+
+  )

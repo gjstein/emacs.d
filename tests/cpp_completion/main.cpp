@@ -17,7 +17,7 @@ main()
   // characters 'foo' here:
 
   // foo
-  
+
   
   // Upon running this, a new buffer should open which shows both 'foobar' and
   // 'foobar_d' as options. In addition, running the command 'company-irony'
