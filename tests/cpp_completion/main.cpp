@@ -3,22 +3,21 @@
 #include "rect.h"
 
 int main() {
-
-  // Hello! 
+  // Hello!
   std::cout << "Hello World!";
-  
+
   // Define some testing variables here
   int foobar = 1;
   double foobar_d = 0;
 
- 
+
   // Now that the above variables are defined, irony should be working.  You can
   // call 'M-x irony-completion-at-point-async' after typing the first few
   // characters 'foo' here:
 
   // foo
 
-  
+
   // Upon running this, a new buffer should open which shows both 'foobar' and
   // 'foobar_d' as options. In addition, running the command 'company-irony'
   // will rely on 'company' to show the completion in place (try it and
@@ -39,7 +38,6 @@ int main() {
   // extremely large projects, so 'gtags' becomes necessary.
   // squ
   // square.
-  
+
   return 0;
-  
 }
