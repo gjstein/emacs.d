@@ -15,3 +15,4 @@ srecode-map.el
 /tests/cpp_completion/GRTAGS
 /tests/cpp_completion/GPATH
 /bookmarks
+/session.*
