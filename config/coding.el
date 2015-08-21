@@ -101,6 +101,9 @@
   :defer t
   :init
   (add-hook 'after-init-hook #'global-flycheck-mode)
+  (custom-set-variables
+   '(flycheck-c/c++-clang-executable "clang-3.5")
+   )
   )
 
 ;; == google-c-style && cpplint ==
