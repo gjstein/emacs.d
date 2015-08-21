@@ -1,8 +1,8 @@
-#include <iostream.h>
+// Copyright 2015 <Gregory J Stein>
+#include <iostream>
 #include "rect.h"
 
-main()
-{
+int main() {
 
   // Hello! 
   std::cout << "Hello World!";
@@ -11,7 +11,7 @@ main()
   int foobar = 1;
   double foobar_d = 0;
 
-  
+ 
   // Now that the above variables are defined, irony should be working.  You can
   // call 'M-x irony-completion-at-point-async' after typing the first few
   // characters 'foo' here:
@@ -37,10 +37,8 @@ main()
   // multiple times. This is because both 'irony' and 'gtags' are capable of
   // finding the completions. However, 'irony' does not seem to scale to
   // extremely large projects, so 'gtags' becomes necessary.
-
   // squ
   // square.
-
   
   return 0;
   
