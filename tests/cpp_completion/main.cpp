@@ -17,7 +17,6 @@ int main() {
 
   // foo
 
-
   // Upon running this, a new buffer should open which shows both 'foobar' and
   // 'foobar_d' as options. In addition, running the command 'company-irony'
   // will rely on 'company' to show the completion in place (try it and
@@ -38,6 +37,7 @@ int main() {
   // extremely large projects, so 'gtags' becomes necessary.
   // squ
   // square.
+
 
   return 0;
 }

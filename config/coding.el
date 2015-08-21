@@ -83,10 +83,46 @@
 
 (use-package python-mode
   :ensure t
+  :defer t
   :init
 
   ;; Force the window configuration to remain the same even when comands are run
   ;; Must manually open the buffer in another window  
   ;; (setq py-keep-windows-configuration 'force)
 
+  )
+
+
+;; === Style && Syntax Checking ===
+
+;; == flycheck ==
+(use-package flycheck
+  :ensure t
+  :defer t
+  :init
+  (add-hook 'after-init-hook #'global-flycheck-mode)
+  )
+
+;; == google-c-style && cpplint ==
+
+(use-package google-c-style
+  :ensure t
+  :defer t
+  :init
+  (add-hook 'c-mode-common-hook 'google-set-c-style)
+  (add-hook 'c-mode-common-hook 'google-make-newline-indent)
+  ;; == google style guide ==
+  (use-package flycheck-google-cpplint
+    :ensure t
+    :config
+    (flycheck-add-next-checker 'c/c++-gcc ;; change if you don't use 'gcc'
+			       'c/c++-googlelint 'append)
+    (custom-set-variables
+     '(flycheck-google-cpplint-verbose "3")
+     '(flycheck-google-cpplint-filter "-whitespace,+whitespace/braces")
+     '(flycheck-google-cpplint-linelength "120"))
+    ;; This requires that google cpplint be installed
+    ;; See: https://github.com/flycheck/flycheck-google-cpplint
+    
+    )
   )
