@@ -3,6 +3,7 @@
 (use-package helm
   :ensure t
   :init
+  :diminish
   (require 'helm-config) ; Necessary for helm-mode
 
   ;; Changes the helm prefix key

@@ -1,5 +1,4 @@
 
-
 ;; === GTAGS ===
 
 ;; == gtags && helm-gtags ==
@@ -21,7 +20,6 @@
   (bind-key "C-c <" 'helm-gtags-previous-history helm-gtags-mode-map)
   (bind-key "C-c >" 'helm-gtags-next-history helm-gtags-mode-map)
   )
-
 
 ;; === Code Completion ===
 
@@ -49,6 +47,7 @@
 (use-package company
   :ensure t
   :defer t
+  :diminish company-mode
   :init (add-hook 'after-init-hook 'global-company-mode)
   :config
   (use-package company-irony :ensure t :defer t)
@@ -62,6 +61,13 @@
   :bind ("C-;" . company-complete-common)
   )
 
+;; == emmet ==
+(use-package emmet-mode
+  :ensure t
+  :defer t
+  :diminish emmet-mode
+  )
+
 ;; === Syntax Highlighting ===
 
 ;; == MATLAB ==
@@ -71,6 +77,25 @@
   :config (matlab-cedet-setup)
   )
 
+;; == web-mode ==
+(use-package web-mode
+  :ensure t
+  :defer t
+  :init
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+  (setq web-mode-engines-alist
+	'(("django" . "\\.html\\'")))
+  
+  (defun my-web-mode-hook ()
+    "Hooks for Web mode."
+    (setq indent-tabs-mode nil)
+    (setq web-mode-markup-indent-offset 2)
+    (setq web-mode-css-indent-offset 2)
+    (setq web-mode-code-indent-offset 2)
+    )
+  (add-hook 'web-mode-hook  'my-web-mode-hook)
+
+  )
 
 ;; === Tools === 
 
