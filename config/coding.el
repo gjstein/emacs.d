@@ -69,6 +69,7 @@
   :init
   (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
   (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+  (add-hook 'web-mode-hook 'emmet-mode)
   )
 
 ;; === Syntax Highlighting ===
@@ -95,6 +96,7 @@
     (setq web-mode-markup-indent-offset 2)
     (setq web-mode-css-indent-offset 2)
     (setq web-mode-code-indent-offset 2)
+    (setq web-mode-enable-current-element-highlight t)
     )
   (add-hook 'web-mode-hook  'my-web-mode-hook)
 

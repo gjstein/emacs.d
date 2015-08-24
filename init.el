@@ -1,3 +1,8 @@
+;;; init.el --- Initialization code for emacs
+
+
+;;; Code:
+
 ;; User Info
 (setq user-full-name "Gregory Stein")
 (setq user-mail-address "gregory.j.stein@gmail.com")
@@ -30,16 +35,18 @@
   :config (exec-path-from-shell-initialize))
 
 ;; === Face Customization ===
-(load-file "~/.emacs.d/config/gs_face.el")
+(load-file "~/.emacs.d/config/init-face.el")
 
 ;; === Interface ===
-(load-file "~/.emacs.d/config/gs_interface.el")
+(load-file "~/.emacs.d/config/init-interface.el")
 
 ;; === Programming & Coding Functions ===
 (load-file "~/.emacs.d/config/coding.el")
 
 ;; === org-mode ===
-(load-file "~/.emacs.d/config/gs_org.el")
+(load-file "~/.emacs.d/config/init-org.el")
 
 ;; === LaTeX ===
-(load-file "~/.emacs.d/config/gs_tex_new.el")
+(load-file "~/.emacs.d/config/init-tex.el")
+
+;;; init.el ends here
