@@ -1,3 +1,23 @@
+;;; init-30-doc-org.el --- Code for initializing org-mode
+
+;; Copyright (C) 2015 Gregory J Stein
+
+;; Author: Gregory J Stein <gregory.j.stein@gmail.com>
+;; Maintainer: Gregory J Stein <gregory.j.stein@gmail.com>
+;; Created: 20 Aug 2015
+
+;; Keywords: configuration, org
+;; Homepage: https://github.com/gjstein/emacs.d
+;; License: GNU General Public License (see init.el for details)
+
+;;; Commentary:
+;; Runs org-mode along with some custom configuration files
+;;
+;; More information can be found at:
+;;    http://doc.norang.ca/org-mode.html
+
+;;; Code:
+
 (use-package org
   :init
   (add-hook 'org-mode-hook 'visual-line-mode)
@@ -25,3 +45,5 @@
   (load-file "~/.emacs.d/config/bh-org.el")
   
   )
+
+;;; init-31-doc-org.el ends here

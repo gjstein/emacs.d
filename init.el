@@ -1,5 +1,32 @@
 ;;; init.el --- Initialization code for emacs
 
+;; Copyright (c) 2015 Gregory J Stein
+
+;; Author: Gregory J Stein <gregory.j.stein@gmail.com>
+;; Maintainer: Gregory J Stein <gregory.j.stein@gmail.com>
+;; Created: 20 Aug 2015
+
+;; Keywords: configuration
+;; Homepage: https://github.com/gjstein/emacs.d
+
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be
+;; useful, but WITHOUT ANY WARRANTY; without even the implied
+;; warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+;; PURPOSE.  See the GNU General Public License for more details.
+
+;;; Commentary:
+;; Calls my emacs configuration files after installing use-package, which is
+;; necessary for operation.
+;;
+;; Code inspired by:
+;;      http://stackoverflow.com/a/10093312/3672986
+;;      http://www.lunaryorn.com/2015/01/06/my-emacs-configuration-with-use-package.html
+;;      https://github.com/jwiegley/use-package
 
 ;;; Code:
 
@@ -35,18 +62,20 @@
   :config (exec-path-from-shell-initialize))
 
 ;; === Face Customization ===
-(load-file "~/.emacs.d/config/init-face.el")
+(load-file "~/.emacs.d/config/init-10-face.el")
 
 ;; === Interface ===
-(load-file "~/.emacs.d/config/init-interface.el")
+(load-file "~/.emacs.d/config/init-20-nav-interface.el")
+
+;; === Document Editing ===
+(load-file "~/.emacs.d/config/init-30-doc-gen.el")
+(load-file "~/.emacs.d/config/init-31-doc-org.el")
 
 ;; === Programming & Coding Functions ===
-(load-file "~/.emacs.d/config/coding.el")
-
-;; === org-mode ===
-(load-file "~/.emacs.d/config/init-org.el")
-
-;; === LaTeX ===
-(load-file "~/.emacs.d/config/init-tex.el")
+(load-file "~/.emacs.d/config/init-40-coding-gen.el")
+(load-file "~/.emacs.d/config/init-41-coding-c-cpp.el")
+(load-file "~/.emacs.d/config/init-42-coding-web.el")
+(load-file "~/.emacs.d/config/init-43-coding-matlab.el")
+(load-file "~/.emacs.d/config/init-44-coding-python.el")
 
 ;;; init.el ends here

@@ -1,5 +1,19 @@
+;;; init-10-face.el --- Customize the look of emacs
 
-;; == General Face Properties ==
+;; Copyright (C) 2015 Gregory J Stein
+
+;; Author: Gregory J Stein <gregory.j.stein@gmail.com>
+;; Maintainer: Gregory J Stein <gregory.j.stein@gmail.com>
+;; Created: 20 Aug 2015
+
+;; Keywords: configuration, zenburn
+;; Homepage: https://github.com/gjstein/emacs.d
+;; License: GNU General Public License (see init.el for details)
+
+;;; Commentary:
+;; Zenburn theme; default font is set to 'monaco'
+
+;;; Code:
 
 ;; Splash Screen to Org-mode
 (setq inhibit-splash-screen t
@@ -30,3 +44,5 @@
 
 ;; No Backup Files
 (setq make-backup-files nil)
+
+;;; init-10-face.el ends here

@@ -1,5 +1,23 @@
+;;; init-41-coding-c-cpp.el --- Programming in C/C++
 
-;; === GTAGS ===
+;; Copyright (C) 2015 Gregory J Stein
+
+;; Author: Gregory J Stein <gregory.j.stein@gmail.com>
+;; Maintainer: Gregory J Stein <gregory.j.stein@gmail.com>
+;; Created: 20 Aug 2015
+
+;; Keywords: configuration, GNU GLOBAL, gtags, irony, c/c++
+;; Homepage: https://github.com/gjstein/emacs.d
+;; License: GNU General Public License (see init.el for details)
+
+;;; Commentary:
+;; Tools for working with C/C++. This consists of:
+;;   helm-gtags :: make helm play nice with gtags
+;;   irony :: a clang-based completion engine (works with company)
+
+;;; Code:
+
+;; === Project Navigation ===
 
 ;; == gtags && helm-gtags ==
 (use-package helm-gtags
@@ -21,7 +39,16 @@
   (bind-key "C-c >" 'helm-gtags-next-history helm-gtags-mode-map)
   )
 
+
 ;; === Code Completion ===
+
+;; == company-backends ==
+(defun my-c-company-hook ()
+  "Company backends in C/C++."
+  (setq company-backends '(company-irony company-gtags))
+  )
+(add-hook 'c-mode-hook 'my-c-company-hook)
+(add-hook 'c++-mode-hook 'my-c-company-hook)
 
 ;; == irony-mode ==
 (use-package irony
@@ -43,101 +70,10 @@
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
   )
 
-;; == company-mode ==
-(use-package company
-  :ensure t
-  :defer t
-  :diminish company-mode
-  :init (add-hook 'after-init-hook 'global-company-mode)
-  :config
-  (use-package company-irony :ensure t :defer t)
-  (setq company-idle-delay              nil
-	company-minimum-prefix-length   2
-	company-show-numbers            t
-	company-tooltip-limit           20
-	company-dabbrev-downcase        nil
-	company-backends                '((company-irony company-gtags))
-	)
-  :bind ("C-;" . company-complete-common)
-  )
 
-;; == emmet ==
-(use-package emmet-mode
-  :ensure t
-  :defer t
-  :diminish emmet-mode
-  :init
-  (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
-  (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
-  (add-hook 'web-mode-hook 'emmet-mode)
-  )
-
-;; === Syntax Highlighting ===
-
-;; == MATLAB ==
-(use-package matlab-mode
-  :ensure t
-  :defer t
-  :config (matlab-cedet-setup)
-  )
-
-;; == web-mode ==
-(use-package web-mode
-  :ensure t
-  :defer t
-  :init
-  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-  (setq web-mode-engines-alist
-	'(("django" . "\\.html\\'")))
-  
-  (defun my-web-mode-hook ()
-    "Hooks for Web mode."
-    (setq indent-tabs-mode nil)
-    (setq web-mode-markup-indent-offset 2)
-    (setq web-mode-css-indent-offset 2)
-    (setq web-mode-code-indent-offset 2)
-    (setq web-mode-enable-current-element-highlight t)
-    )
-  (add-hook 'web-mode-hook  'my-web-mode-hook)
-
-  )
-
-;; === Tools === 
-
-;; == magit == 
-(use-package magit
-  :ensure t
-  :defer t
-  :bind ("C-x g" . magit-status)
-  )
-
-(use-package python-mode
-  :ensure t
-  :defer t
-  :init
-
-  ;; Force the window configuration to remain the same even when comands are run
-  ;; Must manually open the buffer in another window  
-  ;; (setq py-keep-windows-configuration 'force)
-
-  )
-
-
-;; === Style && Syntax Checking ===
-
-;; == flycheck ==
-(use-package flycheck
-  :ensure t
-  :defer t
-  :init
-  (add-hook 'after-init-hook #'global-flycheck-mode)
-  (custom-set-variables
-   '(flycheck-c/c++-clang-executable "clang-3.5")
-   )
-  )
+;; === Other ===
 
 ;; == google-c-style && cpplint ==
-
 (use-package google-c-style
   :ensure t
   :defer t
@@ -159,3 +95,5 @@
     
     )
   )
+
+;;; init-41-coding-c-cpp.el ends here
