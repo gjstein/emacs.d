@@ -10,7 +10,6 @@ int main() {
   int foobar = 1;
   double foobar_d = 0;
 
-
   // Now that the above variables are defined, irony should be working.  You can
   // call 'M-x irony-completion-at-point-async' after typing the first few
   // characters 'foo' here:

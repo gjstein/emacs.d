@@ -84,8 +84,9 @@
   (use-package flycheck-google-cpplint
     :ensure t
     :config
-    (flycheck-add-next-checker 'c/c++-gcc ;; change if you don't use 'gcc'
-			       'c/c++-googlelint 'append)
+;    (flycheck-add-next-checker 'c/c++-gcc ;; change if you don't use 'gcc'
+					;			       'c/c++-googlelint)
+    (add-to-list 'flycheck-checkers 'c/c++-googlelint)
     (custom-set-variables
      '(flycheck-google-cpplint-verbose "3")
      '(flycheck-google-cpplint-filter "-whitespace,+whitespace/braces")

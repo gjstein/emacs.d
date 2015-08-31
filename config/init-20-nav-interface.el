@@ -48,12 +48,18 @@
 	helm-M-x-fuzzy-match                  t
 	helm-ff-file-name-history-use-recentf t)
 
-  ;; Make grep work on osx (FIXME for Linux)
-  ;; This requires the 'ggrep' command to be installed
-  (setq helm-grep-default-command
-	"ggrep --color=always -d skip %e -n%cH -e %p %f"
-	helm-grep-default-recurse-command
-	"ggrep --color=always -d recurse %e -n%cH -e %p %f")
+
+  (if (string-equal system-type "darwin")
+      ;; This requires the 'ggrep' command to be installed for OSX
+      (setq helm-grep-default-command
+	    "ggrep --color=always -d skip %e -n%cH -e %p %f"
+	    helm-grep-default-recurse-command
+	    "ggrep --color=always -d recurse %e -n%cH -e %p %f"))
+  (if (string-equal system-type "gnu/linux")
+      (setq helm-grep-default-command
+	    "grep --color=always -d skip %e -n%cH -e %p %f"
+	    helm-grep-default-recurse-command
+	    "grep --color=always -d recurse %e -n%cH -e %p %f"))
 
   (helm-mode 1)
   
