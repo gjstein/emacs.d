@@ -77,5 +77,6 @@
 (load-file "~/.emacs.d/config/init-42-coding-web.el")
 (load-file "~/.emacs.d/config/init-43-coding-matlab.el")
 (load-file "~/.emacs.d/config/init-44-coding-python.el")
+(load-file "~/.emacs.d/config/init-45-coding-ROS.el")
 
 ;;; init.el ends here

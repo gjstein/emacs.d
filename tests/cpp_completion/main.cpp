@@ -1,6 +1,7 @@
 // Copyright 2015 <Gregory J Stein>
 #include <iostream>
 #include "rect.h"
+#include <Eigen/Dense>
 
 int main() {
   // Hello!
@@ -15,7 +16,7 @@ int main() {
   // characters 'foo' here:
 
   // foo
-
+  
   // Upon running this, a new buffer should open which shows both 'foobar' and
   // 'foobar_d' as options. In addition, running the command 'company-irony'
   // will rely on 'company' to show the completion in place (try it and
