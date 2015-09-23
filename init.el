@@ -79,4 +79,7 @@
 (load-file "~/.emacs.d/config/init-44-coding-python.el")
 (load-file "~/.emacs.d/config/init-45-coding-ROS.el")
 
+;; === misc ===
+(load-file "~/.emacs.d/config/init-70-misc-ledger.el")
+
 ;;; init.el ends here

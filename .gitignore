@@ -17,3 +17,4 @@ srecode-map.el
 /bookmarks
 /session.*
 .DS_Store
+/projectile-bookmarks.eld

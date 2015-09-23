@@ -13,6 +13,7 @@
 ;;; Commentary:
 ;; General tools for programming across languages. This consists of:
 ;;   Company :: used for code completion
+;;   Projectile :: used for searching projects
 ;;   Magit :: used for interfacing with git/github
 ;;   Flycheck :: code syntax/convention checking
 
@@ -39,6 +40,19 @@
 
 
 ;; === Tools ===
+
+;; == Projectile ==
+(use-package projectile
+  :ensure t
+  :init
+  (projectile-global-mode)
+  (setq projectile-completion-system 'helm)
+  (use-package helm-projectile
+    :ensure t
+    :init 
+    (helm-projectile-on)
+    )
+  )
 
 ;; == magit ==
 (use-package magit
