@@ -35,7 +35,9 @@
 (setq-default fill-column 80)
 
 ;; quiet, please! No dinging!
-(setq visible-bell t)
+;(setq visible-bell t)
+(setq visible-bell nil) ;; The default
+(setq ring-bell-function 'ignore)
 
 ;; Disable menu bars, etc.
 (if window-system (scroll-bar-mode -1))
