@@ -97,4 +97,18 @@
     )
   )
 
+
+;; === CMake ===
+(use-package cmake-mode
+  :ensure t
+  :defer t
+  :init
+  ; Add cmake listfile names to the mode list.
+  (setq auto-mode-alist
+	(append
+	 '(("CMakeLists\\.txt\\'" . cmake-mode))
+	 '(("\\.cmake\\'" . cmake-mode))
+	 auto-mode-alist))
+  )
+
 ;;; init-41-coding-c-cpp.el ends here
