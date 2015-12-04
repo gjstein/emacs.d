@@ -23,11 +23,21 @@
   (add-hook 'org-mode-hook 'visual-line-mode)
   (add-hook 'org-mode-hook 'org-indent-mode)
   (add-hook 'org-mode-hook 'flyspell-mode)
-  (define-key global-map "\C-cl" 'org-store-link)
-  (define-key global-map "\C-ca" 'org-agenda)
+
+  :defer t
+  :bind ("\C-c a" . org-agenda)
+  :config
+  ;; Custom functions for emacs & org mode
+  (load-file "~/.emacs.d/config/bh-org.el")
+
+  ;; Agenda
   (setq org-agenda-window-setup 'current-window)
   (setq org-agenda-files (quote ("~/org" "~/rrg/gjstein_notebook"
 				 )))
+
+  (define-key global-map "\C-cl" 'org-store-link)
+
+  
   ; Run/highlight code using babel in org-mode
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -38,11 +48,6 @@
      ))
   ;; Syntax hilight in #+begin_src blocks
   (setq org-src-fontify-natively t)
-
-  :defer t
-  :config
-  ;; Custom functions for emacs & org mode
-  (load-file "~/.emacs.d/config/bh-org.el")
   
   )
 

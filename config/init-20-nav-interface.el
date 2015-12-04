@@ -23,7 +23,6 @@
   :ensure t
   :diminish helm-mode
   :init
-  (require 'helm-config) ; Necessary for helm-mode
 
   ;; Changes the helm prefix key
   (global-set-key (kbd "C-c h") 'helm-command-prefix)
@@ -33,9 +32,12 @@
   (setq ad-redefinition-action 'accept)
 
   :config
+
+  (require 'helm-config) ; Necessary for helm-mode
+  
   ;; Key bindings
   (bind-key "<tab>" 'helm-execute-persistent-action helm-map)
-  (bind-key "C-i" 'helm-execute-persistend-action helm-map)
+  (bind-key "C-i" 'helm-execute-persistent-action helm-map)
   (bind-key "C-z" 'helm-select-action helm-map) ; list actions using C-z
 
   (when (executable-find "curl")
@@ -68,5 +70,7 @@
 	 ("M-x" . helm-M-x)
 	 )
   )
+
+
 
 ;;; init-20-nav-interface.el ends here

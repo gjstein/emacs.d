@@ -17,6 +17,9 @@
 
 ;;; Code:
 
+;; === General Configuration
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+
 ;; === Project Navigation ===
 
 ;; == gtags && helm-gtags ==
