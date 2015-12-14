@@ -24,6 +24,7 @@
   :defer t
   :init
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.xml?\\'" . web-mode))
   (setq web-mode-engines-alist '(("django" . "\\.html\\'")))
   
   (defun my-web-mode-hook ()
