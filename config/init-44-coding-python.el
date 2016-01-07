@@ -15,9 +15,18 @@
 
 ;;; Code:
 
-(use-package python-mode
+
+;; ensure:
+;;; pip install jedi
+;;  pip install flake8
+;;  pip install importmagic
+;;  pip install autopep8
+;;  pip install yapf
+(use-package elpy
   :ensure t
   :defer t
+  :init
+  (elpy-enable)
   )
 
 ;;; init-44-coding-python.el ends here
