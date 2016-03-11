@@ -26,7 +26,7 @@
   :ensure t
   :defer t
   :diminish company-mode
-  :init (add-hook 'after-init-hook 'global-company-mode)
+;;  :init (add-hook 'after-init-hook 'global-company-mode)
   :config
   (use-package company-irony :ensure t :defer t)
   (setq company-idle-delay              nil
