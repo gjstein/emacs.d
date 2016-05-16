@@ -78,6 +78,8 @@
 	 '(flycheck-c/c++-clang-executable "clang-3.5")
 	 )))
   (add-hook 'c++-mode-hook (lambda () (setq flycheck-clang-language-standard "c++11")))
+  (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-gcc))
+  
   )
 
 ;;; init-40-coding-gen.el ends here

@@ -76,6 +76,8 @@
 
 ;; === Other ===
 
+
+
 ;; == google-c-style && cpplint ==
 (use-package google-c-style
   :ensure t
@@ -91,6 +93,7 @@
 					;			       'c/c++-googlelint)
     (add-to-list 'flycheck-checkers 'c/c++-googlelint)
     (custom-set-variables
+     '(flycheck-c/c++-googlelint-executable "~/.emacs.d/scripts/cpplint.py")
      '(flycheck-google-cpplint-verbose "3")
      '(flycheck-google-cpplint-filter "-whitespace,+whitespace/braces")
      '(flycheck-google-cpplint-linelength "120"))
