@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: dox
+# key: dox
+# --
+/**
+ * \brief ${1:Brief Description}
+ * 
+ * ${2:Long Description}
+ * 
+ * @param ${3:Param}[in] ${4:Param Description}
+ * @return ${5:Return Description}
+ */

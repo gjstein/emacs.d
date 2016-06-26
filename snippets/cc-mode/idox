@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: idox
+# key: idox
+# --
+/**< ${1:Description} */

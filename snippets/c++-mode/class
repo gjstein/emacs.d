@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: class
+# key: cls
+# --
+class ${1:Name} final {
+ public:
+  ${1:$(yas/substr yas-text "[^: ]*")}() = default;
+  ~${1:$(yas/substr yas-text "[^: ]*")}() = default;
+
+  ${1:$(yas/substr yas-text "[^: ]*")}(const ${1:$(yas/substr yas-text "[^: ]*")}& rhs) = delete;
+  ${1:$(yas/substr yas-text "[^: ]*")}& operator=(const ${1:$(yas/substr yas-text "[^: ]*")}& rhs) = delete;
+
+  ${1:$(yas/substr yas-text "[^: ]*")}(${1:$(yas/substr yas-text "[^: ]*")}&& rhs) = delete;
+  ${1:$(yas/substr yas-text "[^: ]*")}& operator=(${1:$(yas/substr yas-text "[^: ]*")}&& rhs) = delete;
+};
+$0

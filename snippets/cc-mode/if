@@ -1,0 +1,6 @@
+#name : if (...) { ... }
+# key: cc-modeif
+# --
+if (${1:condition}) {
+  $0
+}

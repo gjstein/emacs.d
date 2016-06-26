@@ -11,7 +11,7 @@
 ;; License: GNU General Public License (see init.el for details)
 
 ;;; Commentary:
-;; General tools for programming across languages. This consists of:
+;; General tools for programming across languages.  This consists of:
 ;;   Company :: used for code completion
 ;;   Projectile :: used for searching projects
 ;;   Magit :: used for interfacing with git/github
@@ -26,7 +26,7 @@
   :ensure t
   :defer t
   :diminish company-mode
-;;  :init (add-hook 'after-init-hook 'global-company-mode)
+  :init (add-hook 'after-init-hook 'global-company-mode)
   :config
   (use-package company-irony :ensure t :defer t)
   (setq company-idle-delay              nil
@@ -41,6 +41,13 @@
 
 ;; === Tools ===
 
+;; == YASnippet ==
+(use-package yasnippet
+  :ensure t
+  :defer t
+  :config (yas-global-mode t)
+  )
+
 ;; == Projectile ==
 (use-package projectile
   :ensure t
@@ -50,7 +57,7 @@
   (setq projectile-completion-system 'helm)
   (use-package helm-projectile
     :ensure t
-    :init 
+    :init
     (helm-projectile-on)
     )
   )
