@@ -28,15 +28,14 @@
   :bind ("\C-c a" . org-agenda)
   :config
   ;; Custom functions for emacs & org mode
-  (load-file "~/.emacs.d/config/bh-org.el")
+  ;; (load-file "~/.emacs.d/config/bh-org.el")
+  (load-file "~/.emacs.d/config/gs-org.el")
 
   ;; Agenda
   (setq org-agenda-window-setup 'current-window)
-  (setq org-agenda-files (quote ("~/org" "~/rrg/gjstein_notebook"
-				 )))
+  ;;(setq org-agenda-files (quote ("~/org" "~/rrg/gjstein_notebook")))
 
   (define-key global-map "\C-cl" 'org-store-link)
-
   
   ; Run/highlight code using babel in org-mode
   (org-babel-do-load-languages
