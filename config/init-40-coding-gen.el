@@ -80,4 +80,11 @@
   (add-hook 'c++-mode-hook (lambda () (setq flycheck-clang-language-standard "c++11")))
   )
 
+;; == OTHER LANGUAGES ==
+
+(use-package swift-mode
+  :ensure t
+  :defer t
+  )
+
 ;;; init-40-coding-gen.el ends here
