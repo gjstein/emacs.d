@@ -22,10 +22,15 @@
 
 ;; == Load Custom Theme ==
 
-;; Zenburn
-(use-package zenburn-theme
+;;; Zenburn
+;;(use-package zenburn-theme
+;;  :ensure t
+;;  :config (load-theme 'zenburn t)
+;;  )
+
+;;; Solarized
+(use-package solarized-theme
   :ensure t
-  :config (load-theme 'zenburn t)
   )
 
 ;; I prefer using a smaller font size than the default (and 'Monaco')
