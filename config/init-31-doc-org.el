@@ -25,7 +25,8 @@
   (add-hook 'org-mode-hook 'flyspell-mode)
 
   :defer t
-  :bind ("\C-c a" . org-agenda)
+  :bind (("\C-c a" . org-agenda)
+	 ("\C-c c" . org-capture))
   :config
   ;; Custom functions for emacs & org mode
   ;; (load-file "~/.emacs.d/config/bh-org.el")

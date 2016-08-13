@@ -28,14 +28,12 @@
               ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
 
 ;; == Capture Mode ==
-(global-set-key (kbd "C-c c") 'org-capture)
 ;; Define the custum capture templates
 (setq org-capture-templates
       (quote (("t" "todo" entry (file org-default-notes-file)
 	       "* TODO %?\n%t\n%a\n" :clock-in t :clock-resume t)
               ("m" "Meeting" entry (file org-default-notes-file)
                "* MEETING with %? :MEETING:\n%t" :clock-in t :clock-resume t) )))
-
 
 ;; == Clocking Functions ==
 
