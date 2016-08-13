@@ -77,6 +77,7 @@
 (load-file "~/.emacs.d/config/init-43-coding-matlab.el")
 (load-file "~/.emacs.d/config/init-44-coding-python.el")
 (load-file "~/.emacs.d/config/init-45-coding-ROS.el")
+(load-file "~/.emacs.d/config/init-46-coding-rust.el")
 
 ;; === misc ===
 (load-file "~/.emacs.d/config/init-70-misc-ledger.el")

@@ -89,4 +89,11 @@
   
   )
 
+;; == OTHER LANGUAGES ==
+
+(use-package swift-mode
+  :ensure t
+  :defer t
+  )
+
 ;;; init-40-coding-gen.el ends here
