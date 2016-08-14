@@ -14,6 +14,7 @@
 ;; Zenburn theme; default font is set to 'monaco'
 
 ;;; Code:
+(require 'use-package)
 
 ;; Splash Screen to Org-mode
 (setq inhibit-splash-screen t

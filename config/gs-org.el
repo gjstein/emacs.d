@@ -1,16 +1,18 @@
 
 (require 'org-agenda)
 
+;;; Code:
 ;; Some general settings
 (setq org-directory "~/Desktop/org")
 (setq org-default-notes-file "~/Desktop/org/refile.org")
-(setq org-default-diary-file "~/Desktop/org/diary.org")
+(defvar org-default-diary-file "~/Desktop/org/diary.org")
 (setq org-agenda-files (quote ("~/Desktop/org")))
 
 (setq org-tags-column 100)
 (setq org-agenda-tags-column org-tags-column)
 
 ;; Custom TODO commands
+(setq org-use-fast-todo-selection t)
 (setq org-todo-keywords
       (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
@@ -32,11 +34,9 @@
               ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
               ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
 
-(setq org-custom-properties '("LOCATION"))
-
 ;; == Capture Mode ==
 ;; Define the custum capture templates
-(setq org-capture-templates
+(defvar org-capture-templates
       (quote (("t" "todo" entry (file org-default-notes-file)
 	       "* TODO %?\n%t\n%a\n" :clock-in t :clock-resume t)
               ("m" "Meeting" entry (file org-default-notes-file)
@@ -61,8 +61,8 @@
 
 ;; Some helper functions for agenda views
 (defun gs/org-agenda-prefix-breadcrumb ()
-    "Format"
-    (concat "[" (org-format-outline-path (org-get-outline-path)) "]"))
+  "Format"
+  (concat "[" (org-format-outline-path (org-get-outline-path)) "]"))
 (defun gs/org-agenda-add-location-string ()
   "Gets the value of the LOCATION property"
   (let ((loc (org-entry-get (point) "LOCATION")))
@@ -78,9 +78,9 @@
 					    (org-agenda-start-day "+0d")))
 				(tags "REFILE" ((org-agenda-overriding-header "Tasks to Refile:")
 						(org-tags-match-list-sublevels nil)))
-				(agenda "" ((org-agenda-overriding-header "Week Schedule")
-					    (org-agenda-ndays 10)
-					    (org-agenda-start-day"-1d")))
+				(agenda "" ((org-agenda-overriding-header "Week At A Glance")
+					    (org-agenda-ndays 5)
+					    (org-agenda-start-day"+1d")))
 				(tags-todo "-REFILE" ((org-agenda-overriding-header "All Tasks:"))))
 	 ((org-agenda-start-with-log-mode t)
 	  (org-agenda-log-mode-items '(closed clock state))
@@ -97,3 +97,6 @@
 	  (org-agenda-start-with-log-mode t)
 	  (org-agenda-log-mode-items '(closed clock state)))
 	 )))
+
+(provide 'gs-org)
+;;; gs-org.el ends here

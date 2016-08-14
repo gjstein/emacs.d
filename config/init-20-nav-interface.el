@@ -17,6 +17,7 @@
 ;;     https://github.com/emacs-helm/helm/wiki
 
 ;;; Code:
+(require 'use-package)
 
 ;; == Helm Mode ==
 (use-package helm
@@ -33,15 +34,14 @@
 
   :config
 
+  (require 'helm)
+  (require 'helm-files)
   (require 'helm-config) ; Necessary for helm-mode
   
   ;; Key bindings
   (bind-key "<tab>" 'helm-execute-persistent-action helm-map)
   (bind-key "C-i" 'helm-execute-persistent-action helm-map)
   (bind-key "C-z" 'helm-select-action helm-map) ; list actions using C-z
-
-  (when (executable-find "curl")
-    (setq helm-google-suggest-use-curl-p t))
 
   (setq helm-split-window-in-side-p           t
 	helm-move-to-line-cycle-in-source     t
