@@ -11,8 +11,9 @@
 
 ;; Display properties
 (setq org-cycle-separator-lines 0)
-(setq org-tags-column 100)
+(setq org-tags-column 80)
 (setq org-agenda-tags-column org-tags-column)
+
 
 ;; == Custom State Keywords ==
 (setq org-use-fast-todo-selection t)
@@ -51,13 +52,7 @@
 	 ("i" "Idea" entry (file org-default-notes-file)
 	  "* %? :IDEA: \n%t" :clock-in t :clock-resume t)
 	 ("n" "Next Task" entry (file+headline org-default-notes-file "Tasks")
-	  "** NEXT %? :TASK: \nDEADLINE: %t") ))
-
-;; TODO : self-explanatory; something I have to get done
-;; MEETING : also self-explanatory; whenever I meet with someone
-;; Diary : Used whenever I have an unscheduled task that isn't associated with anything (like having lunch with someone)
-;; Idea : Used for collecting notes, thoughts and ideas about scattered things that I intend to follow up on.
-;; Next Task : Used to signify one-off tasks, like responding to an email or picking up a package. These are additionally given a deadline for the day they're created so that they're taken care of quickly.
+	  "** NEXT %? \nDEADLINE: %t") ))
 
 ;; == Refile ==
 ; Targets include this file and any file contributing to the agenda - up to 9 levels deep
@@ -152,6 +147,11 @@
 	(concat "{" loc "} ")
       "")))
 
+;; Variables for ignoring tasks with deadlines
+(defvar gs/hide-deadline-next-tasks t)
+(setq org-agenda-tags-todo-honor-ignore-options t)
+(setq org-deadline-warning-days 10)
+
 ;; Custom agenda command definitions
 (setq org-agenda-custom-commands
       '(("h" "Habits" agenda "STYLE=\"habit\""
@@ -163,8 +163,9 @@
 					    (org-agenda-start-on-weekday nil)
 					    (org-agenda-start-day "+0d")))
 				(tags-todo "-CANCELLED/!NEXT"
-					   ((org-agenda-overriding-header "Next Tasks:")))
-				(tags "REFILE"
+					   ((org-agenda-overriding-header "Next Tasks:")
+					    (org-agenda-todo-ignore-deadlines 'near)))
+				(tags "REFILE-REFILE=\"nil\""
 				      ((org-agenda-overriding-header "Tasks to Refile:")
 				       (org-tags-match-list-sublevels nil)))
 				(tags-todo "-INACTIVE-HOLD-CANCELLED/!"
