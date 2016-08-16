@@ -66,7 +66,7 @@
 (setq org-outline-path-complete-in-steps nil)
 
 ;; Allow refile to create parent tasks with confirmation
-(setq org-refile-allow-creating-parent-nodes (quote confirm))
+(setq org-refile-allow-creating-parent-nodes 'confirm)
 
 ;; == Habits ==
 (require 'org-habit)
@@ -74,9 +74,6 @@
 (setq org-habit-show-habits-only-for-today t)
 
 ;; == Clocking Functions ==
-
-;; Automatically set state to NEXT when clocking in
-
 
 ;; == Agenda ==
 
@@ -108,16 +105,58 @@
           (when (member (org-get-todo-state) org-todo-keywords-1)
             (setq has-subtask t))))
       (and is-a-task has-subtask))))
+(defun bh/find-project-task ()
+  "Move point to the parent (project) task if any"
+  (save-restriction
+    (widen)
+    (let ((parent-task (save-excursion (org-back-to-heading 'invisible-ok) (point))))
+      (while (org-up-heading-safe)
+        (when (member (nth 2 (org-heading-components)) org-todo-keywords-1)
+          (setq parent-task (point))))
+      (goto-char parent-task)
+      parent-task)))
+(defun bh/is-project-subtree-p ()
+  "Any task with a todo keyword that is in a project subtree.
+Callers of this function already widen the buffer view."
+  (let ((task (save-excursion (org-back-to-heading 'invisible-ok)
+                              (point))))
+    (save-excursion
+      (bh/find-project-task)
+      (if (equal (point) task)
+          nil
+        t))))
 
 ;; Some helper functions for selection within agenda views
-(defun gs/skip-non-projects ()
-  "Skips tags which are not projects"
+(defun gs/select-with-tag-function (select-fun-p)
   (save-restriction
     (widen)
     (let ((next-headline
 	   (save-excursion (or (outline-next-heading)
 			       (point-max)))))
-      (if (bh/is-project-p) nil next-headline))))
+      (if (funcall select-fun-p) nil next-headline))))
+  
+(defun gs/select-projects ()
+  "Selects tasks which are project headers"
+  (gs/select-with-tag-function #'bh/is-project-p))
+(defun gs/select-project-tasks ()
+  "Skips tags which belong to projects (and is not a project itself)"
+  (gs/select-with-tag-function
+   #'(lambda () (and
+		 (not (bh/is-project-p))
+		 (bh/is-project-subtree-p)))))
+(defun gs/select-standalone-tasks ()
+  "Skips tags which belong to projects. Is neither a project, nor does it blong to a project"
+  (gs/select-with-tag-function
+   #'(lambda () (and
+		 (not (bh/is-project-p))
+		 (not (bh/is-project-subtree-p))))))
+(defun gs/select-projects-and-standalone-tasks ()
+  "Skips tags which are not projects"
+  (gs/select-with-tag-function
+   #'(lambda () (or
+		 (bh/is-project-p)
+		 (bh/is-project-subtree-p)))))
+
 
 (defun gs/org-agenda-project-stuck-warning ()
   "Is a project stuck"
@@ -178,19 +217,27 @@
 	(" " "Export Schedule" ((agenda "" ((org-agenda-overriding-header "Today's Schedule:")
 					    (org-agenda-ndays 1)
 					    (org-agenda-start-on-weekday nil)
-					    (org-agenda-start-day "+0d")))
+					    (org-agenda-start-day "+0d")
+					    (org-agenda-todo-ignore-deadlines nil)))
 				(tags-todo "-CANCELLED/!NEXT"
 					   ((org-agenda-overriding-header "Next Tasks:")
-					    (org-agenda-todo-ignore-deadlines 'near)))
+					    ))
 				(tags "REFILE-REFILE=\"nil\""
 				      ((org-agenda-overriding-header "Tasks to Refile:")
 				       (org-tags-match-list-sublevels nil)))
-				(tags-todo "-INACTIVE-HOLD-CANCELLED/!"
+				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILEr/!"
 					   ((org-agenda-overriding-header "Active Projects")
-					    (org-agenda-skip-function 'gs/skip-non-projects)))
+					    (org-agenda-skip-function 'gs/select-projects)))
+				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE/!-NEXT"
+					   ((org-agenda-overriding-header "Remaining Project Tasks")
+					    (org-agenda-skip-function 'gs/select-project-tasks)))
+				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE-STYLE=\"habit\"/!"
+					   ((org-agenda-overriding-header "Standalone Tasks")
+					    (org-agenda-skip-function 'gs/select-standalone-tasks)))
 				(agenda "" ((org-agenda-overriding-header "Week At A Glance")
 					    (org-agenda-ndays 5)
-					    (org-agenda-start-day"+1d")))
+					    (org-agenda-start-day"+1d")
+					    (org-agenda-prefix-format '((agenda . "  %-12:c%?-12t %s [%b] ")))))
 				(tags-todo "-CANCELLED-REFILE" ((org-agenda-overriding-header "All Tasks:"))))
 	 ((org-agenda-start-with-log-mode t)
 	  (org-agenda-log-mode-items '(closed clock state))
@@ -199,7 +246,7 @@
 				      (todo . "  %-12:c %(gs/org-agenda-prefix-string) ")
 				      (tags . "  %-12:c %(gs/org-agenda-prefix-string) ")
 				      (search . "  %i %-12:c")))
-	 ))
+	  (org-agenda-todo-ignore-deadlines nil)))
 	("X" "Agenda" ((agenda "") (alltodo))
 	 ((org-agenda-ndays 10)
 	  (org-agenda-start-on-weekday nil)
