@@ -14,6 +14,8 @@
 (setq org-tags-column 80)
 (setq org-agenda-tags-column org-tags-column)
 
+;; Set default column view headings: Task Effort Clock_Summary
+(setq org-columns-default-format "%50ITEM(Task) %10Effort(Effort){:} %10CLOCKSUM %16TIMESTAMP_IA")
 
 ;; == Custom State Keywords ==
 (setq org-use-fast-todo-selection t)
@@ -55,9 +57,16 @@
 	  "** NEXT %? \nDEADLINE: %t") ))
 
 ;; == Refile ==
-; Targets include this file and any file contributing to the agenda - up to 9 levels deep
+;; Targets include this file and any file contributing to the agenda - up to 9 levels deep
 (setq org-refile-targets (quote ((nil :maxlevel . 9)
                                  (org-agenda-files :maxlevel . 9))))
+
+;;  Be sure to use the full path for refile setup
+(setq org-refile-use-outline-path t)
+(setq org-outline-path-complete-in-steps nil)
+
+;; Allow refile to create parent tasks with confirmation
+(setq org-refile-allow-creating-parent-nodes (quote confirm))
 
 ;; == Habits ==
 (require 'org-habit)
@@ -76,6 +85,12 @@
 
 ;; Compact the block agenda view (disabled)
 (setq org-agenda-compact-blocks nil)
+
+;; Set the times to display in the time grid
+(setq org-agenda-time-grid
+  '((daily today require-timed)
+    "----------------"
+    (800 1200 1600 2000)))
 
 ;; bh/helper-functions
 (defun bh/is-project-p ()
@@ -124,10 +139,12 @@
   (save-excursion
 	      (goto-char (point-min))
 	      (while (re-search-forward "!!" nil t)
-		(add-face-text-property
-		 (match-beginning 0) (match-end 0)
-		 '(bold :foreground "red")))
-	      ))
+		(progn
+		  (add-face-text-property
+		   (match-beginning 0) (match-end 0)
+		   '(bold :foreground "white" :background "red"))
+		  )	
+	      )))
 (add-hook 'org-finalize-agenda-hook 'gs/org-finalize-agenda-hook)
 
 ;; Some helper functions for agenda views
