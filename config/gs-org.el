@@ -1,7 +1,6 @@
 
 (require 'org-agenda)
 
-
 ;;; Code:
 ;; Some general settings
 (setq org-directory "~/org")
@@ -250,7 +249,8 @@ Callers of this function already widen the buffer view."
 				      (todo . "  %-12:c %(gs/org-agenda-prefix-string) ")
 				      (tags . "  %-12:c %(gs/org-agenda-prefix-string) ")
 				      (search . "  %i %-12:c")))
-	  (org-agenda-todo-ignore-deadlines 'near)))
+	  (org-agenda-todo-ignore-deadlines 'near)
+	  (org-agenda-todo-ignore-scheduled t)))
 	("X" "Agenda" ((agenda "") (alltodo))
 	 ((org-agenda-ndays 10)
 	  (org-agenda-start-on-weekday nil)
@@ -258,6 +258,32 @@ Callers of this function already widen the buffer view."
 	  (org-agenda-start-with-log-mode t)
 	  (org-agenda-log-mode-items '(closed clock state)))
 	 )))
+
+;; == Agenda Navigation ==
+
+;; Search for a "=" and go to the next line
+(defun gs/org-agenda-next-section ()
+  "Go to the next section in an org agenda buffer"
+  (interactive)
+  (if (search-forward (char-to-string ?=) nil t 1)
+      (forward-line 1)
+    (goto-char (point-max)))
+  (beginning-of-line))
+
+;; Search for a "=" and go to the previous line
+(defun gs/org-agenda-prev-section ()
+  "Go to the next section in an org agenda buffer"
+  (interactive)
+  (forward-line -2)
+  (if (search-forward (char-to-string ?=) nil t -1)
+      (forward-line 1)
+    (goto-char (point-min))))
+
+;; Bind the keys
+(add-hook 'org-agenda-mode-hook
+	  (lambda ()
+	    (define-key org-agenda-mode-map (kbd "M-n") 'gs/org-agenda-next-section)
+	    (define-key org-agenda-mode-map (kbd "M-p") 'gs/org-agenda-prev-section)))
 
 (provide 'gs-org)
 ;;; gs-org.el ends here
