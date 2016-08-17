@@ -75,10 +75,14 @@
 
 ;; == Clocking Functions ==
 
+(add-hook 'org-mode-hook
+    (lambda ()
+        (define-key org-mode-map (kbd "C-c C-.") 'org-time-stamp-inactive)))
+
 ;; == Agenda ==
 
-;; Do not dim blocked tasks
-(setq org-agenda-dim-blocked-tasks nil)
+;; Dim blocked tasks
+(setq org-agenda-dim-blocked-tasks t)
 
 ;; Compact the block agenda view (disabled)
 (setq org-agenda-compact-blocks nil)
@@ -240,13 +244,13 @@ Callers of this function already widen the buffer view."
 					    (org-agenda-prefix-format '((agenda . "  %-12:c%?-12t %s [%b] ")))))
 				(tags-todo "-CANCELLED-REFILE" ((org-agenda-overriding-header "All Tasks:"))))
 	 ((org-agenda-start-with-log-mode t)
-	  (org-agenda-log-mode-items '(closed clock state))
+	  (org-agenda-log-mode-items '(clock))
 	  (org-agenda-prefix-format '((agenda . "  %-12:c%?-12t %(gs/org-agenda-add-location-string)% s")
 				      (timeline . "  % s")
 				      (todo . "  %-12:c %(gs/org-agenda-prefix-string) ")
 				      (tags . "  %-12:c %(gs/org-agenda-prefix-string) ")
 				      (search . "  %i %-12:c")))
-	  (org-agenda-todo-ignore-deadlines nil)))
+	  (org-agenda-todo-ignore-deadlines 'near)))
 	("X" "Agenda" ((agenda "") (alltodo))
 	 ((org-agenda-ndays 10)
 	  (org-agenda-start-on-weekday nil)
