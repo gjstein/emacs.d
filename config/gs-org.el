@@ -16,83 +16,7 @@
 ;; Set default column view headings: Task Effort Clock_Summary
 (setq org-columns-default-format "%50ITEM(Task) %10Effort(Effort){:} %10CLOCKSUM %16TIMESTAMP_IA")
 
-;; == Custom State Keywords ==
-(setq org-use-fast-todo-selection t)
-(setq org-fast-tag-selection-single-key 'expert)
-(setq org-todo-keywords
-      '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-	(sequence "WAITING(w@/!)" "INACTIVE(i@/!)" "|" "CANCELLED(c@/!)" "MEETING")))
-;; Custom colors for the keywords
-(setq org-todo-keyword-faces
-      '(("TODO" :foreground "red" :weight bold)
-	("NEXT" :foreground "blue" :weight bold)
-	("DONE" :foreground "forest green" :weight bold)
-	("WAITING" :foreground "orange" :weight bold)
-	("INACTIVE" :foreground "magenta" :weight bold)
-	("CANCELLED" :foreground "forest green" :weight bold)
-	("MEETING" :foreground "forest green" :weight bold)))
-;; Auto-update tags whenever the state is changed
-(setq org-todo-state-tags-triggers
-      '(("CANCELLED" ("CANCELLED" . t))
-	("WAITING" ("WAITING" . t))
-	("INACTIVE" ("WAITING") ("INACTIVE" . t))
-	(done ("WAITING") ("INACTIVE"))
-	("TODO" ("WAITING") ("CANCELLED") ("INACTIVE"))
-	("NEXT" ("WAITING") ("CANCELLED") ("INACTIVE"))
-	("DONE" ("WAITING") ("CANCELLED") ("INACTIVE"))))
-
-;; == Capture Mode Settings ==
-;; Define the custum capture templates
-(setq org-capture-templates
-       '(("t" "todo" entry (file org-default-notes-file)
-	  "* TODO %?\n%u\n%a\n" :clock-in t :clock-resume t)
-	 ("m" "Meeting" entry (file org-default-notes-file)
-	  "* MEETING with %? :MEETING:\n%t" :clock-in t :clock-resume t)
-	 ("d" "Diary" entry (file+datetree "~/org/diary.org")
-	  "* %?\n%U\n" :clock-in t :clock-resume t)
-	 ("i" "Idea" entry (file org-default-notes-file)
-	  "* %? :IDEA: \n%t" :clock-in t :clock-resume t)
-	 ("n" "Next Task" entry (file+headline org-default-notes-file "Tasks")
-	  "** NEXT %? \nDEADLINE: %t") ))
-
-;; == Refile ==
-;; Targets include this file and any file contributing to the agenda - up to 9 levels deep
-(setq org-refile-targets (quote ((nil :maxlevel . 9)
-                                 (org-agenda-files :maxlevel . 9))))
-
-;;  Be sure to use the full path for refile setup
-(setq org-refile-use-outline-path t)
-(setq org-outline-path-complete-in-steps nil)
-
-;; Allow refile to create parent tasks with confirmation
-(setq org-refile-allow-creating-parent-nodes 'confirm)
-
-;; == Habits ==
-(require 'org-habit)
-(setq org-modules '(org-habit))
-(setq org-habit-show-habits-only-for-today t)
-
-;; == Clocking Functions ==
-
-(add-hook 'org-mode-hook
-    (lambda ()
-        (define-key org-mode-map (kbd "C-c C-.") 'org-time-stamp-inactive)))
-
-;; == Agenda ==
-
-;; Dim blocked tasks
-(setq org-agenda-dim-blocked-tasks t)
-
-;; Compact the block agenda view (disabled)
-(setq org-agenda-compact-blocks nil)
-
-;; Set the times to display in the time grid
-(setq org-agenda-time-grid
-  '((daily today require-timed)
-    "----------------"
-    (800 1200 1600 2000)))
-
-;; bh/helper-functions
+;; == bh/helper-functions ==
 (defun bh/is-project-p ()
   "Any task with a todo keyword subtask"
   (save-restriction
@@ -128,6 +52,119 @@ Callers of this function already widen the buffer view."
       (if (equal (point) task)
           nil
         t))))
+
+;; == Custom State Keywords ==
+(setq org-use-fast-todo-selection t)
+(setq org-fast-tag-selection-single-key 'expert)
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+	(sequence "WAITING(w@/!)" "INACTIVE(i@/!)" "|" "CANCELLED(c@/!)" "MEETING")))
+;; Custom colors for the keywords
+(setq org-todo-keyword-faces
+      '(("TODO" :foreground "red" :weight bold)
+	("NEXT" :foreground "blue" :weight bold)
+	("DONE" :foreground "forest green" :weight bold)
+	("WAITING" :foreground "orange" :weight bold)
+	("INACTIVE" :foreground "magenta" :weight bold)
+	("CANCELLED" :foreground "forest green" :weight bold)
+	("MEETING" :foreground "forest green" :weight bold)))
+;; Auto-update tags whenever the state is changed
+(setq org-todo-state-tags-triggers
+      '(("CANCELLED" ("CANCELLED" . t))
+	("WAITING" ("WAITING" . t))
+	("INACTIVE" ("WAITING") ("INACTIVE" . t))
+	(done ("WAITING") ("INACTIVE"))
+	("TODO" ("WAITING") ("CANCELLED") ("INACTIVE"))
+	("NEXT" ("WAITING") ("CANCELLED") ("INACTIVE"))
+	("DONE" ("WAITING") ("CANCELLED") ("INACTIVE"))))
+
+(defun gs/mark-next-done-parent-tasks-todo ()
+  "Visit each parent task and change NEXT (or DONE) states to TODO"
+
+  ;; Don't change the value if new state is "DONE"
+  (let ((mystate (or (and (fboundp 'org-state)
+                          (member state
+				  (list "NEXT" "TODO")))
+                     (member (nth 2 (org-heading-components))
+			     (list "NEXT" "TODO")))))
+    (when mystate
+      (save-excursion
+        (while (org-up-heading-safe)
+          (when (member (nth 2 (org-heading-components)) (list "NEXT" "DONE"))
+            (org-todo "TODO")))))))
+(add-hook 'org-after-todo-state-change-hook 'gs/mark-next-done-parent-tasks-todo 'append)
+
+;; == Capture Mode Settings ==
+;; Define the custum capture templates
+(setq org-capture-templates
+       '(("t" "todo" entry (file org-default-notes-file)
+	  "* TODO %?\n%u\n%a\n" :clock-in t :clock-resume t)
+	 ("m" "Meeting" entry (file org-default-notes-file)
+	  "* MEETING with %? :MEETING:\n%t" :clock-in t :clock-resume t)
+	 ("d" "Diary" entry (file+datetree "~/org/diary.org")
+	  "* %?\n%U\n" :clock-in t :clock-resume t)
+	 ("i" "Idea" entry (file org-default-notes-file)
+	  "* %? :IDEA: \n%t" :clock-in t :clock-resume t)
+	 ("n" "Next Task" entry (file+headline org-default-notes-file "Tasks")
+	  "** NEXT %? \nDEADLINE: %t") ))
+
+;; == Refile ==
+;; Targets include this file and any file contributing to the agenda - up to 9 levels deep
+(setq org-refile-targets (quote ((nil :maxlevel . 9)
+                                 (org-agenda-files :maxlevel . 9))))
+
+;;  Be sure to use the full path for refile setup
+(setq org-refile-use-outline-path t)
+(setq org-outline-path-complete-in-steps nil)
+
+;; Allow refile to create parent tasks with confirmation
+(setq org-refile-allow-creating-parent-nodes 'confirm)
+
+;; == Habits ==
+(require 'org-habit)
+
+(setq org-modules '(org-habit))
+(setq org-habit-show-habits-only-for-today t)
+
+;; == Clocking Functions ==
+(require 'org-clock)
+
+;; If not a project, clocking-in changes TODO to NEXT
+(setq org-clock-in-switch-to-state 'bh/clock-in-to-next)
+(defun bh/clock-in-to-next (kw)
+  "Switch a task from TODO to NEXT when clocking in.
+Skips capture tasks, projects, and subprojects.
+Switch projects and subprojects from NEXT back to TODO"
+  (when (not (and (boundp 'org-capture-mode) org-capture-mode))
+    (cond
+     ((and (member (org-get-todo-state) (list "TODO"))
+           (not (bh/is-project-p)))
+      "NEXT")
+     ((and (member (org-get-todo-state) (list "NEXT"))
+           (bh/is-project-p))
+      "TODO"))))
+
+(add-hook 'org-mode-hook
+    (lambda ()
+      (define-key org-mode-map (kbd "C-c C-.") 'org-time-stamp-inactive)))
+
+;; Also ensure that NEXT projects are switched to TODO when clocking in
+(add-hook 'org-clock-in-hook 'gs/mark-next-done-parent-tasks-todo 'append)
+
+;; == Agenda ==
+
+;; Dim blocked tasks
+(setq org-enforce-todo-dependencies t)
+(setq org-agenda-dim-blocked-tasks nil)
+
+;; Compact the block agenda view (disabled)
+(setq org-agenda-compact-blocks nil)
+
+;; Set the times to display in the time grid
+(setq org-agenda-time-grid
+  '((daily today require-timed)
+    "----------------"
+    (800 1200 1600 2000)))
 
 ;; Some helper functions for selection within agenda views
 (defun gs/select-with-tag-function (select-fun-p)
@@ -187,28 +224,8 @@ show this warning instead."
   (if (bh/is-project-p) ; first, check that it's a project
       (let* ((subtree-end (save-excursion (org-end-of-subtree t))))
 	(save-excursion
-	  (re-search-forward "WAITING" subtree-end t)))
+	  (re-search-forward "^\\*+ WAITING" subtree-end t)))
     nil)) ; if it's not a project, return an empty string
-
-;; Highlight the "!!" for stuck projects (for emphasis)
-(defun gs/org-agenda-project-highlight-warning ()
-  (save-excursion
-    (goto-char (point-min))
-    (while (re-search-forward "!W" nil t)
-      (progn
-	(add-face-text-property
-	 (match-beginning 0) (match-end 0)
-	 '(bold :foreground "orange"))
-	))
-    (goto-char (point-min))
-    (while (re-search-forward "!S" nil t)
-      (progn
-	(add-face-text-property
-	 (match-beginning 0) (match-end 0)
-	 '(bold :foreground "white" :background "red"))
-	))
-    ))
-(add-hook 'org-finalize-agenda-hook 'gs/org-agenda-project-highlight-warning)
 
 ;; Some helper functions for agenda views
 (defun gs/org-agenda-prefix-string ()
@@ -262,8 +279,11 @@ show this warning instead."
 					    (org-agenda-ndays 5)
 					    (org-agenda-start-day"+1d")
 					    (org-agenda-prefix-format '((agenda . "  %-12:c%?-12t %s [%b] ")))))
+				(tags "INACTIVE"
+				      ((org-agenda-overriding-header "Inactive Projects and Tasks")
+				       (org-tags-match-list-sublevels nil)))
 				(tags-todo "-CANCELLED-REFILE"
-					   ((org-agenda-overriding-header "Waiting Tasks:"))))
+					   ((org-agenda-overriding-header "All tasks:"))))
 	 ((org-agenda-start-with-log-mode t)
 	  (org-agenda-log-mode-items '(clock))
 	  (org-agenda-prefix-format '((agenda . "  %-12:c%?-12t %(gs/org-agenda-add-location-string)% s")
@@ -300,6 +320,38 @@ show this warning instead."
   (if (search-forward (char-to-string ?=) nil t -1)
       (forward-line 1)
     (goto-char (point-min))))
+
+;; == Agenda Post-processing ==
+;; Highlight the "!!" for stuck projects (for emphasis)
+(defun gs/org-agenda-project-highlight-warning ()
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward "!W" nil t)
+      (progn
+	(add-face-text-property
+	 (match-beginning 0) (match-end 0)
+	 '(bold :foreground "orange"))
+	))
+    (goto-char (point-min))
+    (while (re-search-forward "!S" nil t)
+      (progn
+	(add-face-text-property
+	 (match-beginning 0) (match-end 0)
+	 '(bold :foreground "white" :background "red"))
+	))
+    ))
+(add-hook 'org-finalize-agenda-hook 'gs/org-agenda-project-highlight-warning)
+
+;; Remove empty agenda blocks
+(defun gs/remove-agenda-regions ()
+  (save-excursion
+    (while (< (point) (point-max))
+      (set-mark (point))
+      (gs/org-agenda-next-section)
+      (if (< (count-lines (region-beginning) (region-end)) 4)
+	     (delete-region (region-beginning) (region-end)))
+      )))
+(add-hook 'org-finalize-agenda-hook 'gs/remove-agenda-regions)
 
 ;; Bind the keys
 (add-hook 'org-agenda-mode-hook
