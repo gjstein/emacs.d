@@ -66,7 +66,7 @@ Callers of this function already widen the buffer view."
 		      ))
 
 ;; Allow setting single tags without the menu
-(setq org-fast-tag-selection-single-key nil)
+(setq org-fast-tag-selection-single-key 'expert)
 
 ;; Include the todo keywords
 (setq org-fast-tag-selection-include-todo t)
