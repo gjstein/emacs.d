@@ -53,9 +53,26 @@ Callers of this function already widen the buffer view."
           nil
         t))))
 
+;; == Tags ==
+(setq org-tag-alist '((:startgroup)
+		      ("@errand" . ?e)
+		      ("@campus" . ?c)
+		      ("@home" . ?h)
+		      (:endgroup)
+		      ("WAITING" . ?w)
+		      ("PERSONAL" . ?P)
+		      ("RRG" . ?W)
+		      ("NOTE" . ?n)
+		      ))
+
+;; Allow setting single tags without the menu
+(setq org-fast-tag-selection-single-key nil)
+
+;; Include the todo keywords
+(setq org-fast-tag-selection-include-todo t)
+
 ;; == Custom State Keywords ==
 (setq org-use-fast-todo-selection t)
-(setq org-fast-tag-selection-single-key 'expert)
 (setq org-todo-keywords
       '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
 	(sequence "WAITING(w@/!)" "INACTIVE(i@/!)" "|" "CANCELLED(c@/!)" "MEETING")))
