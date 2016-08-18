@@ -338,6 +338,12 @@ show this warning instead."
       (forward-line 1)
     (goto-char (point-min))))
 
+;; Bind the keys
+(add-hook 'org-agenda-mode-hook
+	  (lambda ()
+	    (define-key org-agenda-mode-map (kbd "M-n") 'gs/org-agenda-next-section)
+	    (define-key org-agenda-mode-map (kbd "M-p") 'gs/org-agenda-prev-section)))
+
 ;; == Agenda Post-processing ==
 ;; Highlight the "!!" for stuck projects (for emphasis)
 (defun gs/org-agenda-project-highlight-warning ()
@@ -362,19 +368,15 @@ show this warning instead."
 ;; Remove empty agenda blocks
 (defun gs/remove-agenda-regions ()
   (save-excursion
-    (while (< (point) (point-max))
-      (set-mark (point))
-      (gs/org-agenda-next-section)
-      (if (< (count-lines (region-beginning) (region-end)) 4)
-	     (delete-region (region-beginning) (region-end)))
-      )))
+    (let ((region-large t))
+      (while (and (< (point) (point-max)) region-large)
+		  (set-mark (point))
+		  (gs/org-agenda-next-section)
+		  (if (< (- (region-end) (region-beginning)) 5) (setq region-large nil))
+		  (if (< (count-lines (region-beginning) (region-end)) 4)
+		      (delete-region (region-beginning) (region-end)))
+		  ))))
 (add-hook 'org-finalize-agenda-hook 'gs/remove-agenda-regions)
-
-;; Bind the keys
-(add-hook 'org-agenda-mode-hook
-	  (lambda ()
-	    (define-key org-agenda-mode-map (kbd "M-n") 'gs/org-agenda-next-section)
-	    (define-key org-agenda-mode-map (kbd "M-p") 'gs/org-agenda-prev-section)))
 
 (provide 'gs-org)
 ;;; gs-org.el ends here
