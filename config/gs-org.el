@@ -160,8 +160,14 @@ Callers of this function already widen the buffer view."
 		 (bh/is-project-p)
 		 (bh/is-project-subtree-p)))))
 
+(defun gs/org-agenda-project-warning ()
+  "Is a project stuck or waiting. If the project is not stuck,
+show nothing. However, if it is stuck and waiting on something,
+show this warning instead."
+  (if (gs/org-agenda-project-is-stuck)
+    (if (gs/org-agenda-project-is-waiting) " !W" " !S") ""))
 
-(defun gs/org-agenda-project-stuck-warning ()
+(defun gs/org-agenda-project-is-stuck ()
   "Is a project stuck"
   (if (bh/is-project-p) ; first, check that it's a project
       (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
@@ -173,27 +179,42 @@ Callers of this function already widen the buffer view."
 		      (re-search-forward "^\\*+ NEXT " subtree-end t))
 	    (unless (member "WAITING" (org-get-tags-at))
 	      (setq has-next t))))
-	(if has-next "" " !!")) ; signify that this project is stuck
-    "")) ; if it's not a project, return an empty string
+	(if has-next nil t)) ; signify that this project is stuck
+    nil)) ; if it's not a project, return an empty string
+
+(defun gs/org-agenda-project-is-waiting ()
+  "Is a project stuck"
+  (if (bh/is-project-p) ; first, check that it's a project
+      (let* ((subtree-end (save-excursion (org-end-of-subtree t))))
+	(save-excursion
+	  (re-search-forward "WAITING" subtree-end t)))
+    nil)) ; if it's not a project, return an empty string
 
 ;; Highlight the "!!" for stuck projects (for emphasis)
-(defun gs/org-finalize-agenda-hook ()
+(defun gs/org-agenda-project-highlight-warning ()
   (save-excursion
-	      (goto-char (point-min))
-	      (while (re-search-forward "!!" nil t)
-		(progn
-		  (add-face-text-property
-		   (match-beginning 0) (match-end 0)
-		   '(bold :foreground "white" :background "red"))
-		  )	
-	      )))
-(add-hook 'org-finalize-agenda-hook 'gs/org-finalize-agenda-hook)
+    (goto-char (point-min))
+    (while (re-search-forward "!W" nil t)
+      (progn
+	(add-face-text-property
+	 (match-beginning 0) (match-end 0)
+	 '(bold :foreground "orange"))
+	))
+    (goto-char (point-min))
+    (while (re-search-forward "!S" nil t)
+      (progn
+	(add-face-text-property
+	 (match-beginning 0) (match-end 0)
+	 '(bold :foreground "white" :background "red"))
+	))
+    ))
+(add-hook 'org-finalize-agenda-hook 'gs/org-agenda-project-highlight-warning)
 
 ;; Some helper functions for agenda views
 (defun gs/org-agenda-prefix-string ()
   "Format"
   (let ((path (org-format-outline-path (org-get-outline-path))) ; "breadcrumb" path
-	(stuck (gs/org-agenda-project-stuck-warning))) ; warning for stuck projects
+	(stuck (gs/org-agenda-project-warning))) ; warning for stuck projects
        (if (> (length path) 0)
 	   (concat stuck ; add stuck warning
 		   " [" path "]") ; add "breadcrumb"
@@ -229,19 +250,20 @@ Callers of this function already widen the buffer view."
 				      ((org-agenda-overriding-header "Tasks to Refile:")
 				       (org-tags-match-list-sublevels nil)))
 				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILEr/!"
-					   ((org-agenda-overriding-header "Active Projects")
+					   ((org-agenda-overriding-header "Active Projects:")
 					    (org-agenda-skip-function 'gs/select-projects)))
 				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE/!-NEXT"
-					   ((org-agenda-overriding-header "Remaining Project Tasks")
+					   ((org-agenda-overriding-header "Remaining Project Tasks:")
 					    (org-agenda-skip-function 'gs/select-project-tasks)))
 				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE-STYLE=\"habit\"/!"
-					   ((org-agenda-overriding-header "Standalone Tasks")
+					   ((org-agenda-overriding-header "Standalone Tasks:")
 					    (org-agenda-skip-function 'gs/select-standalone-tasks)))
-				(agenda "" ((org-agenda-overriding-header "Week At A Glance")
+				(agenda "" ((org-agenda-overriding-header "Week At A Glance:")
 					    (org-agenda-ndays 5)
 					    (org-agenda-start-day"+1d")
 					    (org-agenda-prefix-format '((agenda . "  %-12:c%?-12t %s [%b] ")))))
-				(tags-todo "-CANCELLED-REFILE" ((org-agenda-overriding-header "All Tasks:"))))
+				(tags-todo "-CANCELLED-REFILE"
+					   ((org-agenda-overriding-header "Waiting Tasks:"))))
 	 ((org-agenda-start-with-log-mode t)
 	  (org-agenda-log-mode-items '(clock))
 	  (org-agenda-prefix-format '((agenda . "  %-12:c%?-12t %(gs/org-agenda-add-location-string)% s")
