@@ -121,7 +121,7 @@ Callers of this function already widen the buffer view."
 	 ("d" "Diary" entry (file+datetree "~/org/diary.org")
 	  "* %?\n%U\n" :clock-in t :clock-resume t)
 	 ("i" "Idea" entry (file org-default-notes-file)
-	  "* %? :IDEA: \n%t" :clock-in t :clock-resume t)
+	  "* %? :IDEA: \n%u" :clock-in t :clock-resume t)
 	 ("n" "Next Task" entry (file+headline org-default-notes-file "Tasks")
 	  "** NEXT %? \nDEADLINE: %t") ))
 
@@ -324,7 +324,7 @@ show this warning instead."
 (defun gs/org-agenda-next-section ()
   "Go to the next section in an org agenda buffer"
   (interactive)
-  (if (search-forward (char-to-string ?=) nil t 1)
+  (if (search-forward "===" nil t 1)
       (forward-line 1)
     (goto-char (point-max)))
   (beginning-of-line))
@@ -334,7 +334,7 @@ show this warning instead."
   "Go to the next section in an org agenda buffer"
   (interactive)
   (forward-line -2)
-  (if (search-forward (char-to-string ?=) nil t -1)
+  (if (search-forward "===" nil t -1)
       (forward-line 1)
     (goto-char (point-min))))
 
@@ -368,14 +368,15 @@ show this warning instead."
 ;; Remove empty agenda blocks
 (defun gs/remove-agenda-regions ()
   (save-excursion
+    (goto-char (point-min))
     (let ((region-large t))
       (while (and (< (point) (point-max)) region-large)
-		  (set-mark (point))
-		  (gs/org-agenda-next-section)
-		  (if (< (- (region-end) (region-beginning)) 5) (setq region-large nil))
-		  (if (< (count-lines (region-beginning) (region-end)) 4)
-		      (delete-region (region-beginning) (region-end)))
-		  ))))
+	(set-mark (point))
+	(gs/org-agenda-next-section)
+	(if (< (- (region-end) (region-beginning)) 5) (setq region-large nil)
+	  (if (< (count-lines (region-beginning) (region-end)) 4)
+	      (delete-region (region-beginning) (region-end)))
+	  )))))
 (add-hook 'org-finalize-agenda-hook 'gs/remove-agenda-regions)
 
 (provide 'gs-org)
