@@ -137,6 +137,10 @@ Callers of this function already widen the buffer view."
 ;; Allow refile to create parent tasks with confirmation
 (setq org-refile-allow-creating-parent-nodes 'confirm)
 
+;; == Archive ==
+(setq org-archive-location "archive/%s_archive::")
+(setq org-archive-file-header-format "#+FILETAGS: ARCHIVE\nArchived entries from file %s\n")
+
 ;; == Habits ==
 (require 'org-habit)
 
@@ -277,30 +281,28 @@ show this warning instead."
 					    (org-agenda-start-on-weekday nil)
 					    (org-agenda-start-day "+0d")
 					    (org-agenda-todo-ignore-deadlines nil)))
-				(tags-todo "-CANCELLED/!NEXT"
+				(tags-todo "-CANCELLED-ARCHIVE/!NEXT"
 					   ((org-agenda-overriding-header "Next Tasks:")
 					    ))
-				(tags "REFILE-REFILE=\"nil\""
+				(tags "REFILE-ARCHIVE-REFILE=\"nil\""
 				      ((org-agenda-overriding-header "Tasks to Refile:")
 				       (org-tags-match-list-sublevels nil)))
-				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILEr/!"
+				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE-ARCHIVEr/!"
 					   ((org-agenda-overriding-header "Active Projects:")
 					    (org-agenda-skip-function 'gs/select-projects)))
-				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE/!-NEXT"
-					   ((org-agenda-overriding-header "Remaining Project Tasks:")
-					    (org-agenda-skip-function 'gs/select-project-tasks)))
-				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE-STYLE=\"habit\"/!"
+				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE-ARCHIVE-STYLE=\"habit\"/!"
 					   ((org-agenda-overriding-header "Standalone Tasks:")
 					    (org-agenda-skip-function 'gs/select-standalone-tasks)))
+				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE-ARCHIVE/!-NEXT"
+					   ((org-agenda-overriding-header "Remaining Project Tasks:")
+					    (org-agenda-skip-function 'gs/select-project-tasks)))
 				(agenda "" ((org-agenda-overriding-header "Week At A Glance:")
 					    (org-agenda-ndays 5)
 					    (org-agenda-start-day"+1d")
 					    (org-agenda-prefix-format '((agenda . "  %-12:c%?-12t %s [%b] ")))))
-				(tags "INACTIVE"
+				(tags "INACTIVE-ARCHIVE"
 				      ((org-agenda-overriding-header "Inactive Projects and Tasks")
-				       (org-tags-match-list-sublevels nil)))
-				(tags-todo "-CANCELLED-REFILE"
-					   ((org-agenda-overriding-header "All tasks:"))))
+				       (org-tags-match-list-sublevels nil))))
 	 ((org-agenda-start-with-log-mode t)
 	  (org-agenda-log-mode-items '(clock))
 	  (org-agenda-prefix-format '((agenda . "  %-12:c%?-12t %(gs/org-agenda-add-location-string)% s")
