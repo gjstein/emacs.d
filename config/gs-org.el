@@ -141,6 +141,8 @@ Callers of this function already widen the buffer view."
 (setq org-archive-location "archive/%s_archive::")
 (setq org-archive-file-header-format "#+FILETAGS: ARCHIVE\nArchived entries from file %s\n")
 
+
+
 ;; == Habits ==
 (require 'org-habit)
 
@@ -290,18 +292,21 @@ show this warning instead."
 				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE-ARCHIVEr/!"
 					   ((org-agenda-overriding-header "Active Projects:")
 					    (org-agenda-skip-function 'gs/select-projects)))
-				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE-ARCHIVE-STYLE=\"habit\"/!"
+				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE-ARCHIVE-STYLE=\"habit\"/!-NEXT"
 					   ((org-agenda-overriding-header "Standalone Tasks:")
 					    (org-agenda-skip-function 'gs/select-standalone-tasks)))
-				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE-ARCHIVE/!-NEXT"
-					   ((org-agenda-overriding-header "Remaining Project Tasks:")
-					    (org-agenda-skip-function 'gs/select-project-tasks)))
 				(agenda "" ((org-agenda-overriding-header "Week At A Glance:")
 					    (org-agenda-ndays 5)
 					    (org-agenda-start-day"+1d")
 					    (org-agenda-prefix-format '((agenda . "  %-12:c%?-12t %s [%b] ")))))
+				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE-ARCHIVE/!-NEXT"
+					   ((org-agenda-overriding-header "Remaining Project Tasks:")
+					    (org-agenda-skip-function 'gs/select-project-tasks)))
 				(tags "INACTIVE-ARCHIVE"
 				      ((org-agenda-overriding-header "Inactive Projects and Tasks")
+				       (org-tags-match-list-sublevels nil)))
+				(tags "ENDOFAGENDA"
+				      ((org-agenda-overriding-header "End of Agenda")
 				       (org-tags-match-list-sublevels nil))))
 	 ((org-agenda-start-with-log-mode t)
 	  (org-agenda-log-mode-items '(clock))
