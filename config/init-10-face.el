@@ -32,6 +32,7 @@
 ;;; Solarized
 (use-package solarized-theme
   :ensure t
+  :init (load-theme 'solarized t)
   )
 
 ;; I prefer using a smaller font size than the default (and 'Monaco')
