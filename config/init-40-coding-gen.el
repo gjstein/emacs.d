@@ -62,6 +62,19 @@
     )
   )
 
+;; == ag ==
+
+;; Note that 'ag' (the silver searcher) needs to be installed.
+;; Ubuntu: sudo apt-get install ag
+;; OSX: brew install ag
+(use-package ag
+  :ensure t
+  )
+
+(use-package helm-ag
+  :ensure t
+  )
+
 ;; == magit ==
 (use-package magit
   :ensure t

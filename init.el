@@ -20,8 +20,9 @@
 ;; PURPOSE.  See the GNU General Public License for more details.
 
 ;;; Commentary:
-;; Calls my emacs configuration files after installing use-package, which is
-;; necessary for operation.
+;; Calls my Emacs configuration files after installing use-package, which is
+;; necessary for operation.  See also:
+;;      http://www.cachestocaches.com/2015/8/getting-started-use-package/
 ;;
 ;; Code inspired by:
 ;;      http://stackoverflow.com/a/10093312/3672986
