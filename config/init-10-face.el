@@ -30,7 +30,8 @@
 ;;  )
 
 ;;; Solarized
-(use-package solarized-theme
+(use-package color-theme :ensure t)
+(use-package color-theme-solarized
   :ensure t
   :init (load-theme 'solarized t)
   )
