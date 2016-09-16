@@ -116,6 +116,8 @@ Callers of this function already widen the buffer view."
 (setq org-capture-templates
        '(("t" "todo" entry (file org-default-notes-file)
 	  "* TODO %?\n%u\n%a\n" :clock-in t :clock-resume t)
+	 ("b" "Blank" entry (file org-default-notes-file)
+	  "* %?\n%u")
 	 ("m" "Meeting" entry (file org-default-notes-file)
 	  "* MEETING with %? :MEETING:\n%t" :clock-in t :clock-resume t)
 	 ("d" "Diary" entry (file+datetree "~/org/diary.org")
