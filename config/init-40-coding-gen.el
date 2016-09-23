@@ -75,6 +75,17 @@
   :ensure t
   )
 
+;; == compile ==
+
+;; https://emacs.stackexchange.com/questions/8135/why-does-compilation-buffer-show-control-characters
+(use-package ansi-color
+  :ensure t
+  :config (progn
+            (defun my/ansi-colorize-buffer ()
+              (let ((buffer-read-only nil))
+                (ansi-color-apply-on-region (point-min) (point-max))))
+            (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer)))
+
 ;; == magit ==
 (use-package magit
   :ensure t
