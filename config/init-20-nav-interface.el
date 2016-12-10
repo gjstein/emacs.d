@@ -19,6 +19,17 @@
 ;;; Code:
 (require 'use-package)
 
+
+;; == Evil Mode ==
+(use-package evil
+  :ensure t
+  :init
+  (evil-mode 1)
+  (define-key evil-ex-map "b" 'helm-mini)
+  (define-key evil-ex-map "e" 'helm-find-files)
+  )
+
+
 ;; == Helm Mode ==
 (use-package helm
   :ensure t
