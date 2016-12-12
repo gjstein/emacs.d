@@ -75,6 +75,12 @@
 	    "grep --color=always -d recurse %e -n%cH -e %p %f"))
 
   (helm-mode 1)
+
+  (defun spacemacs//hide-cursor-in-helm-buffer ()
+    "Hide the cursor in helm buffers."
+    (with-helm-buffer
+      (setq cursor-in-non-selected-windows nil)))
+  (add-hook 'helm-after-initialize-hook 'spacemacs//hide-cursor-in-helm-buffer)
   
   :bind (("C-x b" . helm-mini)
 	 ("C-x C-f" . helm-find-files)
