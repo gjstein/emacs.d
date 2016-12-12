@@ -1,6 +1,6 @@
 ;;; init-20-nav-interface.el --- Customize emacs interface (mostly Helm)
 
-;; Copyright (C) 2015 Gregory J Stein
+;; Copyright (C) 2016 Gregory J Stein
 
 ;; Author: Gregory J Stein <gregory.j.stein@gmail.com>
 ;; Maintainer: Gregory J Stein <gregory.j.stein@gmail.com>
@@ -18,6 +18,17 @@
 
 ;;; Code:
 (require 'use-package)
+
+
+;; == Evil Mode ==
+(use-package evil
+  :ensure t
+  :init
+  (evil-mode 1)
+  (define-key evil-ex-map "b" 'helm-mini)
+  (define-key evil-ex-map "e" 'helm-find-files)
+  )
+
 
 ;; == Helm Mode ==
 (use-package helm
@@ -64,6 +75,12 @@
 	    "grep --color=always -d recurse %e -n%cH -e %p %f"))
 
   (helm-mode 1)
+
+  (defun spacemacs//hide-cursor-in-helm-buffer ()
+    "Hide the cursor in helm buffers."
+    (with-helm-buffer
+      (setq cursor-in-non-selected-windows nil)))
+  (add-hook 'helm-after-initialize-hook 'spacemacs//hide-cursor-in-helm-buffer)
   
   :bind (("C-x b" . helm-mini)
 	 ("C-x C-f" . helm-find-files)

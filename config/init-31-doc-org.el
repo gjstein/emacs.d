@@ -1,6 +1,6 @@
 ;;; init-30-doc-org.el --- Code for initializing org-mode
 
-;; Copyright (C) 2015 Gregory J Stein
+;; Copyright (C) 2016 Gregory J Stein
 
 ;; Author: Gregory J Stein <gregory.j.stein@gmail.com>
 ;; Maintainer: Gregory J Stein <gregory.j.stein@gmail.com>

@@ -84,3 +84,21 @@
 (load-file "~/.emacs.d/config/init-70-misc-ledger.el")
 
 ;;; init.el ends here
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(flycheck-c/c++-googlelint-executable "~/.emacs.d/scripts/cpplint.py")
+ '(flycheck-google-cpplint-filter "-whitespace,+whitespace/braces")
+ '(flycheck-google-cpplint-linelength "120")
+ '(flycheck-google-cpplint-verbose "3")
+ '(package-selected-packages
+   (quote
+    (evil scss-mode flymake-sass sass-mode less-css-mode ledger-mode flycheck-rust rust-mode yaml-mode elpy matlab-mode emmet-mode web-mode cmake-mode flycheck-google-cpplint google-c-style helm-gtags swift-mode flycheck magit helm-ag ag helm-projectile projectile yasnippet company-irony company auctex markdown-mode helm color-theme-solarized color-theme exec-path-from-shell use-package))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 100 :width normal :foundry "nil" :family "Monaco")))))
