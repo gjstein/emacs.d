@@ -25,8 +25,10 @@
   :ensure t
   :init
   (evil-mode 1)
-  (define-key evil-ex-map "b" 'helm-mini)
+  (define-key evil-ex-map "b " 'helm-mini)
   (define-key evil-ex-map "e" 'helm-find-files)
+  ;; Resolve sentence jumping issue
+  (setq sentence-end-double-space nil)
   )
 
 
@@ -53,6 +55,7 @@
   (bind-key "<tab>" 'helm-execute-persistent-action helm-map)
   (bind-key "C-i" 'helm-execute-persistent-action helm-map)
   (bind-key "C-z" 'helm-select-action helm-map) ; list actions using C-z
+  (bind-key [escape] 'helm-keyboard-quit)
 
   (setq helm-split-window-in-side-p           t
 	helm-move-to-line-cycle-in-source     t
