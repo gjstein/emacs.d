@@ -51,11 +51,10 @@
   (require 'helm-files)
   (require 'helm-config) ; Necessary for helm-mode
   
-  ;; Key bindings
+  ;; Additional key bindings
   (bind-key "<tab>" 'helm-execute-persistent-action helm-map)
-  (bind-key "C-i" 'helm-execute-persistent-action helm-map)
-  (bind-key "C-z" 'helm-select-action helm-map) ; list actions using C-z
-  (bind-key [escape] 'helm-keyboard-quit)
+  (bind-key [escape] 'helm-keyboard-quit helm-map)
+  (bind-key "C-l" (kbd "RET") helm-map)
 
   (setq helm-split-window-in-side-p           t
 	helm-move-to-line-cycle-in-source     t
@@ -88,6 +87,19 @@
   :bind (("C-x b" . helm-mini)
 	 ("C-x C-f" . helm-find-files)
 	 ("M-x" . helm-M-x)
+	 :map helm-map
+	 ("C-i" . helm-execute-persistent-action)
+	 ("C-z" . helm-select-action)
+	 ("C-j" . helm-next-line)
+	 ("C-k" . helm-previous-line)
+	 ("C-h" . helm-next-source)
+	 ("C-S-h" . describe-key)
+	 :map helm-find-files-map
+	 ("C-l" . helm-execute-persistent-action)
+	 ("C-h" . helm-find-files-up-one-level)
+	 :map helm-read-file-map
+	 ("C-l" . helm-execute-persistent-action)
+	 ("C-h" . helm-find-files-up-one-level)
 	 )
   )
 
