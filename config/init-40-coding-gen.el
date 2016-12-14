@@ -94,6 +94,16 @@
   :init
   (setq magit-diff-options (quote ("--word-diff")))
   (setq magit-diff-refine-hunk 'all)
+  ;; Use evil keybindings within magit
+  (use-package evil-magit
+    :ensure t
+    :init
+    ;; Default commit editor opening in insert mode
+    (add-hook 'with-editor-mode-hook 'evil-insert-state)
+    (evil-define-key 'normal with-editor-mode-map
+      ",c" 'with-editor-finish
+      ",k" 'with-editor-cancel)
+    )
   )
 
 ;; == flycheck ==
