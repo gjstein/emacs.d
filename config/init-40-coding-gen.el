@@ -97,12 +97,13 @@
   ;; Use evil keybindings within magit
   (use-package evil-magit
     :ensure t
-    :init
+    :config
     ;; Default commit editor opening in insert mode
     (add-hook 'with-editor-mode-hook 'evil-insert-state)
     (evil-define-key 'normal with-editor-mode-map
-      ",c" 'with-editor-finish
-      ",k" 'with-editor-cancel)
+      (kbd "RET") 'with-editor-finish
+      [escape] 'with-editor-cancel
+      )
     )
   )
 
