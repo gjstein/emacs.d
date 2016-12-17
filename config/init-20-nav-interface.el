@@ -21,6 +21,16 @@
 
 
 ;; == Evil Mode ==
+(use-package evil-leader
+  :ensure t
+  :init
+  (global-evil-leader-mode)
+  (evil-leader/set-leader ",")
+  (evil-leader/set-key "c" 'org-capture)
+  (evil-leader/set-key "a" 'org-agenda)
+  (evil-leader/set-key "g" 'magit-status)
+  )
+
 (use-package evil
   :ensure t
   :init
