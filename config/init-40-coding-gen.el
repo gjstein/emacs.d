@@ -104,6 +104,9 @@
       (kbd "RET") 'with-editor-finish
       [escape] 'with-editor-cancel
       )
+    (evil-define-key 'normal git-rebase-mode-map
+      "l" 'git-rebase-show-commit
+      )
     )
   )
 
