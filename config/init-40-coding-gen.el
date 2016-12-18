@@ -53,7 +53,7 @@
   :ensure t
   :defer t
   :init
-  (projectile-global-mode)
+  (projectile-mode)
   (setq projectile-completion-system 'helm)
   (use-package helm-projectile
     :ensure t
