@@ -58,8 +58,10 @@
     (kbd "RET") 'org-agenda-switch-to
     [escape] 'org-agenda-quit
     "q" 'org-agenda-quit
-    "s" 'org-agenda-save-all-org-buffers
+    "s" 'org-save-all-org-buffers
     "t" 'org-agenda-todo
+    "T" 'org-agenda-set-tags
+    "g" 'org-agenda-redo
     (kbd "SPC") 'org-agenda-show-and-scroll-up
     )
   (evil-leader/set-key-for-mode 'org-agenda-mode
