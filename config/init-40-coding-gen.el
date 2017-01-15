@@ -59,6 +59,7 @@
     :ensure t
     :init
     (helm-projectile-on)
+    (evil-leader/set-key "s" 'helm-projectile-ag)
     )
   )
 
