@@ -24,6 +24,10 @@
          ("\\.md\\'" . markdown-mode))
   )
 
+(use-package flyspell
+  :defer t
+  :diminish (flyspell-mode . " φ"))
+
 ;; == LaTex / AucTeX ==
 (use-package tex
   :defer t

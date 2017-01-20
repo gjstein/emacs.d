@@ -23,11 +23,18 @@
   (add-hook 'org-mode-hook 'visual-line-mode)
   (add-hook 'org-mode-hook 'org-indent-mode)
   (add-hook 'org-mode-hook 'flyspell-mode)
-
+  :diminish visual-line-mode
+  :diminish org-indent-mode
   :defer t
   :bind (("\C-c a" . org-agenda)
 	 ("\C-c c" . org-capture))
   :config
+
+  (defun sk/diminish-org-indent ()
+    "Diminish org-indent-mode on the modeline"
+    (interactive)
+    (diminish 'org-indent-mode ""))
+  (add-hook 'org-indent-mode-hook 'sk/diminish-org-indent)
   ;; Custom functions for emacs & org mode
   (load-file "~/.emacs.d/config/gs-org.el")
   (require 'org)
@@ -46,6 +53,9 @@
      ))
   ;; Syntax hilight in #+begin_src blocks
   (setq org-src-fontify-natively t)
+
+  ;; Capture mode
+  (add-hook 'org-capture-mode-hook 'evil-insert-state)
 
   ;; Evil key configurations (agenda)
   (evil-set-initial-state 'org-agenda-mode 'normal)
@@ -72,6 +82,24 @@
     )
 
   ;; Evil key configuration (org)
+
+  (defun gs-org-meta-return (&optional _arg)
+    "Ensures org-meta-return switches to evil insert mode"
+    (interactive)
+    (evil-append 0)
+    (org-meta-return _arg)
+    )
+ 
+  (defun gs-org-insert-heading-respect-content (&optional invisible-ok)
+    "Insert heading with `org-insert-heading-respect-content' set to t."
+    (interactive)
+    (org-insert-heading '(4) invisible-ok)
+    (evil-insert 0))
+  
+  (evil-define-key 'normal org-mode-map
+    (kbd "<M-return>") 'gs-org-meta-return
+    (kbd "<C-return>") 'gs-org-insert-heading-respect-content
+    )
   (evil-leader/set-key-for-mode 'org-mode
     "i" 'org-clock-in
     "o" 'org-clock-out

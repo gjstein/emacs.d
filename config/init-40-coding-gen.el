@@ -52,9 +52,9 @@
 (use-package projectile
   :ensure t
   :defer t
+  :diminish projectile-mode
   :init
   (projectile-mode)
-  (setq projectile-completion-system 'helm)
   (use-package helm-projectile
     :ensure t
     :init
@@ -87,6 +87,15 @@
                 (ansi-color-apply-on-region (point-min) (point-max))))
             (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer)))
 
+
+;; == evil + vimish-fold ==
+(use-package evil-vimish-fold
+  :ensure t
+  :init
+  (evil-vimish-fold-mode 1)
+  :diminish evil-vimish-fold-mode
+  )
+
 ;; == magit ==
 (use-package magit
   :ensure t
@@ -114,8 +123,10 @@
 ;; == flycheck ==
 (use-package flycheck
   :ensure t
+  :diminish flycheck-mode
   :defer t
   :init
+
   (add-hook 'after-init-hook #'global-flycheck-mode)
   ;; check OS type
   (if (string-equal system-type "gnu/linux")
