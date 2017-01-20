@@ -45,8 +45,7 @@
 (setq-default fill-column 80)
 
 ;; quiet, please! No dinging!
-;(setq visible-bell t)
-(setq visible-bell nil) ;; The default
+(setq visible-bell nil)
 (setq ring-bell-function 'ignore)
 
 ;; Disable menu bars, etc.
@@ -56,5 +55,72 @@
 
 ;; No Backup Files
 (setq make-backup-files nil)
+
+;; Diminish extraneous info in the modeline
+(diminish 'abbrev-mode)
+(defun sk/diminish-auto-revert ()
+  "Diminishes the 'auto-revert-mode' in the mode line."
+  (interactive)
+  (diminish 'auto-revert-mode ""))
+(add-hook 'auto-revert-mode-hook 'sk/diminish-auto-revert)
+
+;; Customize the modeline
+(use-package validate :ensure t)
+(setq line-number-mode 1)
+(setq column-number-mode 1)
+(setq ns-use-srgb-colorspace nil)
+(use-package spaceline-config
+  :ensure spaceline
+  :config
+  (spaceline-define-segment gjstein-buffer-position
+    "a better buffer position display"
+    (let ((buffer-position (format-mode-line "%p")))
+      (if (string= buffer-position "Top") "top"
+	(if (string= buffer-position "Bottom") "bot"
+	  (if (string= buffer-position "All") "all"
+	    "%p")))
+      )
+    )
+  (spaceline-define-segment gjstein-version-control
+    "Version control information."
+    (when vc-mode
+      (powerline-raw
+       (s-trim (concat
+		(let ((backend (symbol-name (vc-backend (buffer-file-name)))))
+		  (substring vc-mode (+ (length backend) 2)))
+		(when (buffer-file-name)
+		  (pcase (vc-state (buffer-file-name))
+		    (`up-to-date " ")
+		    (`edited "*")
+		    (`added "@")
+		    (`unregistered "?")
+		    (`removed "-")
+		    (`needs-merge " Con")
+		    (`needs-update " Upd")
+		    (`ignored "!")
+		    (_ " Unk"))))))))
+  
+  (spaceline-compile
+   'gjstein
+   ;; Left side of the mode line (all the important stuff)
+   '(((buffer-modified buffer-size input-method) :face highlight-face)
+     '(buffer-id remote-host major-mode)
+     ((point-position line-column gjstein-buffer-position) :separator "|" )
+     process
+     (org-clock)
+     ((flycheck-error flycheck-warning flycheck-info) :when active)
+     ((which-function projectile-root (gjstein-version-control :when active)) :separator ":")
+     )
+   ;; Right segment (the unimportant stuff)
+   '((minor-modes :separator spaceline-minor-modes-separator) :when active))
+  
+  (setq-default mode-line-format '("%e" (:eval (spaceline-ml-gjstein)))))
+
+(use-package powerline
+  :ensure t
+  :after spaceline-config
+  :config (validate-setq
+	   powerline-height (truncate (* 1.0 (frame-char-height)))
+	   powerline-default-separator 'utf-8))
 
 ;;; init-10-face.el ends here

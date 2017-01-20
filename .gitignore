@@ -21,3 +21,4 @@ srecode-map.el
 /session.*
 .DS_Store
 /projectile-bookmarks.eld
+/vimish-fold/*
