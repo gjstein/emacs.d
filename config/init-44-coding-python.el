@@ -24,8 +24,8 @@
 ;;  pip install yapf
 (use-package elpy
   :ensure t
-  :defer t
-  :init
+  :after python
+  :config
   (elpy-enable)
   )
 

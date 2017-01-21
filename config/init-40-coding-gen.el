@@ -38,7 +38,6 @@
   :bind ("C-;" . company-complete-common)
   )
 
-
 ;; === Tools ===
 
 ;; == YASnippet ==
@@ -57,7 +56,9 @@
   (projectile-mode)
   (use-package helm-projectile
     :ensure t
-    :init
+    :defer t
+    :after helm
+    :config
     (helm-projectile-on)
     (evil-leader/set-key "s" 'helm-projectile-ag)
     )
@@ -68,12 +69,15 @@
 ;; Note that 'ag' (the silver searcher) needs to be installed.
 ;; Ubuntu: sudo apt-get install ag
 ;; OSX: brew install ag
+
 (use-package ag
   :ensure t
+  :defer t
   )
-
 (use-package helm-ag
   :ensure t
+  :defer t
+  :after helm
   )
 
 ;; == compile ==
@@ -81,6 +85,7 @@
 ;; https://emacs.stackexchange.com/questions/8135/why-does-compilation-buffer-show-control-characters
 (use-package ansi-color
   :ensure t
+  :defer t
   :config (progn
             (defun my/ansi-colorize-buffer ()
               (let ((buffer-read-only nil))
@@ -91,6 +96,7 @@
 ;; == evil + vimish-fold ==
 (use-package evil-vimish-fold
   :ensure t
+  :defer t
   :init
   (evil-vimish-fold-mode 1)
   :diminish evil-vimish-fold-mode
@@ -105,6 +111,7 @@
   (setq magit-diff-options (quote ("--word-diff")))
   (setq magit-diff-refine-hunk 'all)
   ;; Use evil keybindings within magit
+  :config
   (use-package evil-magit
     :ensure t
     :config
@@ -136,7 +143,6 @@
 	 )))
   (add-hook 'c++-mode-hook (lambda () (setq flycheck-clang-language-standard "c++11")))
   (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-gcc))
-  
   )
 
 ;; == OTHER LANGUAGES ==

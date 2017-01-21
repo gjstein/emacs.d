@@ -27,7 +27,11 @@
   (global-evil-leader-mode)
   (evil-leader/set-leader "<SPC>")
   (evil-leader/set-key "c" 'org-capture)
-  (evil-leader/set-key "a" 'org-agenda)
+  (defun gjstein-org-agenda ()
+    "Open my custom agenda"
+    (interactive)
+    (org-agenda 0 " "))
+  (evil-leader/set-key "a" 'gjstein-org-agenda)
   (evil-leader/set-key "g" 'magit-status)
   )
 

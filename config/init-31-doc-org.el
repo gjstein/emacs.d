@@ -104,6 +104,17 @@
     "i" 'org-clock-in
     "o" 'org-clock-out
     )
+
+  ;; some functions for timing
+  )
+
+(defun org-build-agenda ()
+  (interactive)
+  (setq last-build-time (format-time-string "%S.%3N"))
+  (org-agenda 0 " ")
+  (setq after-build-time (format-time-string "%S.%3N"))
+  (print last-build-time)
+  (print after-build-time)
   )
 
 ;;; init-31-doc-org.el ends here

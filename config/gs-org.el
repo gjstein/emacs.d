@@ -18,7 +18,7 @@
 
 ;; == bh/helper-functions ==
 (defun bh/is-project-p ()
-  "Any task with a todo keyword subtask"
+  "Any task with a todo keyword subtask."
   (save-restriction
     (widen)
     (let ((has-subtask)
@@ -33,7 +33,7 @@
             (setq has-subtask t))))
       (and is-a-task has-subtask))))
 (defun bh/find-project-task ()
-  "Move point to the parent (project) task if any"
+  "Move point to the parent (project) task if any."
   (save-restriction
     (widen)
     (let ((parent-task (save-excursion (org-back-to-heading 'invisible-ok) (point))))
@@ -96,8 +96,7 @@ Callers of this function already widen the buffer view."
 	("DONE" ("WAITING") ("CANCELLED") ("INACTIVE"))))
 
 (defun gs/mark-next-done-parent-tasks-todo ()
-  "Visit each parent task and change NEXT (or DONE) states to TODO"
-
+  "Visit each parent task and change NEXT (or DONE) states to TODO."
   ;; Don't change the value if new state is "DONE"
   (let ((mystate (or (and (fboundp 'org-state)
                           (member state
@@ -113,7 +112,7 @@ Callers of this function already widen the buffer view."
 
 ;; == Capture Mode Settings ==
 ;; Define the custum capture templates
-(setq org-capture-templates
+(defvar org-capture-templates
        '(("t" "todo" entry (file org-default-notes-file)
 	  "* TODO %?\n%u\n%a\n" :clock-in t :clock-resume t)
 	 ("b" "Blank" entry (file org-default-notes-file)
@@ -141,9 +140,7 @@ Callers of this function already widen the buffer view."
 
 ;; == Archive ==
 (setq org-archive-location "archive/%s_archive::")
-(setq org-archive-file-header-format "#+FILETAGS: ARCHIVE\nArchived entries from file %s\n")
-
-
+(defvar org-archive-file-header-format "#+FILETAGS: ARCHIVE\nArchived entries from file %s\n")
 
 ;; == Habits ==
 (require 'org-habit)
@@ -178,8 +175,9 @@ Switch projects and subprojects from NEXT back to TODO"
 
 ;; == Agenda ==
 
-;; Dim blocked tasks
+;; Dim blocked tasks (and other settings)
 (setq org-enforce-todo-dependencies t)
+(setq org-agenda-inhibit-startup nil)
 (setq org-agenda-dim-blocked-tasks nil)
 
 ;; Compact the block agenda view (disabled)
