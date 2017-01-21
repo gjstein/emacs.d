@@ -1,6 +1,6 @@
 ;;; init-10-face.el --- Customize the look of emacs
 
-;; Copyright (C) 2016 Gregory J Stein
+;; Copyright (C) 2017 Gregory J Stein
 
 ;; Author: Gregory J Stein <gregory.j.stein@gmail.com>
 ;; Maintainer: Gregory J Stein <gregory.j.stein@gmail.com>
@@ -81,6 +81,7 @@
 	    "%p")))
       )
     )
+    (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
   (spaceline-define-segment gjstein-version-control
     "Version control information."
     (when vc-mode

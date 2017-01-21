@@ -1,6 +1,6 @@
 ;;; init-70-misc-ledger.el --- Enable ledger-mode
 
-;; Copyright (C) 2016 Gregory J Stein
+;; Copyright (C) 2017 Gregory J Stein
 
 ;; Author: Gregory J Stein <gregory.j.stein@gmail.com>
 ;; Maintainer: Gregory J Stein <gregory.j.stein@gmail.com>
