@@ -35,6 +35,14 @@
     (interactive)
     (diminish 'org-indent-mode ""))
   (add-hook 'org-indent-mode-hook 'sk/diminish-org-indent)
+
+  ;; Fix evil-auto-indent for org buffers.
+  (defun gs-org-disable-evil-auto-indent nil
+    "Disables evil's auto-indent for org."
+    (setq evil-auto-indent nil)
+    )
+  (add-hook 'org-mode-hook #'gs-org-disable-evil-auto-indent)
+  
   ;; Custom functions for emacs & org mode
   (load-file "~/.emacs.d/config/gs-org.el")
   (require 'org)
