@@ -80,8 +80,10 @@
     "t" 'org-agenda-todo
     "T" 'org-agenda-set-tags
     "g" 'org-agenda-redo
+    "." 'org-agenda-goto-today
     (kbd "SPC") 'org-agenda-show-and-scroll-up
     )
+
   (evil-leader/set-key-for-mode 'org-agenda-mode
     "i" 'org-agenda-clock-in
     "o" 'org-agenda-clock-out
@@ -111,6 +113,7 @@
   (evil-leader/set-key-for-mode 'org-mode
     "i" 'org-clock-in
     "o" 'org-clock-out
+    "t" 'org-todo
     )
 
   ;; some functions for timing

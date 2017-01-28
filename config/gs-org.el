@@ -329,7 +329,7 @@ show this warning instead."
 ;; == Agenda Navigation ==
 
 ;; Search for a "=" and go to the next line
-(defun gs/org-agenda-next-section ()
+(defun gjstein/org-agenda-next-section ()
   "Go to the next section in an org agenda buffer"
   (interactive)
   (if (search-forward "===" nil t 1)
@@ -338,19 +338,13 @@ show this warning instead."
   (beginning-of-line))
 
 ;; Search for a "=" and go to the previous line
-(defun gs/org-agenda-prev-section ()
+(defun gjstein/org-agenda-prev-section ()
   "Go to the next section in an org agenda buffer"
   (interactive)
   (forward-line -2)
   (if (search-forward "===" nil t -1)
       (forward-line 1)
     (goto-char (point-min))))
-
-;; Bind the keys
-(add-hook 'org-agenda-mode-hook
-	  (lambda ()
-	    (define-key org-agenda-mode-map (kbd "M-n") 'gs/org-agenda-next-section)
-	    (define-key org-agenda-mode-map (kbd "M-p") 'gs/org-agenda-prev-section)))
 
 ;; == Agenda Post-processing ==
 ;; Highlight the "!!" for stuck projects (for emphasis)

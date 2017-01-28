@@ -102,7 +102,7 @@
  '(flycheck-google-cpplint-verbose "3")
  '(package-selected-packages
    (quote
-    (esup smart-mode-line evil-surround evil-extra-operator evil-vimish-fold evil-magit evil scss-mode flymake-sass sass-mode less-css-mode ledger-mode flycheck-rust rust-mode yaml-mode elpy matlab-mode emmet-mode web-mode cmake-mode flycheck-google-cpplint google-c-style helm-gtags swift-mode flycheck magit helm-ag ag helm-projectile projectile yasnippet company-irony company auctex markdown-mode helm color-theme-solarized color-theme exec-path-from-shell use-package))))
+    (evil-snipe esup smart-mode-line evil-surround evil-extra-operator evil-vimish-fold evil-magit evil scss-mode flymake-sass sass-mode less-css-mode ledger-mode flycheck-rust rust-mode yaml-mode elpy matlab-mode emmet-mode web-mode cmake-mode flycheck-google-cpplint google-c-style helm-gtags swift-mode flycheck magit helm-ag ag helm-projectile projectile yasnippet company-irony company auctex markdown-mode helm color-theme-solarized color-theme exec-path-from-shell use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

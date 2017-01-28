@@ -19,7 +19,6 @@
 ;;; Code:
 (require 'use-package)
 
-
 ;; == Evil Mode ==
 (use-package evil-leader
   :ensure t
@@ -27,6 +26,7 @@
   (global-evil-leader-mode)
   (evil-leader/set-leader "<SPC>")
   (evil-leader/set-key "c" 'org-capture)
+  (evil-leader/set-key "!" 'gjstein-swap-theme-light-dark)
   (defun gjstein-org-agenda ()
     "Open my custom agenda"
     (interactive)
@@ -62,12 +62,24 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
   (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
   (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+  )
 
-  (use-package evil-surround
-    :ensure t
-    :init
-    (global-evil-surround-mode 1)
-    )
+(use-package evil-surround
+  :ensure t
+  :after evil
+  :init
+  (global-evil-surround-mode 1)
+  )
+
+(use-package evil-snipe
+  :diminish evil-snipe-local-mode
+  :ensure t
+  :after evil
+  :init
+  (evil-snipe-mode 1)
+  (setq evil-snipe-scope 'buffer
+	evil-snipe-repeat-scope 'buffer)
+  (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
   )
 
 
