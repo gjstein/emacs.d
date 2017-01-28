@@ -83,7 +83,6 @@
     "." 'org-agenda-goto-today
     (kbd "SPC") 'org-agenda-show-and-scroll-up
     )
-
   (evil-leader/set-key-for-mode 'org-agenda-mode
     "i" 'org-agenda-clock-in
     "o" 'org-agenda-clock-out
