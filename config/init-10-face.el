@@ -33,7 +33,9 @@
 (use-package color-theme :ensure t)
 (use-package color-theme-solarized
   :ensure t
-  :init (load-theme 'solarized t)
+  :init
+  (set-frame-parameter nil 'background-mode 'dark)
+  (load-theme 'solarized t)
   (defun gjstein-swap-theme-light-dark ()
     "Swaps between solarized light and dark"
     (interactive)

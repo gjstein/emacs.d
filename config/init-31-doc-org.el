@@ -82,11 +82,14 @@
     "g" 'org-agenda-redo
     "." 'org-agenda-goto-today
     (kbd "SPC") 'org-agenda-show-and-scroll-up
+    "J" 'gs/org-agenda-next-section
+    "K" 'gs/org-agenda-prev-section
     )
   (evil-leader/set-key-for-mode 'org-agenda-mode
     "i" 'org-agenda-clock-in
-    "o" 'org-agenda-clock-out
     "k" 'org-agenda-kill
+    "o" 'org-agenda-clock-out
+    "w" 'org-agenda-refile
     "/" 'org-agenda-filter-by-tag
     )
 

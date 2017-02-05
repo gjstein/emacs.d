@@ -346,12 +346,6 @@ show this warning instead."
       (forward-line 1)
     (goto-char (point-min))))
 
-;; Bind the keys
-(add-hook 'org-agenda-mode-hook
-	  (lambda ()
-	    (define-key org-agenda-mode-map (kbd "M-n") 'gs/org-agenda-next-section)
-	    (define-key org-agenda-mode-map (kbd "M-p") 'gs/org-agenda-prev-section)))
-
 ;; == Agenda Post-processing ==
 ;; Highlight the "!!" for stuck projects (for emphasis)
 (defun gs/org-agenda-project-highlight-warning ()
