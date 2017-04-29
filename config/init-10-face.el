@@ -27,11 +27,12 @@
 (use-package monokai-theme
   :ensure t
   :config
-  (add-hook 'after-make-frame-functions
-	    (lambda (frame)
-	      (if (display-graphic-p)
-		  nil
-		(load-theme 'monokai))))
+  (load-theme 'monokai t)
+;;  (add-hook 'after-make-frame-functions
+;;	    (lambda (frame)
+;;	      (if (display-graphic-p)
+;;		  nil
+;;		(load-theme 'monokai))))
   )
 
 ;; Solarized
@@ -40,10 +41,11 @@
   :ensure t
   :init
   (set-frame-parameter nil 'background-mode 'dark)
-  (load-theme 'solarized t)
+  ; (load-theme 'solarized t)
   (defun gjstein-swap-theme-light-dark ()
     "Swaps between solarized light and dark"
     (interactive)
+    (load-theme 'solarized)
     (if (eq 'light (frame-parameter nil 'background-mode))
 	(set-frame-parameter nil 'background-mode 'dark)
       (set-frame-parameter nil 'background-mode 'light)
