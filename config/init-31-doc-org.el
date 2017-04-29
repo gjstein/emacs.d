@@ -23,6 +23,7 @@
   (add-hook 'org-mode-hook 'visual-line-mode)
   (add-hook 'org-mode-hook 'org-indent-mode)
   (add-hook 'org-mode-hook 'flyspell-mode)
+  (setq org-mobile-directory "~/Dropbox (Personal)/Apps/MobileOrg")
   :diminish visual-line-mode
   :diminish org-indent-mode
   :defer t
@@ -84,11 +85,13 @@
     (kbd "SPC") 'org-agenda-show-and-scroll-up
     "J" 'gs/org-agenda-next-section
     "K" 'gs/org-agenda-prev-section
+    "c" 'org-agenda-goto-calendar
     )
   (evil-leader/set-key-for-mode 'org-agenda-mode
     "i" 'org-agenda-clock-in
     "k" 'org-agenda-kill
     "o" 'org-agenda-clock-out
+    "t" 'org-agenda-todo
     "w" 'org-agenda-refile
     "/" 'org-agenda-filter-by-tag
     )

@@ -284,7 +284,7 @@ show this warning instead."
 					    (org-agenda-start-on-weekday nil)
 					    (org-agenda-start-day "+0d")
 					    (org-agenda-todo-ignore-deadlines nil)))
-				(tags-todo "-CANCELLED-ARCHIVE/!NEXT"
+				(tags-todo "-INACTIVE-CANCELLED-ARCHIVE/!NEXT"
 					   ((org-agenda-overriding-header "Next Tasks:")
 					    ))
 				(tags "REFILE-ARCHIVE-REFILE=\"nil\""
@@ -298,7 +298,8 @@ show this warning instead."
 					    (org-agenda-skip-function 'gs/select-standalone-tasks)))
 				(agenda "" ((org-agenda-overriding-header "Week At A Glance:")
 					    (org-agenda-ndays 5)
-					    (org-agenda-start-day"+1d")
+					    (org-agenda-start-day "+1d")
+					    (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
 					    (org-agenda-prefix-format '((agenda . "  %-12:c%?-12t %s [%b] ")))))
 				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE-ARCHIVE/!-NEXT"
 					   ((org-agenda-overriding-header "Remaining Project Tasks:")
