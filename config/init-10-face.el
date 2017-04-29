@@ -23,13 +23,18 @@
 
 ;; == Load Custom Theme ==
 
-;;; Zenburn
-;;(use-package zenburn-theme
-;;  :ensure t
-;;  :config (load-theme 'zenburn t)
-;;  )
+;;; Cyberpunk
+(use-package monokai-theme
+  :ensure t
+  :config
+  (add-hook 'after-make-frame-functions
+	    (lambda (frame)
+	      (if (display-graphic-p)
+		  nil
+		(load-theme 'monokai))))
+  )
 
-;;; Solarized
+;; Solarized
 (use-package color-theme :ensure t)
 (use-package color-theme-solarized
   :ensure t
@@ -49,7 +54,7 @@
 
 ;; I prefer using a smaller font size than the default (and 'Monaco')
 (if (eq system-type 'darwin)
-    (custom-set-faces '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 100 :width normal :foundry "nil" :family "Monaco")))))
+    (custom-set-faces '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 100 :width normal :foundry "nil" :family "Iosevka Light")))))
   (custom-set-faces '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 110 :width normal :foundry "nil" :family "Ubuntu Mono"))))))
 
 ;; Set default fill column
@@ -66,6 +71,16 @@
 
 ;; No Backup Files
 (setq make-backup-files nil)
+
+;; initial window
+(setq initial-frame-alist
+      '((width . 102)   ; characters in a line
+        (height . 54))) ; number of lines
+
+;; sebsequent frame
+(setq default-frame-alist
+      '((width . 100)   ; characters in a line
+        (height . 52))) ; number of lines
 
 ;; Diminish extraneous info in the modeline
 (diminish 'abbrev-mode)
@@ -152,8 +167,9 @@
      )
    ;; Right segment (the unimportant stuff)
    '((org-clock)
-     (minor-modes :separator " ") :when active))
-  
+     ((minor-modes :separator " ") :when active)
+     (mu4e-alert-segment)))
+
   (spaceline-helm-mode)
   (setq-default mode-line-format '("%e" (:eval (spaceline-ml-gjstein)))))
 
