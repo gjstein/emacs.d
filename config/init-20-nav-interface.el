@@ -155,6 +155,15 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	 )
   )
 
+(use-package helm-swoop
+  :ensure t
+  :after helm
+  :init
+  (evil-leader/set-key "/" 'helm-swoop)
+  ;; Don't auto-fill swoop with thing-at-point
+  (setq helm-swoop-pre-input-function
+       (lambda () nil))
+  )
 
 
 ;;; init-20-nav-interface.el ends here
