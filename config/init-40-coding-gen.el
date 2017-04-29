@@ -35,7 +35,12 @@
 	company-tooltip-limit           20
 	company-dabbrev-downcase        nil
 	)
-  :bind ("C-;" . company-complete-common)
+  (define-key evil-insert-state-map (kbd "C-;") 'company-complete-common)
+  (define-key evil-insert-state-map (kbd "TAB") 'company-complete-common)
+
+  :bind (("C-;" . company-complete-common)
+	 ("M-/" . company-dabbrev))
+
   )
 
 ;; === Tools ===
@@ -78,6 +83,8 @@
   :ensure t
   :defer t
   :after helm
+  :config
+  (bind-key "C-c C-e" 'helm-ag-edit helm-ag-mode-map)
   )
 
 ;; == compile ==
