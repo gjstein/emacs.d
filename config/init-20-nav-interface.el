@@ -19,30 +19,18 @@
 ;;; Code:
 (require 'use-package)
 
+(setq evil-want-C-i-jump nil)
 
 ;; == Evil Mode ==
-(use-package evil-leader
-  :ensure t
-  :init
-  (global-evil-leader-mode)
-  (evil-leader/set-leader "<SPC>")
-  (evil-leader/set-key "c" 'org-capture)
-  (evil-leader/set-key "!" 'gjstein-swap-theme-light-dark)
-  (defun gjstein-org-agenda ()
-    "Open my custom agenda"
-    (interactive)
-    (org-agenda 0 " "))
-  (evil-leader/set-key "a" 'gjstein-org-agenda)
-  (evil-leader/set-key "g" 'magit-status)
-  )
-
 (use-package evil
   :ensure t
   :diminish undo-tree-mode
+  :config
   :init
   (evil-mode 1)
   (define-key evil-ex-map "b " 'helm-mini)
   (define-key evil-ex-map "e " 'helm-find-files)
+
   ;; Resolve sentence jumping issue
   (setq sentence-end-double-space nil)
 
@@ -63,6 +51,49 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
   (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
   (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+  )
+
+(use-package evil-leader
+  :ensure t
+  :after evil
+  :init
+  (global-evil-leader-mode)
+  (evil-leader/set-leader "<SPC>")
+  (evil-leader/set-key "c" 'org-capture)
+  (evil-leader/set-key "!" 'gjstein-swap-theme-light-dark)
+  (defun gjstein-org-agenda ()
+    "Open my custom agenda"
+    (interactive)
+    (org-agenda 0 " "))
+  (evil-leader/set-key "a" 'gjstein-org-agenda)
+  (evil-leader/set-key "g" 'magit-status)
+  )
+
+(use-package navigate
+  :ensure t
+  :after evil
+  :config
+  ;; Ensure that these shortcuts will also work in motion state
+  (define-key evil-motion-state-map
+    (kbd "C-h")
+    (lambda ()
+      (interactive)
+      (tmux-navigate "left")))
+  (define-key evil-motion-state-map
+    (kbd "C-j")
+    (lambda ()
+      (interactive)
+      (tmux-navigate "down")))
+  (define-key evil-motion-state-map
+    (kbd "C-k")
+    (lambda ()
+      (interactive)
+      (tmux-navigate "up")))
+  (define-key evil-motion-state-map
+    (kbd "C-l")
+    (lambda ()
+      (interactive)
+      (tmux-navigate "right")))
   )
 
 (use-package evil-surround
