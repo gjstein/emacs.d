@@ -88,22 +88,19 @@
   :init
   (add-hook 'c-mode-common-hook 'google-set-c-style)
   (add-hook 'c-mode-common-hook 'google-make-newline-indent)
+
   ;; == google style guide ==
-  (use-package flycheck-google-cpplint
-    :ensure t
-    :config
-    
-    (add-to-list 'flycheck-checkers 'c/c++-googlelint)
-    (custom-set-variables
-     '(flycheck-c/c++-googlelint-executable "~/.emacs.d/scripts/cpplint.py")
-     '(flycheck-google-cpplint-verbose "3")
-     '(flycheck-google-cpplint-filter "-whitespace,+whitespace/braces")
-     '(flycheck-google-cpplint-linelength "120"))
-    ;; This requires that google cpplint be installed
-    ;; See: https://github.com/flycheck/flycheck-google-cpplint
-    
-    (flycheck-add-next-checker 'c/c++-cppcheck 'c/c++-googlelint)
-    )
+  (load "~/.emacs.d/external/flycheck-google-cpplint")
+  (add-to-list 'flycheck-checkers 'c/c++-googlelint)
+  (custom-set-variables
+   '(flycheck-c/c++-googlelint-executable "~/.emacs.d/scripts/cpplint.py")
+   '(flycheck-google-cpplint-verbose "3")
+   '(flycheck-google-cpplint-filter "-whitespace,+whitespace/braces")
+   '(flycheck-google-cpplint-linelength "120"))
+  ;; This requires that google cpplint be installed
+  ;; See: https://github.com/flycheck/flycheck-google-cpplint
+  (flycheck-add-next-checker 'c/c++-cppcheck 'c/c++-googlelint)
+
   :config
   (defun check-compile-options ()
   (interactive)
