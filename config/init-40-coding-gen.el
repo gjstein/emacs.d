@@ -25,6 +25,7 @@
 (use-package company
   :ensure t
   :defer t
+  :after
   :diminish company-mode
   :init (add-hook 'after-init-hook 'global-company-mode)
   :config
@@ -35,12 +36,7 @@
 	company-tooltip-limit           20
 	company-dabbrev-downcase        nil
 	)
-  (define-key evil-insert-state-map (kbd "C-;") 'company-complete-common)
-  (define-key evil-insert-state-map (kbd "TAB") 'company-complete-common)
-
-  :bind (("C-;" . company-complete-common)
-	 ("M-/" . company-dabbrev))
-
+  (define-key evil-insert-state-map (kbd "C-f") 'company-complete-common)
   )
 
 ;; === Tools ===
