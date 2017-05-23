@@ -123,7 +123,7 @@ Callers of this function already widen the buffer view."
 	 ("d" "Diary" entry (file+datetree "~/org/diary.org")
 	  "* %?\n%U\n" :clock-in t :clock-resume t)
 	 ("D" "Daily Log" entry (file "~/org/daily-log.org")
-	  "* %u %?\n" :clock-in t :clock-resume t)
+	  "* %u %?\n*Summary*: \n\n*Problem*: \n\n*Insight*: \n\n*Tomorrow*: " :clock-in t :clock-resume t)
 	 ("i" "Idea" entry (file org-default-notes-file)
 	  "* %? :IDEA: \n%u" :clock-in t :clock-resume t)
 	 ("n" "Next Task" entry (file+headline org-default-notes-file "Tasks")
@@ -282,6 +282,7 @@ show this warning instead."
 	  (org-agenda-sorting-strategy
 	   '(todo-state-down effort-up category-keep))))
 	(" " "Export Schedule" ((agenda "" ((org-agenda-overriding-header "Today's Schedule:")
+					    (org-agenda-span 'day)
 					    (org-agenda-ndays 1)
 					    (org-agenda-start-on-weekday nil)
 					    (org-agenda-start-day "+0d")
