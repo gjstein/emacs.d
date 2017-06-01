@@ -53,20 +53,35 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
   )
 
-(use-package evil-leader
+(use-package general
   :ensure t
   :after evil
   :init
-  (global-evil-leader-mode)
-  (evil-leader/set-leader "<SPC>")
-  (evil-leader/set-key "c" 'org-capture)
-  (evil-leader/set-key "!" 'gjstein-swap-theme-light-dark)
+  (defvar gjs-leader-key "<SPC>")
+
   (defun gjstein-org-agenda ()
     "Open my custom agenda"
     (interactive)
     (org-agenda 0 " "))
-  (evil-leader/set-key "a" 'gjstein-org-agenda)
-  (evil-leader/set-key "g" 'magit-status)
+  (defun gjstein-org-weekly-agenda ()
+    "Open my custom agenda"
+    (interactive)
+    (org-agenda 0 "a"))
+
+  ;; Global general keybindings
+  (general-evil-setup)
+  (general-define-key
+   :prefix gjs-leader-key
+   :states '(normal motion)
+   ;; I want these everywhere
+   "a" '(gjstein-org-agenda :which-key "agenda")
+   "A" '(gjstein-org-weekly-agenda :which-key "weekly agenda")
+   "g" '(magit-status :which-key "git")
+   ;; org-mode keys
+   ;;"c" '(:ignore t :which-key "Org Keys")
+   "q" '(org-capture :which-key "Capture")
+   )
+
   )
 
 (use-package navigate
@@ -190,11 +205,20 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   :ensure t
   :after helm
   :init
-  (evil-leader/set-key "/" 'helm-swoop)
-  ;; Don't auto-fill swoop with thing-at-point
+  (general-define-key
+   :prefix gjs-leader-key
+   :states '(normal motion)
+   "/" 'helm-swoop)
+  ;; don't auto-fill swoop with thing-at-point
   (setq helm-swoop-pre-input-function
        (lambda () nil))
   )
 
+(use-package which-key
+  :ensure t
+  :init
+  (which-key-mode)
+  (setq which-key-idle-delay 0.2)
+  )
 
 ;;; init-20-nav-interface.el ends here

@@ -61,7 +61,11 @@
     :after helm
     :config
     (helm-projectile-on)
-    (evil-leader/set-key "s" 'helm-projectile-ag)
+    (general-define-key
+     :prefix gjs-leader-key
+     :states '(normal motion)
+     "s" '(helm-projectile-ag :which-key "projectile ag")
+     )
     )
   )
 
@@ -80,7 +84,9 @@
   :defer t
   :after helm
   :config
-  (bind-key "C-c C-e" 'helm-ag-edit helm-ag-mode-map)
+  (general-define-key :keymaps 'helm-ag-map
+		      "C-c C-e" 'helm-ag-edit)
+  ;; (bind-key "C-c C-e" 'helm-ag-edit helm-ag-mode-map)
   )
 
 ;; == compile ==

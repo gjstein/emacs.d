@@ -65,36 +65,51 @@
 
   ;; Capture mode
   (add-hook 'org-capture-mode-hook 'evil-insert-state)
+  (general-define-key
+   :keymaps 'org-capture-mode-map
+   :states '(normal motion)
+   :prefix gjs-leader-key
+   "c" 'org-capture-finalize
+   "k" 'org-capture-kill
+   "w" 'org-capture-refile
+   )
 
   ;; Evil key configurations (agenda)
   (evil-set-initial-state 'org-agenda-mode 'normal)
   (defvar org-agenda-mode-map)
-  (evil-define-key 'normal org-agenda-mode-map
-    "l" 'org-agenda-later
-    "h" 'org-agenda-earlier
-    "j" 'org-agenda-next-line
-    "k" 'org-agenda-previous-line
-    (kbd "RET") 'org-agenda-switch-to
-    [escape] 'org-agenda-quit
-    "q" 'org-agenda-quit
-    "s" 'org-save-all-org-buffers
-    "t" 'org-agenda-todo
-    "T" 'org-agenda-set-tags
-    "g" 'org-agenda-redo
-    "." 'org-agenda-goto-today
-    (kbd "SPC") 'org-agenda-show-and-scroll-up
-    "J" 'gs/org-agenda-next-section
-    "K" 'gs/org-agenda-prev-section
-    "c" 'org-agenda-goto-calendar
-    )
-  (evil-leader/set-key-for-mode 'org-agenda-mode
-    "i" 'org-agenda-clock-in
-    "k" 'org-agenda-kill
-    "o" 'org-agenda-clock-out
-    "t" 'org-agenda-todo
-    "w" 'org-agenda-refile
-    "/" 'org-agenda-filter-by-tag
-    )
+  (general-define-key
+   :keymaps 'org-agenda-mode-map
+   :states '(normal motion)
+   "l" 'org-agenda-later
+   "h" 'org-agenda-earlier
+   "j" 'org-agenda-next-line
+   "k" 'org-agenda-previous-line
+   (kbd "RET") 'org-agenda-switch-to
+   [escape] 'org-agenda-quit
+   "q" 'org-agenda-quit
+   "s" 'org-save-all-org-buffers
+   "t" 'org-agenda-todo
+   "T" 'org-agenda-set-tags
+   "g" 'org-agenda-redo
+   "." 'org-agenda-goto-today
+   "J" 'gs/org-agenda-next-section
+   "K" 'gs/org-agenda-prev-section
+   "c" 'org-agenda-goto-calendar
+   "i" 'org-agenda-clock-in
+   "o" 'org-agenda-clock-out
+   )
+  (general-define-key
+   :keymaps 'org-agenda-mode-map
+   :prefix (concatenate 'string gjs-leader-key)
+   :states '(normal motion)
+   "" '(:ignore t :which-key "Agenda")
+   "i" 'org-agenda-clock-in
+   "k" 'org-agenda-kill
+   "o" 'org-agenda-clock-out
+   "t" 'org-agenda-todo
+   "w" 'org-agenda-refile
+   "/" 'org-agenda-filter-by-tag
+   )
 
   ;; Evil key configuration (org)
 
@@ -115,11 +130,15 @@
     (kbd "<M-return>") 'gs-org-meta-return
     (kbd "<C-return>") 'gs-org-insert-heading-respect-content
     )
-  (evil-leader/set-key-for-mode 'org-mode
-    "i" 'org-clock-in
-    "o" 'org-clock-out
-    "t" 'org-todo
-    )
+  (general-define-key
+   :prefix (concatenate 'string gjs-leader-key)
+   :keymaps 'org-mode-map
+   :states '(normal motion)
+   "i" '(org-clock-in :which-key "clock in")
+   "o" '(org-clock-out :which-key "clock out")
+   "t" '(org-todo :which-key "todo state")
+   "ce" '(org-export-dispatch :which-key "org export")
+   )
 
   ;; some functions for timing
   )
