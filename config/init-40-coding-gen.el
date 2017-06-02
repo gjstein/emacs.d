@@ -28,6 +28,12 @@
   :after
   :diminish company-mode
   :init (add-hook 'after-init-hook 'global-company-mode)
+  (general-define-key
+   :keymaps 'company-active-map
+   "C-j" 'company-select-next
+   "C-k" 'company-select-previous
+   "C-l" 'company-complete-selection)
+
   :config
   (use-package company-irony :ensure t :defer t)
   (setq company-idle-delay              nil

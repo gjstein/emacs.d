@@ -48,7 +48,8 @@
 ;; == company-backends ==
 (defun my-c-company-hook ()
  "Company backends in C/C++."
- (setq company-backends '(company-irony company-gtags))
+ (set (make-local-variable 'company-backends)
+      '(company-dabbrev-code company-irony company-gtags))
  )
 (add-hook 'c-mode-hook 'my-c-company-hook)
 (add-hook 'c++-mode-hook 'my-c-company-hook)
