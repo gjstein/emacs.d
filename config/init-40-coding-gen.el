@@ -54,6 +54,14 @@
   :config (yas-global-mode t)
   )
 
+;; == ws-butler ==
+;; This cleans up any whitespace I have at the end of my lines.
+(use-package ws-butler
+  :ensure t
+  :init
+  (ws-butler-global-mode)
+  )
+
 ;; == Projectile ==
 (use-package projectile
   :ensure t
