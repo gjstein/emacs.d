@@ -60,6 +60,7 @@
   :ensure t
   :init
   (ws-butler-global-mode)
+  :diminish ws-butler-mode
   )
 
 ;; == Projectile ==
@@ -78,17 +79,18 @@
     (general-define-key
      :prefix gjs-leader-key
      :states '(normal motion)
+     ;; Ensure (leader p) maps to the projectile bindings
+     "p" '(:keymap projectile-command-map :which-key "Projectile")
      "s" '(helm-projectile-ag :which-key "projectile ag")
+     "p/" '(helm-projectile-ag)
      )
     )
   )
 
 ;; == ag ==
-
 ;; Note that 'ag' (the silver searcher) needs to be installed.
-;; Ubuntu: sudo apt-get install ag
+;; Ubuntu: sudo apt-get install silversearcher-ag
 ;; OSX: brew install ag
-
 (use-package ag
   :ensure t
   :defer t
@@ -154,9 +156,7 @@
 (use-package flycheck
   :ensure t
   :diminish flycheck-mode
-  :defer t
   :init
-
   (add-hook 'after-init-hook #'global-flycheck-mode)
   ;; check OS type
   (if (string-equal system-type "gnu/linux")
@@ -169,7 +169,6 @@
   )
 
 ;; == OTHER LANGUAGES ==
-
 (use-package swift-mode
   :ensure t
   :defer t

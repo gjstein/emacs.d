@@ -219,6 +219,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   :init
   (which-key-mode)
   (setq which-key-idle-delay 0.2)
+  :diminish which-key-mode
   )
 
 ;;; init-20-nav-interface.el ends here

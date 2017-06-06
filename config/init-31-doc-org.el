@@ -35,7 +35,7 @@
     "Diminish org-indent-mode on the modeline"
     (interactive)
     (diminish 'org-indent-mode ""))
-  (add-hook 'org-indent-mode-hook 'sk/diminish-org-indent)
+  (add-hook 'org-indent-mode-hook #'sk/diminish-org-indent)
 
   ;; Fix evil-auto-indent for org buffers.
   (defun gs-org-disable-evil-auto-indent nil
@@ -91,6 +91,7 @@
    "t" 'org-agenda-todo
    "T" 'org-agenda-set-tags
    "g" 'org-agenda-redo
+   "v" 'org-agenda-view-mode-dispatch
    "." 'org-agenda-goto-today
    "J" 'gs/org-agenda-next-section
    "K" 'gs/org-agenda-prev-section
@@ -126,10 +127,12 @@
     (org-insert-heading '(4) invisible-ok)
     (evil-insert 0))
   
-  (evil-define-key 'normal org-mode-map
-    (kbd "<M-return>") 'gs-org-meta-return
-    (kbd "<C-return>") 'gs-org-insert-heading-respect-content
-    )
+  ;; (general-define-key
+  ;;  :keymaps org-mode-map
+  ;;  :states '(normal)
+  ;;  (kbd "<M-return>") 'gs-org-meta-return
+  ;;  (kbd "<C-return>") 'gs-org-insert-heading-respect-content
+  ;;  )
   (general-define-key
    :prefix (concatenate 'string gjs-leader-key)
    :keymaps 'org-mode-map
