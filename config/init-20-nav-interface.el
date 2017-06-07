@@ -144,7 +144,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (setq ad-redefinition-action 'accept)
 
   :config
-
   (require 'helm)
   (require 'helm-files)
   (require 'helm-config) ; Necessary for helm-mode
@@ -160,6 +159,16 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	helm-scroll-amount                    8
 	helm-M-x-fuzzy-match                  t
 	helm-ff-file-name-history-use-recentf t)
+
+  (defhydra hydra-helm-menu (:color pink
+				    :hint nil)
+    " THIS IS INCOMPLETE
+^^^^^^^^---------------
+d: delete"
+    ("d" helm-buffer-run-kill-persistent)
+    ("j" helm-next-line)
+    ("q" quit-window "quit" :color blue)
+    )
 
 
   (if (string-equal system-type "darwin")
@@ -192,6 +201,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	 ("C-k" . helm-previous-line)
 	 ("C-h" . helm-next-source)
 	 ("C-S-h" . describe-key)
+	 ("C-e" . hydra-helm-menu/body)
 	 :map helm-find-files-map
 	 ("C-l" . helm-execute-persistent-action)
 	 ("C-h" . helm-find-files-up-one-level)
@@ -201,17 +211,15 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	 )
   )
 
-(use-package helm-swoop
+(use-package swiper :ensure t)
+(use-package swiper-helm
   :ensure t
   :after helm
   :init
   (general-define-key
    :prefix gjs-leader-key
    :states '(normal motion)
-   "/" 'helm-swoop)
-  ;; don't auto-fill swoop with thing-at-point
-  (setq helm-swoop-pre-input-function
-       (lambda () nil))
+   "/" 'swiper-helm)
   )
 
 (use-package which-key
