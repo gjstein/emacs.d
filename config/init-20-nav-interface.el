@@ -80,8 +80,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
    ;; org-mode keys
    ;;"c" '(:ignore t :which-key "Org Keys")
    "q" '(org-capture :which-key "Capture")
+   gjs-leader-key '(helm-M-x :which-key "M-x")
    )
-
   )
 
 (use-package navigate
