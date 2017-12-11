@@ -40,9 +40,23 @@
   (add-hook 'LaTeX-mode-hook 'flyspell-mode)
   (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
   (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+  (fset 'tex-font-lock-suscript 'ignore)
+  (setq font-latex-fontify-script nil)
   (setq reftex-plug-into-AUCTeX t)
   (setq TeX-PDF-mode t)
   (setq reftex-bibliography-commands '("bibliography" "nobibliography" "addbibresource"))
+
+  (general-define-key
+   :keymaps 'LaTeX-mode-map
+   :prefix (concat gjs-leader-key "c")
+   :states '(normal visual)
+   "c" 'TeX-command-master
+   "v" 'TeX-view
+   "e" 'LaTeX-environment
+   "s" 'LaTeX-section
+   "m" 'TeX-insert-macro
+   "=" 'reftex-toc
+   )
   
   ;; Don't use Helm for the reftex-citation lookup
   (eval-after-load 'helm-mode
