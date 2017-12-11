@@ -68,6 +68,13 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (interactive)
     (org-agenda 0 "a"))
 
+  (defun gjstein-open-ledger ()
+    "Open my ledger file"
+    (interactive)
+    (find-file "~/ledger/main.ledger")
+    (evil-goto-line)
+    )
+
   ;; Global general keybindings
   (general-evil-setup)
   (general-define-key
@@ -80,6 +87,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
    ;; org-mode keys
    ;;"c" '(:ignore t :which-key "Org Keys")
    "q" '(org-capture :which-key "Capture")
+   "l" '(gjstein-open-ledger :which-key "Ledger")
    gjs-leader-key '(helm-M-x :which-key "M-x")
    )
   )
@@ -126,7 +134,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (evil-snipe-mode 1)
   (setq evil-snipe-scope 'buffer
 	evil-snipe-repeat-scope 'buffer)
-  (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
+  (push 'magit-mode evil-snipe-disabled-modes)
+  (push 'org-agenda-mode evil-snipe-disabled-modes)
+  ; (add-hook 'magit-mode-hook 'turn-off-evil-snipe-mode)
+  ;(add-hook 'org-agenda-mode-hook 'turn-off-evil-snipe-mode)
   )
 
 
@@ -159,17 +170,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	helm-scroll-amount                    8
 	helm-M-x-fuzzy-match                  t
 	helm-ff-file-name-history-use-recentf t)
-
-  (defhydra hydra-helm-menu (:color pink
-				    :hint nil)
-    " THIS IS INCOMPLETE
-^^^^^^^^---------------
-d: delete"
-    ("d" helm-buffer-run-kill-persistent)
-    ("j" helm-next-line)
-    ("q" quit-window "quit" :color blue)
-    )
-
 
   (if (string-equal system-type "darwin")
       ;; This requires the 'ggrep' command to be installed for OSX
@@ -221,6 +221,11 @@ d: delete"
    :states '(normal motion)
    "/" 'swiper-helm)
   )
+(general-define-key
+ :keymaps 'swiper-map
+ :states '(normal motion)
+ [escape] 'keyboard-escape-quit
+ )					;
 
 (use-package which-key
   :ensure t
