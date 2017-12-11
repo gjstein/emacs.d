@@ -20,10 +20,26 @@
   :defer t
   :init
   (add-to-list 'auto-mode-alist '("\\.ledger$" . ledger-mode))
+
   :config
   (use-package flycheck-ledger
     :ensure t
     )
+
+  (general-define-key
+   :keymaps 'ledger-mode-map
+   :states '(normal motion)
+   :prefix (concat gjs-leader-key "c")
+   "r" 'ledger-report
+   "R" 'ledger-report-redo
+   )
+
+  (evil-set-initial-state 'ledger-report-mode 'motion)
+  (general-define-key
+   :keymaps 'ledger-report-mode-map
+   :states '(normal motion)
+   "q" 'ledger-report-quit
+   "e" 'ledger-report-edit-report
+   "r" 'ledger-report-redo
+   )
   )
-
-
