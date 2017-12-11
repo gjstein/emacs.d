@@ -299,11 +299,11 @@ show this warning instead."
 				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE-ARCHIVE-STYLE=\"habit\"/!-NEXT"
 					   ((org-agenda-overriding-header "Standalone Tasks:")
 					    (org-agenda-skip-function 'gs/select-standalone-tasks)))
-				(agenda "" ((org-agenda-overriding-header "Week At A Glance:")
-					    (org-agenda-ndays 5)
-					    (org-agenda-start-day "+1d")
-					    (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
-					    (org-agenda-prefix-format '((agenda . "  %-12:c%?-12t %s [%b] ")))))
+				;; (agenda "" ((org-agenda-overriding-header "Week At A Glance:")
+				;; 	    (org-agenda-ndays 5)
+				;; 	    (org-agenda-start-day "+1d")
+				;; 	    (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
+				;; 	    (org-agenda-prefix-format '((agenda . "  %-12:c%?-12t %s [%b] ")))))
 				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE-ARCHIVE/!-NEXT"
 					   ((org-agenda-overriding-header "Remaining Project Tasks:")
 					    (org-agenda-skip-function 'gs/select-project-tasks)))
