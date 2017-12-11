@@ -59,6 +59,7 @@
      (python . t)
      (octave . t)
      (C . t)
+     (sh . t)
      ))
   ;; Syntax hilight in #+begin_src blocks
   (setq org-src-fontify-natively t)
