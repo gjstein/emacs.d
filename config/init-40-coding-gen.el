@@ -69,7 +69,7 @@
   :defer t
   :diminish projectile-mode
   :init
-  (projectile-mode)
+  (projectile-global-mode 1)
   (use-package helm-projectile
     :ensure t
     :defer t
@@ -172,6 +172,12 @@
 (use-package swift-mode
   :ensure t
   :defer t
+  )
+
+(use-package haskell-mode
+  :ensure t
+  :defer t
+  :init
   )
 
 ;;; init-40-coding-gen.el ends here
