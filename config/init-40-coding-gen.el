@@ -25,7 +25,6 @@
 (use-package company
   :ensure t
   :defer t
-  :after
   :diminish company-mode
   :init (add-hook 'after-init-hook 'global-company-mode)
   (general-define-key
@@ -66,13 +65,11 @@
 ;; == Projectile ==
 (use-package projectile
   :ensure t
-  :defer t
   :diminish projectile-mode
   :init
   (projectile-global-mode 1)
   (use-package helm-projectile
     :ensure t
-    :defer t
     :after helm
     :config
     (helm-projectile-on)
@@ -82,7 +79,7 @@
      ;; Ensure (leader p) maps to the projectile bindings
      "p" '(:keymap projectile-command-map :which-key "Projectile")
      "s" '(helm-projectile-ag :which-key "projectile ag")
-     "p/" '(helm-projectile-ag)
+     "p/" '(helm-projectile-ag :which-key "projectile ag")
      )
     )
   )
