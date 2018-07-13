@@ -50,4 +50,9 @@
   (add-hook 'web-mode-hook 'emmet-mode)
   )
 
+(use-package less-css-mode
+  :ensure t
+  :defer t
+  )
+
 ;;; init-42-coding-web.el ends here
