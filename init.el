@@ -42,7 +42,7 @@
 			 '(("melpa" . "http://melpa.org/packages/")
 			 ("marmalade" . "http://marmalade-repo.org/packages/")
 			 ("gnu" . "http://elpa.gnu.org/packages/")
-			 ;; ("org" . "http://orgmode.org/elpa/")
+			 ("org" . "http://orgmode.org/elpa/")
 			 ("elpy" . "http://jorgenschaefer.github.io/packages/"))))
 (package-initialize)
 
