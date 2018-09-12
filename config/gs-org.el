@@ -124,11 +124,20 @@ Callers of this function already widen the buffer view."
 	 ("d" "Diary" entry (file+datetree "~/org/diary.org")
 	  "* %?\n%U\n" :clock-in t :clock-resume t)
 	 ("D" "Daily Log" entry (file "~/org/daily-log.org")
-	  "* %u %?\n*Summary*: \n\n*Problem*: \n\n*Insight*: \n\n*Tomorrow*: " :clock-in t :clock-resume t)
+	  "* %u %?\n#+BEGIN: gjs-daily-clocktable :maxlevel 4 :date \"%u\" :link t :compact t \n#+END:\n\n*Summary*: \n\n*Problem*: \n\n*Insight*: \n\n*Tomorrow*: " :clock-in t :clock-resume t)
 	 ("i" "Idea" entry (file org-default-notes-file)
 	  "* %? :IDEA: \n%u" :clock-in t :clock-resume t)
 	 ("n" "Next Task" entry (file+headline org-default-notes-file "Tasks")
-	  "** NEXT %? \nDEADLINE: %t") ))
+	  "** NEXT %? \nDEADLINE: %t")
+	 ("l" "Ledger entries")
+	 ("lc" "MBNA" plain
+	  (file "~/ledger/main-test.ledger")
+	  "%(org-read-date) %^{Payee}
+    ; %^{Comments/Tags}
+    Expenses:%?  %^{Amount}
+    Assets:Checking
+")
+	 ))
 
 ;; == Refile ==
 ;; Targets include this file and any file contributing to the agenda - up to 9 levels deep
@@ -354,7 +363,72 @@ show this warning instead."
 	 ((org-agenda-overriding-header "Habits")
 	  (org-agenda-sorting-strategy
 	   '(todo-state-down effort-up category-keep))))
-	(" " "Export Schedule" ((agenda "" ((org-agenda-overriding-header "Today's Schedule:")
+	(" " "Export Schedule" (
+				(agenda "" ((org-agenda-overriding-header "Today's Schedule:")
+					    (org-agenda-span 'day)
+					    (org-agenda-ndays 1)
+					    (org-agenda-start-on-weekday nil)
+					    (org-agenda-start-day "+0d")
+					    (org-agenda-todo-ignore-deadlines nil)))
+				(tags "REFILE-ARCHIVE-REFILE=\"nil\""
+				      ((org-agenda-overriding-header "Tasks to Refile:")
+				       (org-tags-match-list-sublevels nil)))
+				(tags-todo "-INACTIVE-CANCELLED-ARCHIVE/!NEXT"
+					   ((org-agenda-overriding-header "Next Tasks:")
+					    ))
+				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILEr/!"
+					   ((org-agenda-overriding-header "Active Projects:")
+					    (org-agenda-skip-function 'gs/select-projects)))
+				(tags "ENDOFAGENDA"
+				      ((org-agenda-overriding-header "End of Agenda")
+				       (org-tags-match-list-sublevels nil)))
+				)
+	 ((org-agenda-start-with-log-mode t)
+	  (org-agenda-log-mode-items '(clock))
+	  (org-agenda-prefix-format '((agenda . "  %-12:c%?-12t %(gs/org-agenda-add-location-string)% s")
+				      (timeline . "  % s")
+				      (todo . "  %-12:c %(gs/org-agenda-prefix-string) ")
+				      (tags . "  %-12:c %(gs/org-agenda-prefix-string) ")
+				      (search . "  %i %-12:c")))
+	  (org-agenda-todo-ignore-deadlines 'near)
+	  (org-agenda-todo-ignore-scheduled t)))
+	("b" "Agenda Review" (
+				(tags "REFILE-ARCHIVE-REFILE=\"nil\""
+				      ((org-agenda-overriding-header "Tasks to Refile:")
+				       (org-tags-match-list-sublevels nil)))
+				(tags-todo "-INACTIVE-CANCELLED-ARCHIVE/!NEXT"
+					   ((org-agenda-overriding-header "Next Tasks:")
+					    ))
+				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE-ARCHIVEr/!"
+					   ((org-agenda-overriding-header "Active Projects:")
+					    (org-agenda-skip-function 'gs/select-projects)))
+				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE-ARCHIVE-STYLE=\"habit\"/!-NEXT"
+					   ((org-agenda-overriding-header "Standalone Tasks:")
+					    (org-agenda-skip-function 'gs/select-standalone-tasks)))
+				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE-ARCHIVE/!-NEXT"
+					   ((org-agenda-overriding-header "Remaining Project Tasks:")
+					    (org-agenda-skip-function 'gs/select-project-tasks)))
+				(tags-todo "-INACTIVE-CANCELLED-ARCHIVE/!WAITING"
+					   ((org-agenda-overriding-header "Waiting Tasks:")
+					    ))
+				(tags "INACTIVE-ARCHIVE-CANCELLED"
+				      ((org-agenda-overriding-header "Inactive Projects and Tasks")
+				       (org-tags-match-list-sublevels nil)))
+				(tags "ENDOFAGENDA"
+				      ((org-agenda-overriding-header "End of Agenda")
+				       (org-tags-match-list-sublevels nil)))
+				)
+	 ((org-agenda-start-with-log-mode t)
+	  (org-agenda-log-mode-items '(clock))
+	  (org-agenda-prefix-format '((agenda . "  %-12:c%?-12t %(gs/org-agenda-add-location-string)% s")
+				      (timeline . "  % s")
+				      (todo . "  %-12:c %(gs/org-agenda-prefix-string) ")
+				      (tags . "  %-12:c %(gs/org-agenda-prefix-string) ")
+				      (search . "  %i %-12:c")))
+	  (org-agenda-todo-ignore-deadlines 'near)
+	  (org-agenda-todo-ignore-scheduled t)))
+
+	("O" "Export Schedule (old)" ((agenda "" ((org-agenda-overriding-header "Today's Schedule:")
 					    (org-agenda-span 'day)
 					    (org-agenda-ndays 1)
 					    (org-agenda-start-on-weekday nil)
@@ -372,15 +446,10 @@ show this warning instead."
 				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE-ARCHIVE-STYLE=\"habit\"/!-NEXT"
 					   ((org-agenda-overriding-header "Standalone Tasks:")
 					    (org-agenda-skip-function 'gs/select-standalone-tasks)))
-				;; (agenda "" ((org-agenda-overriding-header "Week At A Glance:")
-				;; 	    (org-agenda-ndays 5)
-				;; 	    (org-agenda-start-day "+1d")
-				;; 	    (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
-				;; 	    (org-agenda-prefix-format '((agenda . "  %-12:c%?-12t %s [%b] ")))))
 				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE-ARCHIVE/!-NEXT"
 					   ((org-agenda-overriding-header "Remaining Project Tasks:")
 					    (org-agenda-skip-function 'gs/select-project-tasks)))
-				(tags "INACTIVE-ARCHIVE"
+				(tags "INACTIVE-ARCHIVE-CANCELLED"
 				      ((org-agenda-overriding-header "Inactive Projects and Tasks")
 				       (org-tags-match-list-sublevels nil)))
 				(tags "ENDOFAGENDA"
@@ -442,7 +511,7 @@ show this warning instead."
 	 '(bold :foreground "white" :background "red"))
 	))
     ))
-(add-hook 'org-finalize-agenda-hook 'gs/org-agenda-project-highlight-warning)
+(add-hook 'org-agenda-finalize-hook 'gs/org-agenda-project-highlight-warning)
 
 ;; Remove empty agenda blocks
 (defun gs/remove-agenda-regions ()
@@ -456,7 +525,33 @@ show this warning instead."
 	  (if (< (count-lines (region-beginning) (region-end)) 4)
 	      (delete-region (region-beginning) (region-end)))
 	  )))))
-(add-hook 'org-finalize-agenda-hook 'gs/remove-agenda-regions)
+(add-hook 'org-agenda-finalize-hook 'gs/remove-agenda-regions)
+
+;; === Clocktable ===
+(require 'org-clock)
+(defun gjs-org-clocktable-filter-empty-tables (ipos tables params)
+  "Removes all empty tables before printing the clocktable"
+  (org-clocktable-write-default ipos
+				(seq-filter
+				 (lambda (tbl)
+				   (not (null (nth 2 tbl))))
+				 tables)
+				params)
+  )
+
+(defun org-dblock-write:gjs-daily-clocktable (params)
+  "Custom clocktable command for my daily log"
+  (let ((local-params params)
+	(date-str (substring
+		   (plist-get params ':date)
+		   1 11))
+	)
+    (plist-put params ':block date-str)
+    (plist-put params ':formatter 'gjs-org-clocktable-filter-empty-tables)
+    (plist-put params ':scope 'agenda)
+    (org-dblock-write:clocktable params)
+    )
+  )
 
 (provide 'gs-org)
 ;;; gs-org.el ends here
