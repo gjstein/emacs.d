@@ -18,7 +18,9 @@
 
 ;;; Code:
 
+
 (use-package org
+  :ensure org-plus-contrib
   :init
   (add-hook 'org-mode-hook 'visual-line-mode)
   (add-hook 'org-mode-hook 'org-indent-mode)
@@ -28,8 +30,10 @@
   :diminish org-indent-mode
   :defer t
   :bind (("\C-c a" . org-agenda)
-	 ("\C-c c" . org-capture))
+	 ("\C-c c" . org-capture)
+	 ("\C-c j" . gs-helm-org-link-to-contact))
   :config
+
 
   (defun sk/diminish-org-indent ()
     "Diminish org-indent-mode on the modeline"
@@ -48,21 +52,56 @@
   (load-file "~/.emacs.d/config/gs-org.el")
   (require 'org)
 
+  (setq org-display-inline-images t)
+  (setq org-redisplay-inline-images t)
+  (setq org-startup-with-inline-images "inlineimages")
+
   ;; == Agenda ==
   (defvar org-agenda-window-setup)
   (setq org-agenda-window-setup 'current-window)
-  
+
   ;; Run/highlight code using babel in org-mode
   (org-babel-do-load-languages
    'org-babel-load-languages
    '(
      (python . t)
+     (ipython . t)
      (octave . t)
      (C . t)
-     (sh . t)
+     (shell . t)
      ))
   ;; Syntax hilight in #+begin_src blocks
   (setq org-src-fontify-natively t)
+  ;; Don't prompt before running code in org
+  (setq org-confirm-babel-evaluate nil)
+  ;; Display inline images after running code
+  (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
+
+  ;; Org + LaTeX
+  (with-eval-after-load 'ox-latex
+    (add-to-list 'org-latex-classes
+	       '("book-noparts"
+		 "\\documentclass{book}"
+		 ("\\chapter{%s}" . "\\chapter*{%s}")
+		 ("\\section{%s}" . "\\section*{%s}")
+		 ("\\subsection{%s}" . "\\subsection*{%s}")
+		 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+		 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+		 ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+
+
+  (use-package helm-org-rifle
+    :ensure t)
+
+  (use-package ob-async
+    :ensure t
+    ;:load-path "/Users/Greg/Desktop/ob-async"
+    :config
+    (setq ob-async-no-async-languages-alist '("ipython"))
+    )
+
+  (use-package ob-ipython
+    :ensure t)
 
   ;; Capture mode
   (add-hook 'org-capture-mode-hook 'evil-insert-state)
@@ -102,7 +141,7 @@
    )
   (general-define-key
    :keymaps 'org-agenda-mode-map
-   :prefix (concatenate 'string gjs-leader-key)
+   :prefix gjs-leader-key
    :states '(normal motion)
    "" '(:ignore t :which-key "Agenda")
    "i" 'org-agenda-clock-in
@@ -111,7 +150,10 @@
    "t" 'org-agenda-todo
    "w" 'org-agenda-refile
    "/" 'org-agenda-filter-by-tag
+   "cs" '(gs-org-goto :which-key "org goto")
+   "c/" '(helm-org-rifle :which-key "org-rifle")
    )
+
 
   ;; Evil key configuration (org)
 
@@ -127,7 +169,14 @@
     (interactive)
     (org-insert-heading '(4) invisible-ok)
     (evil-insert 0))
-  
+
+  (defun gs-org-goto ()
+    "Insert heading with `org-insert-heading-respect-content' set to t."
+    (interactive)
+    (org-refile '(4))
+    ;; (let ((org-goto-interface 'outline-path-completion)) (org-goto))
+    )
+
   ;; (general-define-key
   ;;  :keymaps org-mode-map
   ;;  :states '(normal)
@@ -141,10 +190,30 @@
    "i" '(org-clock-in :which-key "clock in")
    "o" '(org-clock-out :which-key "clock out")
    "t" '(org-todo :which-key "todo state")
+   "ct" '(org-todo :which-key "todo state")
    "ce" '(org-export-dispatch :which-key "org export")
+   "cp" '(org-set-property :which-key "org set property")
+   "cs" '(gs-org-goto :which-key "org goto")
+   "cj" '(gs-helm-org-link-to-contact :which-key "link contact")
+   "c/" '(helm-org-rifle :which-key "org-rifle")
    )
-
   ;; some functions for timing
+  )
+
+(use-package org-ref
+  :ensure t
+  :after org
+  :init
+  (setq reftex-default-bibliography '("~/org/resources/bibliography/references.bib"))
+  ;; see org-ref for use of these variables
+  (setq org-ref-default-bibliography '("~/org/resources/bibliography/references.bib"))
+
+  ;; Ensure LaTeX export correctly produces the bibliography
+  (setq org-latex-pdf-process
+	'("pdflatex -interaction nonstopmode -output-directory %o %f"
+	  "bibtex %b"
+	  "pdflatex -interaction nonstopmode -output-directory %o %f"
+	  "pdflatex -interaction nonstopmode -output-directory %o %f"))
   )
 
 (defun org-build-agenda ()
