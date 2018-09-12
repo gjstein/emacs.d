@@ -51,3 +51,20 @@
   :ensure t
   :after flycheck
   )
+
+(use-package hledger-mode
+  :ensure t
+  :defer t
+  :config
+  ;; To open files with .journal extension in hledger-mode
+  (add-to-list 'auto-mode-alist '("\\.journal\\'" . hledger-mode))
+
+  ;; Provide the path to you journal file.
+  ;; The default location is too opinionated.
+  (setq hledger-jfile "~/ledger/main.ledger")
+
+
+  ;; Auto-completion for account names
+  ;; For company-mode users,
+  (add-to-list 'company-backends 'hledger-company)
+  )
