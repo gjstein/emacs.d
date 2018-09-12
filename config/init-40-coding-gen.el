@@ -174,7 +174,11 @@
 (use-package haskell-mode
   :ensure t
   :defer t
-  :init
+  )
+
+(use-package csharp-mode
+  :ensure t
+  :defer t
   )
 
 ;;; init-40-coding-gen.el ends here
