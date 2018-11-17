@@ -62,7 +62,9 @@
   (eval-after-load 'helm-mode
     '(add-to-list 'helm-completing-read-handlers-alist '(reftex-citation . nil))
     )
-  
   )
+
+
+(load "~/.emacs.d/external/ox-c2c")
 
 ;;; init-30-doc-gen.el ends here
