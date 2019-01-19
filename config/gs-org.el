@@ -13,6 +13,7 @@
 (setq org-tags-column 80)
 (setq org-agenda-tags-column org-tags-column)
 (setq org-agenda-sticky t)
+(setq org-latex-prefer-user-labels t)
 
 ;; Set default column view headings: Task Effort Clock_Summary
 (setq org-columns-default-format "%50ITEM(Task) %10Effort(Effort){:} %10CLOCKSUM %16TIMESTAMP_IA")
