@@ -6,54 +6,18 @@
 (setq org-directory "~/org")
 (setq org-default-notes-file "~/org/refile.org")
 (defvar org-default-diary-file "~/org/diary.org")
-(setq org-agenda-files (quote ("~/org" "~/org/archive")))
 
 ;; Display properties
 (setq org-cycle-separator-lines 0)
 (setq org-tags-column 80)
-(setq org-agenda-tags-column org-tags-column)
-(setq org-agenda-sticky t)
 (setq org-latex-prefer-user-labels t)
+
+;; Dim blocked tasks (and other settings)
+(setq org-enforce-todo-dependencies t)
 
 ;; Set default column view headings: Task Effort Clock_Summary
 (setq org-columns-default-format "%50ITEM(Task) %10Effort(Effort){:} %10CLOCKSUM %16TIMESTAMP_IA")
 
-;; == bh/helper-functions ==
-(defun bh/is-project-p ()
-  "Any task with a todo keyword subtask."
-  (save-restriction
-    (widen)
-    (let ((has-subtask)
-          (subtree-end (save-excursion (org-end-of-subtree t)))
-          (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
-      (save-excursion
-        (forward-line 1)
-        (while (and (not has-subtask)
-                    (< (point) subtree-end)
-                    (re-search-forward "^\*+ " subtree-end t))
-          (when (member (org-get-todo-state) org-todo-keywords-1)
-            (setq has-subtask t))))
-      (and is-a-task has-subtask))))
-(defun bh/find-project-task ()
-  "Move point to the parent (project) task if any."
-  (save-restriction
-    (widen)
-    (let ((parent-task (save-excursion (org-back-to-heading 'invisible-ok) (point))))
-      (while (org-up-heading-safe)
-        (when (member (nth 2 (org-heading-components)) org-todo-keywords-1)
-          (setq parent-task (point))))
-      (goto-char parent-task)
-      parent-task)))
-(defun bh/is-project-subtree-p ()
-  "Any task with a todo keyword that is in a project subtree.
-Callers of this function already widen the buffer view."
-  (let ((task (save-excursion (org-back-to-heading 'invisible-ok)
-                              (point))))
-    (save-excursion
-      (bh/find-project-task)
-      (if (equal (point) task)
-          nil
-        t))))
 
 ;; ;; == Tags ==
 ;; (setq org-tag-alist '((:startgroup)
@@ -78,7 +42,7 @@ Callers of this function already widen the buffer view."
 (setq org-use-fast-todo-selection t)
 (setq org-todo-keywords
       '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-	(sequence "WAITING(w@/!)" "INACTIVE(i)" "|" "CANCELLED(c@/!)" "MEETING")))
+	(sequence "WAITING(w@/!)" "INACTIVE(i)" "SOMEDAY(s)" "|" "CANCELLED(c@/!)" "MEETING")))
 ;; Custom colors for the keywords
 (setq org-todo-keyword-faces
       '(("TODO" :foreground "red" :weight bold)
@@ -86,17 +50,19 @@ Callers of this function already widen the buffer view."
 	("DONE" :foreground "forest green" :weight bold)
 	("WAITING" :foreground "orange" :weight bold)
 	("INACTIVE" :foreground "magenta" :weight bold)
+	("SOMEDAY" :foreground "cyan" :weight bold)
 	("CANCELLED" :foreground "forest green" :weight bold)
 	("MEETING" :foreground "forest green" :weight bold)))
 ;; Auto-update tags whenever the state is changed
 (setq org-todo-state-tags-triggers
       '(("CANCELLED" ("CANCELLED" . t))
-	("WAITING" ("WAITING" . t))
-	("INACTIVE" ("WAITING") ("INACTIVE" . t))
-	(done ("WAITING") ("INACTIVE"))
-	("TODO" ("WAITING") ("CANCELLED") ("INACTIVE"))
-	("NEXT" ("WAITING") ("CANCELLED") ("INACTIVE"))
-	("DONE" ("WAITING") ("CANCELLED") ("INACTIVE"))))
+	("WAITING" ("SOMEDAY") ("INACTIVE") ("WAITING" . t))
+	("INACTIVE" ("WAITING") ("SOMEDAY") ("INACTIVE" . t))
+	("SOMEDAY" ("WAITING") ("INACTIVE") ("SOMEDAY" . t))
+	(done ("WAITING") ("INACTIVE") ("SOMEDAY"))
+	("TODO" ("WAITING") ("CANCELLED") ("INACTIVE") ("SOMEDAY"))
+	("NEXT" ("WAITING") ("CANCELLED") ("INACTIVE") ("SOMEDAY"))
+	("DONE" ("WAITING") ("CANCELLED") ("INACTIVE") ("SOMEDAY"))))
 
 (defun gs/mark-next-done-parent-tasks-todo ()
   "Visit each parent task and change NEXT (or DONE) states to TODO."
@@ -169,6 +135,46 @@ Callers of this function already widen the buffer view."
 (require 'org-id)
 ;; I might also need org-ref
 
+;;;; bh/helper-functions
+
+(defun bh/is-project-p ()
+  "Any task with a todo keyword subtask."
+  (save-restriction
+    (widen)
+    (let ((has-subtask)
+          (subtree-end (save-excursion (org-end-of-subtree t)))
+          (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
+      (save-excursion
+        (forward-line 1)
+        (while (and (not has-subtask)
+                    (< (point) subtree-end)
+                    (re-search-forward "^\*+ " subtree-end t))
+          (when (member (org-get-todo-state) org-todo-keywords-1)
+            (setq has-subtask t))))
+      (and is-a-task has-subtask))))
+
+(defun bh/find-project-task ()
+  "Move point to the parent (project) task if any."
+  (save-restriction
+    (widen)
+    (let ((parent-task (save-excursion (org-back-to-heading 'invisible-ok) (point))))
+      (while (org-up-heading-safe)
+        (when (member (nth 2 (org-heading-components)) org-todo-keywords-1)
+          (setq parent-task (point))))
+      (goto-char parent-task)
+      parent-task)))
+
+(defun bh/is-project-subtree-p ()
+  "Any task with a todo keyword that is in a project subtree.
+Callers of this function already widen the buffer view."
+  (let ((task (save-excursion (org-back-to-heading 'invisible-ok)
+                              (point))))
+    (save-excursion
+      (bh/find-project-task)
+      (if (equal (point) task)
+          nil
+        t))))
+
 ;; == Contacts ==
 (require 'org-contacts)
 
@@ -183,33 +189,33 @@ Callers of this function already widen the buffer view."
 
 (defun gstest ()
   (interactive)
-  	   ;; Just link to current headline
-	   (setq cpltxt (concat "file:"
-				(abbreviate-file-name
-				 (buffer-file-name (buffer-base-buffer)))))
-	   ;; Add a context search string
-	   (when t
-	     (let* ((element (org-element-at-point))
-		    (name (org-element-property :name element)))
-	       (setq txt (cond
-			  ((org-at-heading-p) nil)
-			  (name)
-			  ((org-region-active-p)
-			   (buffer-substring (region-beginning) (region-end)))))
-	       (when (or (null txt) (string-match "\\S-" txt))
-		 (setq cpltxt
-		       (concat cpltxt "::"
-			       (condition-case nil
-				   (org-make-org-heading-search-string txt)
-				 (error "")))
-		       desc (or name
-				(nth 4 (ignore-errors (org-heading-components)))
-				"NONE")))))
-	   (when (string-match "::\\'" cpltxt)
-	     (setq cpltxt (substring cpltxt 0 -2)))
-	   (setq link cpltxt)
-	   link
-	   )
+  ;; Just link to current headline
+  (setq cpltxt (concat "file:"
+		       (abbreviate-file-name
+			(buffer-file-name (buffer-base-buffer)))))
+  ;; Add a context search string
+  (when t
+    (let* ((element (org-element-at-point))
+	   (name (org-element-property :name element)))
+      (setq txt (cond
+		 ((org-at-heading-p) nil)
+		 (name)
+		 ((org-region-active-p)
+		  (buffer-substring (region-beginning) (region-end)))))
+      (when (or (null txt) (string-match "\\S-" txt))
+	(setq cpltxt
+	      (concat cpltxt "::"
+		      (condition-case nil
+			  (org-make-org-heading-search-string txt)
+			(error "")))
+	      desc (or name
+		       (nth 4 (ignore-errors (org-heading-components)))
+		       "NONE")))))
+  (when (string-match "::\\'" cpltxt)
+    (setq cpltxt (substring cpltxt 0 -2)))
+  (setq link cpltxt)
+  link
+  )
 
 
 
@@ -260,289 +266,9 @@ Switch projects and subprojects from NEXT back to TODO"
 
 ;; == Agenda ==
 
-;; Dim blocked tasks (and other settings)
-(setq org-enforce-todo-dependencies t)
-(setq org-agenda-inhibit-startup nil)
-(setq org-agenda-dim-blocked-tasks nil)
+(load-file "~/.emacs.d/config/gs-org-agenda.el")
 
-;; Compact the block agenda view (disabled)
-(setq org-agenda-compact-blocks nil)
-
-;; Set the times to display in the time grid
-(setq org-agenda-time-grid
-      (quote
-       ((daily today remove-match)
-        (800 1200 1600 2000)
-        "......" "----------------")))
-
-;; Some helper functions for selection within agenda views
-(defun gs/select-with-tag-function (select-fun-p)
-  (save-restriction
-    (widen)
-    (let ((next-headline
-	   (save-excursion (or (outline-next-heading)
-			       (point-max)))))
-      (if (funcall select-fun-p) nil next-headline))))
-  
-(defun gs/select-projects ()
-  "Selects tasks which are project headers"
-  (gs/select-with-tag-function #'bh/is-project-p))
-(defun gs/select-project-tasks ()
-  "Skips tags which belong to projects (and is not a project itself)"
-  (gs/select-with-tag-function
-   #'(lambda () (and
-		 (not (bh/is-project-p))
-		 (bh/is-project-subtree-p)))))
-(defun gs/select-standalone-tasks ()
-  "Skips tags which belong to projects. Is neither a project, nor does it blong to a project"
-  (gs/select-with-tag-function
-   #'(lambda () (and
-		 (not (bh/is-project-p))
-		 (not (bh/is-project-subtree-p))))))
-(defun gs/select-projects-and-standalone-tasks ()
-  "Skips tags which are not projects"
-  (gs/select-with-tag-function
-   #'(lambda () (or
-		 (bh/is-project-p)
-		 (bh/is-project-subtree-p)))))
-
-(defun gs/org-agenda-project-warning ()
-  "Is a project stuck or waiting. If the project is not stuck,
-show nothing. However, if it is stuck and waiting on something,
-show this warning instead."
-  (if (gs/org-agenda-project-is-stuck)
-    (if (gs/org-agenda-project-is-waiting) " !W" " !S") ""))
-
-(defun gs/org-agenda-project-is-stuck ()
-  "Is a project stuck"
-  (if (bh/is-project-p) ; first, check that it's a project
-      (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
-	     (has-next))
-	(save-excursion
-	  (forward-line 1)
-	  (while (and (not has-next)
-		      (< (point) subtree-end)
-		      (re-search-forward "^\\*+ NEXT " subtree-end t))
-	    (unless (member "WAITING" (org-get-tags-at))
-	      (setq has-next t))))
-	(if has-next nil t)) ; signify that this project is stuck
-    nil)) ; if it's not a project, return an empty string
-
-(defun gs/org-agenda-project-is-waiting ()
-  "Is a project stuck"
-  (if (bh/is-project-p) ; first, check that it's a project
-      (let* ((subtree-end (save-excursion (org-end-of-subtree t))))
-	(save-excursion
-	  (re-search-forward "^\\*+ WAITING" subtree-end t)))
-    nil)) ; if it's not a project, return an empty string
-
-;; Some helper functions for agenda views
-(defun gs/org-agenda-prefix-string ()
-  "Format"
-  (let ((path (org-format-outline-path (org-get-outline-path))) ; "breadcrumb" path
-	(stuck (gs/org-agenda-project-warning))) ; warning for stuck projects
-       (if (> (length path) 0)
-	   (concat stuck ; add stuck warning
-		   " [" path "]") ; add "breadcrumb"
-	 stuck)))
-       
-(defun gs/org-agenda-add-location-string ()
-  "Gets the value of the LOCATION property"
-  (let ((loc (org-entry-get (point) "LOCATION")))
-    (if (> (length loc) 0)
-	(concat "{" loc "} ")
-      "")))
-
-;; Variables for ignoring tasks with deadlines
-(defvar gs/hide-deadline-next-tasks t)
-(setq org-agenda-tags-todo-honor-ignore-options t)
-(setq org-deadline-warning-days 10)
-
-;; Custom agenda command definitions
-(setq org-agenda-custom-commands
-      '(("h" "Habits" agenda "STYLE=\"habit\""
-	 ((org-agenda-overriding-header "Habits")
-	  (org-agenda-sorting-strategy
-	   '(todo-state-down effort-up category-keep))))
-	(" " "Export Schedule" (
-				(agenda "" ((org-agenda-overriding-header "Today's Schedule:")
-					    (org-agenda-span 'day)
-					    (org-agenda-ndays 1)
-					    (org-agenda-start-on-weekday nil)
-					    (org-agenda-start-day "+0d")
-					    (org-agenda-todo-ignore-deadlines nil)))
-				(tags "REFILE-ARCHIVE-REFILE=\"nil\""
-				      ((org-agenda-overriding-header "Tasks to Refile:")
-				       (org-tags-match-list-sublevels nil)))
-				(tags-todo "-INACTIVE-CANCELLED-ARCHIVE/!NEXT"
-					   ((org-agenda-overriding-header "Next Tasks:")
-					    ))
-				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILEr/!"
-					   ((org-agenda-overriding-header "Active Projects:")
-					    (org-agenda-skip-function 'gs/select-projects)))
-				(tags "ENDOFAGENDA"
-				      ((org-agenda-overriding-header "End of Agenda")
-				       (org-tags-match-list-sublevels nil)))
-				)
-	 ((org-agenda-start-with-log-mode t)
-	  (org-agenda-log-mode-items '(clock))
-	  (org-agenda-prefix-format '((agenda . "  %-12:c%?-12t %(gs/org-agenda-add-location-string)% s")
-				      (timeline . "  % s")
-				      (todo . "  %-12:c %(gs/org-agenda-prefix-string) ")
-				      (tags . "  %-12:c %(gs/org-agenda-prefix-string) ")
-				      (search . "  %i %-12:c")))
-	  (org-agenda-todo-ignore-deadlines 'near)
-	  (org-agenda-todo-ignore-scheduled t)))
-	("b" "Agenda Review" (
-				(tags "REFILE-ARCHIVE-REFILE=\"nil\""
-				      ((org-agenda-overriding-header "Tasks to Refile:")
-				       (org-tags-match-list-sublevels nil)))
-				(tags-todo "-INACTIVE-CANCELLED-ARCHIVE/!NEXT"
-					   ((org-agenda-overriding-header "Next Tasks:")
-					    ))
-				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE-ARCHIVEr/!"
-					   ((org-agenda-overriding-header "Active Projects:")
-					    (org-agenda-skip-function 'gs/select-projects)))
-				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE-ARCHIVE-STYLE=\"habit\"/!-NEXT"
-					   ((org-agenda-overriding-header "Standalone Tasks:")
-					    (org-agenda-skip-function 'gs/select-standalone-tasks)))
-				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE-ARCHIVE/!-NEXT"
-					   ((org-agenda-overriding-header "Remaining Project Tasks:")
-					    (org-agenda-skip-function 'gs/select-project-tasks)))
-				(tags-todo "-INACTIVE-CANCELLED-ARCHIVE/!WAITING"
-					   ((org-agenda-overriding-header "Waiting Tasks:")
-					    ))
-				(tags "INACTIVE-ARCHIVE-CANCELLED"
-				      ((org-agenda-overriding-header "Inactive Projects and Tasks")
-				       (org-tags-match-list-sublevels nil)))
-				(tags "ENDOFAGENDA"
-				      ((org-agenda-overriding-header "End of Agenda")
-				       (org-tags-match-list-sublevels nil)))
-				)
-	 ((org-agenda-start-with-log-mode t)
-	  (org-agenda-log-mode-items '(clock))
-	  (org-agenda-prefix-format '((agenda . "  %-12:c%?-12t %(gs/org-agenda-add-location-string)% s")
-				      (timeline . "  % s")
-				      (todo . "  %-12:c %(gs/org-agenda-prefix-string) ")
-				      (tags . "  %-12:c %(gs/org-agenda-prefix-string) ")
-				      (search . "  %i %-12:c")))
-	  (org-agenda-todo-ignore-deadlines 'near)
-	  (org-agenda-todo-ignore-scheduled t)))
-
-	("O" "Export Schedule (old)" ((agenda "" ((org-agenda-overriding-header "Today's Schedule:")
-					    (org-agenda-span 'day)
-					    (org-agenda-ndays 1)
-					    (org-agenda-start-on-weekday nil)
-					    (org-agenda-start-day "+0d")
-					    (org-agenda-todo-ignore-deadlines nil)))
-				(tags-todo "-INACTIVE-CANCELLED-ARCHIVE/!NEXT"
-					   ((org-agenda-overriding-header "Next Tasks:")
-					    ))
-				(tags "REFILE-ARCHIVE-REFILE=\"nil\""
-				      ((org-agenda-overriding-header "Tasks to Refile:")
-				       (org-tags-match-list-sublevels nil)))
-				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE-ARCHIVEr/!"
-					   ((org-agenda-overriding-header "Active Projects:")
-					    (org-agenda-skip-function 'gs/select-projects)))
-				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE-ARCHIVE-STYLE=\"habit\"/!-NEXT"
-					   ((org-agenda-overriding-header "Standalone Tasks:")
-					    (org-agenda-skip-function 'gs/select-standalone-tasks)))
-				(tags-todo "-INACTIVE-HOLD-CANCELLED-REFILE-ARCHIVE/!-NEXT"
-					   ((org-agenda-overriding-header "Remaining Project Tasks:")
-					    (org-agenda-skip-function 'gs/select-project-tasks)))
-				(tags "INACTIVE-ARCHIVE-CANCELLED"
-				      ((org-agenda-overriding-header "Inactive Projects and Tasks")
-				       (org-tags-match-list-sublevels nil)))
-				(tags "ENDOFAGENDA"
-				      ((org-agenda-overriding-header "End of Agenda")
-				       (org-tags-match-list-sublevels nil))))
-	 ((org-agenda-start-with-log-mode t)
-	  (org-agenda-log-mode-items '(clock))
-	  (org-agenda-prefix-format '((agenda . "  %-12:c%?-12t %(gs/org-agenda-add-location-string)% s")
-				      (timeline . "  % s")
-				      (todo . "  %-12:c %(gs/org-agenda-prefix-string) ")
-				      (tags . "  %-12:c %(gs/org-agenda-prefix-string) ")
-				      (search . "  %i %-12:c")))
-	  (org-agenda-todo-ignore-deadlines 'near)
-	  (org-agenda-todo-ignore-scheduled t)))
-	("X" "Agenda" ((agenda "") (alltodo))
-	 ((org-agenda-ndays 10)
-	  (org-agenda-start-on-weekday nil)
-	  (org-agenda-start-day "-1d")
-	  (org-agenda-start-with-log-mode t)
-	  (org-agenda-log-mode-items '(closed clock state)))
-	 )))
-
-;; == Agenda Navigation ==
-
-;; Search for a "=" and go to the next line
-(defun gs/org-agenda-next-section ()
-  "Go to the next section in an org agenda buffer"
-  (interactive)
-  (if (search-forward "===" nil t 1)
-      (forward-line 1)
-    (goto-char (point-max)))
-  (beginning-of-line))
-
-;; Search for a "=" and go to the previous line
-(defun gs/org-agenda-prev-section ()
-  "Go to the next section in an org agenda buffer"
-  (interactive)
-  (forward-line -2)
-  (if (search-forward "===" nil t -1)
-      (forward-line 1)
-    (goto-char (point-min))))
-
-;; == Agenda Post-processing ==
-;; Highlight the "!!" for stuck projects (for emphasis)
-(defun gs/org-agenda-project-highlight-warning ()
-  (save-excursion
-    (goto-char (point-min))
-    (while (re-search-forward "!W" nil t)
-      (progn
-	(add-face-text-property
-	 (match-beginning 0) (match-end 0)
-	 '(bold :foreground "orange"))
-	))
-    (goto-char (point-min))
-    (while (re-search-forward "!S" nil t)
-      (progn
-	(add-face-text-property
-	 (match-beginning 0) (match-end 0)
-	 '(bold :foreground "white" :background "red"))
-	))
-    (goto-char (point-min))
-    (while (re-search-forward ":OPT:" nil t)
-      (progn
-	(put-text-property
-	 (+ 26 (point-at-bol)) (match-end 0)
-	 'face 'org-time-grid)
-	))
-    (goto-char (point-min))
-    (while (re-search-forward ":TENT:" nil t)
-      (progn
-	(put-text-property
-	 (+ 26 (point-at-bol)) (match-end 0)
-	 'face 'org-time-grid)
-	))
-    ))
-(add-hook 'org-agenda-finalize-hook 'gs/org-agenda-project-highlight-warning)
-
-;; Remove empty agenda blocks
-(defun gs/remove-agenda-regions ()
-  (save-excursion
-    (goto-char (point-min))
-    (let ((region-large t))
-      (while (and (< (point) (point-max)) region-large)
-	(set-mark (point))
-	(gs/org-agenda-next-section)
-	(if (< (- (region-end) (region-beginning)) 5) (setq region-large nil)
-	  (if (< (count-lines (region-beginning) (region-end)) 4)
-	      (delete-region (region-beginning) (region-end)))
-	  )))))
-(add-hook 'org-agenda-finalize-hook 'gs/remove-agenda-regions)
-
-;; === Clocktable ===
+;; === Custom Clocktable ===
 (require 'org-clock)
 (defun gjs-org-clocktable-filter-empty-tables (ipos tables params)
   "Removes all empty tables before printing the clocktable"

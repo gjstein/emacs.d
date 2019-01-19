@@ -129,7 +129,7 @@ show this warning instead."
 
 
 
-(defvar gs-org-agenda-block-today-schedule
+(defvar gs-org-agenda-block--today-schedule
   '(agenda "" ((org-agenda-overriding-header "Today's Schedule:")
 	       (org-agenda-span 'day)
 	       (org-agenda-ndays 1)
@@ -138,25 +138,55 @@ show this warning instead."
 	       (org-agenda-todo-ignore-deadlines nil)))
   "A block showing a 1 day schedule.")
 
-(defvar gs-org-agenda-block-refile
+(defvar gs-org-agenda-block--refile
   '(tags "REFILE-ARCHIVE-REFILE=\"nil\""
 	 ((org-agenda-overriding-header "Tasks to Refile:")
 	  (org-tags-match-list-sublevels nil)))
   "Headings with the refile tag.")
 
-(defvar gs-org-agenda-block-next-tasks
+(defvar gs-org-agenda-block--next-tasks
   '(tags-todo "-INACTIVE-CANCELLED-ARCHIVE/!NEXT"
 	      ((org-agenda-overriding-header "Next Tasks:")
 	       ))
   "Next tasks.")
 
-(defvar gs-org-agenda-block-active-projects
+(defvar gs-org-agenda-block--active-projects
   '(tags-todo "-INACTIVE-SOMEDAY-CANCELLED-REFILEr/!"
 	      ((org-agenda-overriding-header "Active Projects:")
 	       (org-agenda-skip-function 'gs/select-projects)))
   "All active projects: no inactive/someday/cancelled/refile.")
 
-(defvar gs-org-agenda-block-end-of-agenda
+(defvar gs-org-agenda-block--standalone-tasks
+  '(tags-todo "-INACTIVE-SOMEDAY-CANCELLED-REFILE-ARCHIVE-STYLE=\"habit\"/!-NEXT"
+	      ((org-agenda-overriding-header "Standalone Tasks:")
+	       (org-agenda-skip-function 'gs/select-standalone-tasks)))
+  "Tasks (TODO) that do not belong to any projects.")
+
+(defvar gs-org-agenda-block--waiting-tasks
+  '(tags-todo "-INACTIVE-SOMEDAY-CANCELLED-ARCHIVE/!WAITING"
+	     ((org-agenda-overriding-header "Waiting Tasks:")
+	      ))
+  "Tasks marked as waiting.")
+
+(defvar gs-org-agenda-block--remaining-project-tasks
+  '(tags-todo "-INACTIVE-SOMEDAY-CANCELLED-WAITING-REFILE-ARCHIVE/!-NEXT"
+	      ((org-agenda-overriding-header "Remaining Project Tasks:")
+	       (org-agenda-skip-function 'gs/select-project-tasks)))
+  "Non-NEXT TODO items belonging to a project.")
+
+(defvar gs-org-agenda-block--inactive-tags
+  '(tags-todo "-SOMEDAY-ARCHIVE-CANCELLED/!INACTIVE"
+	 ((org-agenda-overriding-header "Inactive Projects and Tasks")
+	  (org-tags-match-list-sublevels nil)))
+  "Inactive projects and tasks.")
+
+(defvar gs-org-agenda-block--someday-tags
+  '(tags-todo "-INACTIVE-ARCHIVE-CANCELLED/!SOMEDAY"
+	 ((org-agenda-overriding-header "Someday Projects and Tasks")
+	  (org-tags-match-list-sublevels nil)))
+  "Someday projects and tasks.")
+
+(defvar gs-org-agenda-block--end-of-agenda
   '(tags "ENDOFAGENDA"
 	 ((org-agenda-overriding-header "End of Agenda")
 	  (org-tags-match-list-sublevels nil)))
@@ -182,12 +212,27 @@ show this warning instead."
 	  (org-agenda-sorting-strategy
 	   '(todo-state-down effort-up category-keep))))
 	(" " "Export Schedule"
-	 (,gs-org-agenda-block-today-schedule
-	  ,gs-org-agenda-block-refile
-	  ,gs-org-agenda-block-next-tasks
-	  ,gs-org-agenda-block-active-projects
-	  ,gs-org-agenda-block-end-of-agenda)
+	 (,gs-org-agenda-block--today-schedule
+	  ,gs-org-agenda-block--refile
+	  ,gs-org-agenda-block--next-tasks
+	  ,gs-org-agenda-block--active-projects
+	  ,gs-org-agenda-block--end-of-agenda)
 	 ,gs-org-agenda-display-settings)
+	("b" "Agenda Review"
+	 (,gs-org-agenda-block--next-tasks)
+	 (,gs-org-agenda-block--refile)
+	 (,gs-org-agenda-block--active-projects)
+	 (,gs-org-agenda-block--standalone-tasks)
+	 (,gs-org-agenda-block--remaining-project-tasks)
+	 (,gs-org-agenda-block--inactive-tags)
+	 (,gs-org-agenda-block--someday-tags)
+	 (,gs-org-agenda-block--end-of-agenda)
+	 ,gs-org-agenda-display-settings)
+	("L" "Weekly Log"
+	 agenda
+	 '(((org-agenda-start-with-log-mode t)
+	    (org-agenda-log-mode-items '(closed clock)))
+	  ))
 	))
 
 

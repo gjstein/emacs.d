@@ -66,7 +66,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (defun gjstein-org-weekly-agenda ()
     "Open my custom agenda"
     (interactive)
-    (org-agenda 0 "a"))
+    (org-agenda 0 "L"))
 
   (defun gjstein-open-ledger ()
     "Open my ledger file"
