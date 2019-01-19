@@ -17,11 +17,7 @@
 
 
 ;; ensure:
-;;; pip install jedi
-;;  pip install flake8
-;;  pip install importmagic
-;;  pip install autopep8
-;;  pip install yapf
+;;; pip install jedi flake8 importmagic autopep8 yapf
 (use-package elpy
   :ensure t
   :after python
