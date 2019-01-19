@@ -79,15 +79,37 @@
 
   ;; Org + LaTeX
   (with-eval-after-load 'ox-latex
+    (setq org-latex-prefer-user-labels t)
+    (setq org-latex-listings 'minted)
+    (setq org-latex-custom-lang-environments
+	  '(
+	    (emacs-lisp "common-lispcode")
+	    ))
+    (setq org-latex-minted-options
+	  '(("frame" "lines")
+	    ("fontsize" "\\scriptsize")
+	    ("linenos" "")))
+
+    ;; Ensure LaTeX export correctly produces the bibliography
+    ;; (setq org-latex-pdf-process
+    ;; 	'("pdflatex -interaction nonstopmode -output-directory %o %f"
+    ;; 	  "bibtex %b"
+    ;; 	  "pdflatex -interaction nonstopmode -output-directory %o %f"
+    ;; 	  "pdflatex -interaction nonstopmode -output-directory %o %f"))
+    ;; )
+    (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
+
     (add-to-list 'org-latex-classes
 	       '("book-noparts"
-		 "\\documentclass{book}"
+		 "\\documentclass[12pt,oneside]{book}"
 		 ("\\chapter{%s}" . "\\chapter*{%s}")
 		 ("\\section{%s}" . "\\section*{%s}")
 		 ("\\subsection{%s}" . "\\subsection*{%s}")
 		 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
 		 ("\\paragraph{%s}" . "\\paragraph*{%s}")
 		 ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+
+  (setq org-highlight-latex-and-related '(latex))
 
 
   (use-package helm-org-rifle
@@ -207,13 +229,7 @@
   (setq reftex-default-bibliography '("~/org/resources/bibliography/references.bib"))
   ;; see org-ref for use of these variables
   (setq org-ref-default-bibliography '("~/org/resources/bibliography/references.bib"))
-
-  ;; Ensure LaTeX export correctly produces the bibliography
-  (setq org-latex-pdf-process
-	'("pdflatex -interaction nonstopmode -output-directory %o %f"
-	  "bibtex %b"
-	  "pdflatex -interaction nonstopmode -output-directory %o %f"
-	  "pdflatex -interaction nonstopmode -output-directory %o %f"))
+  (setq org-ref-default-citation-link "citep")
   )
 
 (defun org-build-agenda ()
