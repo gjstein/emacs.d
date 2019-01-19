@@ -219,14 +219,14 @@ show this warning instead."
 	  ,gs-org-agenda-block--end-of-agenda)
 	 ,gs-org-agenda-display-settings)
 	("b" "Agenda Review"
-	 (,gs-org-agenda-block--next-tasks)
-	 (,gs-org-agenda-block--refile)
-	 (,gs-org-agenda-block--active-projects)
-	 (,gs-org-agenda-block--standalone-tasks)
-	 (,gs-org-agenda-block--remaining-project-tasks)
-	 (,gs-org-agenda-block--inactive-tags)
-	 (,gs-org-agenda-block--someday-tags)
-	 (,gs-org-agenda-block--end-of-agenda)
+	 (,gs-org-agenda-block--next-tasks
+	  ,gs-org-agenda-block--refile
+	  ,gs-org-agenda-block--active-projects
+	  ,gs-org-agenda-block--standalone-tasks
+	  ,gs-org-agenda-block--remaining-project-tasks
+	  ,gs-org-agenda-block--inactive-tags
+	  ,gs-org-agenda-block--someday-tags
+	  ,gs-org-agenda-block--end-of-agenda)
 	 ,gs-org-agenda-display-settings)
 	("L" "Weekly Log"
 	 agenda
