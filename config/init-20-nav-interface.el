@@ -54,7 +54,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   )
 
 (use-package general
-  :ensure t
+  :ensure diminish
   :after evil
   :init
   (defvar gjs-leader-key "<SPC>")
