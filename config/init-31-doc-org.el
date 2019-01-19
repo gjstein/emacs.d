@@ -61,6 +61,18 @@
   (setq org-agenda-window-setup 'current-window)
 
   ;; Run/highlight code using babel in org-mode
+
+
+  (use-package ob-async
+    :ensure t
+    ;:load-path "/Users/Greg/Desktop/ob-async"
+    :config
+    (setq ob-async-no-async-languages-alist '("ipython"))
+    )
+
+  (use-package ob-ipython
+    :ensure t)
+
   (org-babel-do-load-languages
    'org-babel-load-languages
    '(
@@ -70,6 +82,7 @@
      (C . t)
      (shell . t)
      ))
+
   ;; Syntax hilight in #+begin_src blocks
   (setq org-src-fontify-natively t)
   ;; Don't prompt before running code in org
@@ -113,16 +126,6 @@
 
 
   (use-package helm-org-rifle
-    :ensure t)
-
-  (use-package ob-async
-    :ensure t
-    ;:load-path "/Users/Greg/Desktop/ob-async"
-    :config
-    (setq ob-async-no-async-languages-alist '("ipython"))
-    )
-
-  (use-package ob-ipython
     :ensure t)
 
   ;; Capture mode

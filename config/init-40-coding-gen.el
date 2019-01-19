@@ -68,9 +68,11 @@
   :diminish projectile-mode
   :init
   (projectile-global-mode 1)
-  (use-package helm-projectile
+  )
+
+(use-package helm-projectile
     :ensure t
-    :after helm
+    :after (:all projectile helm)
     :config
     (helm-projectile-on)
     (general-define-key
@@ -82,7 +84,6 @@
      "p/" '(helm-projectile-ag :which-key "projectile ag")
      )
     )
-  )
 
 ;; == ag ==
 ;; Note that 'ag' (the silver searcher) needs to be installed.
@@ -95,7 +96,7 @@
 (use-package helm-ag
   :ensure t
   :defer t
-  :after helm
+  :after (:all helm ag)
   :config
   (general-define-key :keymaps 'helm-ag-map
 		      "C-c C-e" 'helm-ag-edit)
@@ -119,6 +120,7 @@
 (use-package evil-vimish-fold
   :ensure t
   :defer t
+  :after evil
   :init
   (evil-vimish-fold-mode 1)
   :diminish evil-vimish-fold-mode
@@ -132,6 +134,11 @@
   :init
   (setq magit-diff-options (quote ("--word-diff")))
   (setq magit-diff-refine-hunk 'all)
+  )
+
+(use-package forge
+  :ensure t
+  :after magit
   )
 
 (use-package evil-magit

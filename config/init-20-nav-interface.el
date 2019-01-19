@@ -54,7 +54,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   )
 
 (use-package general
-  :ensure diminish
+  :ensure t
   :after evil
   :init
   (defvar gjs-leader-key "<SPC>")
@@ -80,6 +80,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (general-define-key
    :prefix gjs-leader-key
    :states '(normal motion)
+   ;; Need to unbind prefix key first
+   "" nil
    ;; I want these everywhere
    "a" '(gjstein-org-agenda :which-key "agenda")
    "A" '(gjstein-org-weekly-agenda :which-key "weekly agenda")
