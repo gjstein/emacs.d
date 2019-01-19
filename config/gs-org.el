@@ -511,6 +511,20 @@ show this warning instead."
 	 (match-beginning 0) (match-end 0)
 	 '(bold :foreground "white" :background "red"))
 	))
+    (goto-char (point-min))
+    (while (re-search-forward ":OPT:" nil t)
+      (progn
+	(put-text-property
+	 (+ 26 (point-at-bol)) (match-end 0)
+	 'face 'org-time-grid)
+	))
+    (goto-char (point-min))
+    (while (re-search-forward ":TENT:" nil t)
+      (progn
+	(put-text-property
+	 (+ 26 (point-at-bol)) (match-end 0)
+	 'face 'org-time-grid)
+	))
     ))
 (add-hook 'org-agenda-finalize-hook 'gs/org-agenda-project-highlight-warning)
 
