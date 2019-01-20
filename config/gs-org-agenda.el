@@ -279,14 +279,14 @@ show this warning instead."
     (while (re-search-forward ":OPT:" nil t)
       (progn
 	(put-text-property
-	 (+ 26 (point-at-bol)) (match-end 0)
+	 (+ 14 (point-at-bol)) (match-end 0)
 	 'face 'org-time-grid)
 	))
     (goto-char (point-min))
     (while (re-search-forward ":TENT:" nil t)
       (progn
 	(put-text-property
-	 (+ 26 (point-at-bol)) (match-end 0)
+	 (+ 14 (point-at-bol)) (match-end 0)
 	 'face 'org-time-grid)
 	))
     ))
