@@ -52,6 +52,7 @@
   (load-file "~/.emacs.d/config/gs-org.el")
   (require 'org)
 
+  (setq org-enforce-todo-dependencies nil)
   (setq org-display-inline-images t)
   (setq org-redisplay-inline-images t)
   (setq org-startup-with-inline-images "inlineimages")
