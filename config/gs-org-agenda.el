@@ -127,16 +127,31 @@ show this warning instead."
 
 ;;;; Agenda block definitions
 
-
-
 (defvar gs-org-agenda-block--today-schedule
   '(agenda "" ((org-agenda-overriding-header "Today's Schedule:")
 	       (org-agenda-span 'day)
 	       (org-agenda-ndays 1)
 	       (org-agenda-start-on-weekday nil)
-	       (org-agenda-start-day "+0d")
-	       (org-agenda-todo-ignore-deadlines nil)))
+	       (org-agenda-start-day "+0d")))
   "A block showing a 1 day schedule.")
+
+(defvar gs-org-agenda-block--weekly-log
+  '(agenda "" ((org-agenda-overriding-header "Weekly Log")))
+  "A block showing my schedule and logged tasks for this week.")
+
+(defvar gs-org-agenda-block--previous-calendar-data
+  '(agenda "" ((org-agenda-overriding-header "Previous Calendar Data (last 3 weeks)")
+	       (org-agenda-start-day "-21d")
+	       (org-agenda-span 21)
+	       (org-agenda-start-on-weekday nil)))
+  "A block showing my schedule and logged tasks for the last few weeks.")
+
+(defvar gs-org-agenda-block--upcoming-calendar-data
+  '(agenda "" ((org-agenda-overriding-header "Upcoming Calendar Data (next 2 weeks)")
+	       (org-agenda-start-day "0d")
+	       (org-agenda-span 14)
+	       (org-agenda-start-on-weekday nil)))
+  "A block showing my schedule for the next couple weeks.")
 
 (defvar gs-org-agenda-block--refile
   '(tags "REFILE-ARCHIVE-REFILE=\"nil\""
@@ -145,7 +160,7 @@ show this warning instead."
   "Headings with the refile tag.")
 
 (defvar gs-org-agenda-block--next-tasks
-  '(tags-todo "-INACTIVE-CANCELLED-ARCHIVE/!NEXT"
+  '(tags-todo "-INACTIVE-SOMEDAY-CANCELLED-ARCHIVE/!NEXT"
 	      ((org-agenda-overriding-header "Next Tasks:")
 	       ))
   "Next tasks.")
@@ -218,21 +233,45 @@ show this warning instead."
 	  ,gs-org-agenda-block--active-projects
 	  ,gs-org-agenda-block--end-of-agenda)
 	 ,gs-org-agenda-display-settings)
-	("b" "Agenda Review"
+	("L" "Weekly Log"
+	 (,gs-org-agenda-block--weekly-log)
+	 ,gs-org-agenda-display-settings)
+	("r " "Agenda Review (all)"
 	 (,gs-org-agenda-block--next-tasks
 	  ,gs-org-agenda-block--refile
 	  ,gs-org-agenda-block--active-projects
 	  ,gs-org-agenda-block--standalone-tasks
+	  ,gs-org-agenda-block--waiting-tasks
 	  ,gs-org-agenda-block--remaining-project-tasks
 	  ,gs-org-agenda-block--inactive-tags
 	  ,gs-org-agenda-block--someday-tags
 	  ,gs-org-agenda-block--end-of-agenda)
 	 ,gs-org-agenda-display-settings)
-	("L" "Weekly Log"
-	 agenda
-	 '(((org-agenda-start-with-log-mode t)
-	    (org-agenda-log-mode-items '(closed clock)))
-	  ))
+	("rn" "Agenda Review (next tasks)"
+	 (,gs-org-agenda-block--next-tasks
+	  ,gs-org-agenda-block--end-of-agenda)
+	 ,gs-org-agenda-display-settings)
+	("rp" "Agenda Review (previous calendar data)"
+	 (,gs-org-agenda-block--previous-calendar-data
+	  ,gs-org-agenda-block--end-of-agenda)
+	 ,gs-org-agenda-display-settings)
+	("ru" "Agenda Review (upcoming calendar data)"
+	 (,gs-org-agenda-block--upcoming-calendar-data
+	  ,gs-org-agenda-block--end-of-agenda)
+	 ,gs-org-agenda-display-settings)
+	("rw" "Agenda Review (waiting tasks)"
+	 (,gs-org-agenda-block--waiting-tasks
+	  ,gs-org-agenda-block--end-of-agenda)
+	 ,gs-org-agenda-display-settings)
+	("rP" "Agenda Review (projects list)"
+	 (,gs-org-agenda-block--active-projects
+	  ,gs-org-agenda-block--end-of-agenda)
+	 ,gs-org-agenda-display-settings)
+	("ri" "Agenda Review (someday and inactive projects/tasks)"
+	 (,gs-org-agenda-block--someday-tags
+	  ,gs-org-agenda-block--inactive-tags
+	  ,gs-org-agenda-block--end-of-agenda)
+	 ,gs-org-agenda-display-settings)
 	))
 
 
