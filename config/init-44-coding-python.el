@@ -22,6 +22,7 @@
   :ensure t
   :after python
   :config
+  (remove-hook 'elpy-modules 'elpy-module-flymake)
   (elpy-enable)
   )
 
