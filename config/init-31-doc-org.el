@@ -34,6 +34,8 @@
 	 ("\C-c j" . gs-helm-org-link-to-contact))
   :config
 
+  ;; Expansion for blocks "<s" -> "#+BEGIN_SRC"
+  (require 'org-tempo)
 
   (defun sk/diminish-org-indent ()
     "Diminish org-indent-mode on the modeline"
@@ -50,7 +52,6 @@
   
   ;; Custom functions for emacs & org mode
   (load-file "~/.emacs.d/config/gs-org.el")
-  (require 'org)
 
   (setq org-enforce-todo-dependencies nil)
   (setq org-display-inline-images t)
