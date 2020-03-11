@@ -69,17 +69,21 @@
     :ensure t
     ;:load-path "/Users/Greg/Desktop/ob-async"
     :config
-    (setq ob-async-no-async-languages-alist '("ipython"))
+    (setq ob-async-no-async-languages-alist '("ipython" "jupyter-python"))
     )
 
-  (use-package ob-ipython
+  (use-package zmq
+    :ensure t)
+
+  (use-package jupyter
+    :after zmq
     :ensure t)
 
   (org-babel-do-load-languages
    'org-babel-load-languages
    '(
      (python . t)
-     (ipython . t)
+     (jupyter . t)
      (octave . t)
      (C . t)
      (shell . t)
@@ -122,7 +126,17 @@
 		 ("\\subsection{%s}" . "\\subsection*{%s}")
 		 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
 		 ("\\paragraph{%s}" . "\\paragraph*{%s}")
-		 ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+		 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+(add-to-list 'org-latex-classes
+	       '("mitthesis"
+		 "\\documentclass[12pt,twoside]{mitthesis}"
+		 ("\\chapter{%s}" . "\\chapter*{%s}")
+		 ("\\section{%s}" . "\\section*{%s}")
+		 ("\\subsection{%s}" . "\\subsection*{%s}")
+		 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+		 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+		 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+    )
 
   (setq org-highlight-latex-and-related '(latex))
 

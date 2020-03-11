@@ -91,7 +91,7 @@
 	 ("d" "Diary" entry (file+datetree "~/org/diary.org")
 	  "* %?\n%U\n" :clock-in t :clock-resume t)
 	 ("D" "Daily Log" entry (file "~/org/daily-log.org")
-	  "* %u %?\n#+BEGIN: gjs-daily-clocktable :maxlevel 4 :date \"%u\" :link t :compact t \n#+END:\n\n*Summary*: \n\n*Problem*: \n\n*Insight*: \n\n*Tomorrow*: " :clock-in t :clock-resume t)
+	  "* %u %?\n#+BEGIN: gjs-daily-clocktable :maxlevel 4 :date \"%u\" :link t :compact t \n#+END:\n\n*Summary*: \n\n*Problem*: \n\n*Insight*: \n\n*Tomorrow*: ")
 	 ("i" "Idea" entry (file org-default-notes-file)
 	  "* %? :IDEA: \n%u" :clock-in t :clock-resume t)
 	 ("n" "Next Task" entry (file+headline org-default-notes-file "Tasks")
@@ -283,9 +283,11 @@ Switch projects and subprojects from NEXT back to TODO"
 (defun org-dblock-write:gjs-daily-clocktable (params)
   "Custom clocktable command for my daily log"
   (let ((local-params params)
-	(date-str (substring
+	(date-str
+	 (if (plist-get params ':date)
+	 (substring
 		   (plist-get params ':date)
-		   1 11))
+		   1 11)))
 	)
     (plist-put params ':block date-str)
     (plist-put params ':formatter 'gjs-org-clocktable-filter-empty-tables)
