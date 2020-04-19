@@ -79,6 +79,10 @@
 ;; No Backup Files
 (setq make-backup-files nil)
 
+;; Save more 'recent files'
+(setq recentf-max-menu-items 127)
+(setq recentf-max-saved-items 127)
+
 ;; initial window
 (setq initial-frame-alist
       '((width . 102)   ; characters in a line

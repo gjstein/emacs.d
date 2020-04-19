@@ -54,28 +54,28 @@
 
 (defun gs/select-projects ()
   "Selects tasks which are project headers"
-  (gs/select-with-tag-function #'bh/is-project-p))
+  (gs/select-with-tag-function #'gs/is-project-p))
 
 (defun gs/select-project-tasks ()
   "Skips tags which belong to projects (and is not a project itself)"
   (gs/select-with-tag-function
    #'(lambda () (and
-		 (not (bh/is-project-p))
-		 (bh/is-project-subtree-p)))))
+		 (not (gs/is-project-p))
+		 (gs/is-project-subtree-p)))))
 
 (defun gs/select-standalone-tasks ()
   "Skips tags which belong to projects. Is neither a project, nor does it blong to a project"
   (gs/select-with-tag-function
    #'(lambda () (and
-		 (not (bh/is-project-p))
-		 (not (bh/is-project-subtree-p))))))
+		 (not (gs/is-project-p))
+		 (not (gs/is-project-subtree-p))))))
 
 (defun gs/select-projects-and-standalone-tasks ()
   "Skips tags which are not projects"
   (gs/select-with-tag-function
    #'(lambda () (or
-		 (bh/is-project-p)
-		 (bh/is-project-subtree-p)))))
+		 (gs/is-project-p)
+		 (gs/is-project-subtree-p)))))
 
 (defun gs/org-agenda-project-warning ()
   "Is a project stuck or waiting. If the project is not stuck,
@@ -86,7 +86,7 @@ show this warning instead."
 
 (defun gs/org-agenda-project-is-stuck ()
   "Is a project stuck"
-  (if (bh/is-project-p) ; first, check that it's a project
+  (if (gs/is-project-p) ; first, check that it's a project
       (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
 	     (has-next))
 	(save-excursion
@@ -101,7 +101,7 @@ show this warning instead."
 
 (defun gs/org-agenda-project-is-waiting ()
   "Is a project stuck"
-  (if (bh/is-project-p) ; first, check that it's a project
+  (if (gs/is-project-p) ; first, check that it's a project
       (let* ((subtree-end (save-excursion (org-end-of-subtree t))))
 	(save-excursion
 	  (re-search-forward "^\\*+ WAITING" subtree-end t)))
@@ -123,7 +123,6 @@ show this warning instead."
     (if (> (length loc) 0)
 	(concat "{" loc "} ")
       "")))
-
 
 ;;;; Agenda block definitions
 
@@ -154,10 +153,10 @@ show this warning instead."
   "A block showing my schedule for the next couple weeks.")
 
 (defvar gs-org-agenda-block--refile
-  '(tags "REFILE-ARCHIVE-REFILE=\"nil\""
-	 ((org-agenda-overriding-header "Tasks to Refile:")
+  '(tags "REFILE-ARCHIVE-REFILE=\"nil\"|INFO"
+	 ((org-agenda-overriding-header "Headings needing refiling or other info:")
 	  (org-tags-match-list-sublevels nil)))
-  "Headings with the refile tag.")
+  "Headings needing refiling or other info.")
 
 (defvar gs-org-agenda-block--next-tasks
   '(tags-todo "-INACTIVE-SOMEDAY-CANCELLED-ARCHIVE/!NEXT"
@@ -201,6 +200,11 @@ show this warning instead."
 	  (org-tags-match-list-sublevels nil)))
   "Someday projects and tasks.")
 
+(defvar gs-org-agenda-block--motivators
+  '(todo "AMOTIVATOR|TMOTIVATOR|CMOTIVATOR"
+	 ((org-agenda-overriding-header "Motivators (Active/Tangible/Conceptual)")))
+  "All my 'motivators' across my projects.")
+
 (defvar gs-org-agenda-block--end-of-agenda
   '(tags "ENDOFAGENDA"
 	 ((org-agenda-overriding-header "End of Agenda")
@@ -218,6 +222,11 @@ show this warning instead."
     (org-agenda-todo-ignore-deadlines 'near)
     (org-agenda-todo-ignore-scheduled t))
   "Display settings for my agenda views.")
+
+(defvar gs-org-agenda-entry-display-settings
+  '(,gs-org-agenda-display-settings
+    (org-agenda-entry-text-mode t))
+  "Display settings for my agenda views with entry text.")
 
 ;;;; Agenda Definitions
 
@@ -245,6 +254,7 @@ show this warning instead."
 	  ,gs-org-agenda-block--remaining-project-tasks
 	  ,gs-org-agenda-block--inactive-tags
 	  ,gs-org-agenda-block--someday-tags
+	  ,gs-org-agenda-block--motivators
 	  ,gs-org-agenda-block--end-of-agenda)
 	 ,gs-org-agenda-display-settings)
 	("rn" "Agenda Review (next tasks)"
@@ -272,6 +282,10 @@ show this warning instead."
 	  ,gs-org-agenda-block--inactive-tags
 	  ,gs-org-agenda-block--end-of-agenda)
 	 ,gs-org-agenda-display-settings)
+	("rm" "Agenda Review (motivators)"
+	 (,gs-org-agenda-block--motivators
+	  ,gs-org-agenda-block--end-of-agenda)
+	 ,gs-org-agenda-entry-display-settings)
 	))
 
 
@@ -319,14 +333,14 @@ show this warning instead."
       (progn
 	(put-text-property
 	 (+ 14 (point-at-bol)) (match-end 0)
-	 'face 'org-time-grid)
+	 'face 'font-lock-comment-face)  ; also 'org-time-grid
 	))
     (goto-char (point-min))
     (while (re-search-forward ":TENT:" nil t)
       (progn
 	(put-text-property
 	 (+ 14 (point-at-bol)) (match-end 0)
-	 'face 'org-time-grid)
+	 'face 'font-lock-comment-face)
 	))
     ))
 (add-hook 'org-agenda-finalize-hook 'gs/org-agenda-project-highlight-warning)

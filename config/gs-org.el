@@ -9,7 +9,7 @@
 
 ;; Display properties
 (setq org-cycle-separator-lines 0)
-(setq org-tags-column 80)
+(setq org-tags-column 8)
 (setq org-latex-prefer-user-labels t)
 
 ;; Dim blocked tasks (and other settings)
@@ -41,18 +41,24 @@
 ;; == Custom State Keywords ==
 (setq org-use-fast-todo-selection t)
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-	(sequence "WAITING(w@/!)" "INACTIVE(i)" "SOMEDAY(s)" "|" "CANCELLED(c@/!)" "MEETING")))
+      '((sequence "TODO(t)" "NEXT(n)" "PROJ(p)" "|" "DONE(d)")
+	(sequence "TASK(T)")
+	(sequence "AMOTIVATOR(MA)" "TMOTIVATOR(MT)" "CMOTIVATOR(MC)")
+	(sequence "WAITING(w@/!)" "INACTIVE(i)" "SOMEDAY(s)" "|" "CANCELLED(c@/!)")))
 ;; Custom colors for the keywords
 (setq org-todo-keyword-faces
       '(("TODO" :foreground "red" :weight bold)
+	("TASK" :foreground "#5C888B" :weight bold)
 	("NEXT" :foreground "blue" :weight bold)
+	("PROJ" :foreground "magenta" :weight bold)
+	("AMOTIVATOR" :foreground "#F06292" :weight bold)
+	("TMOTIVATOR" :foreground "#AB47BC" :weight bold)
+	("CMOTIVATOR" :foreground "#5E35B1" :weight bold)
 	("DONE" :foreground "forest green" :weight bold)
 	("WAITING" :foreground "orange" :weight bold)
 	("INACTIVE" :foreground "magenta" :weight bold)
 	("SOMEDAY" :foreground "cyan" :weight bold)
-	("CANCELLED" :foreground "forest green" :weight bold)
-	("MEETING" :foreground "forest green" :weight bold)))
+	("CANCELLED" :foreground "forest green" :weight bold)))
 ;; Auto-update tags whenever the state is changed
 (setq org-todo-state-tags-triggers
       '(("CANCELLED" ("CANCELLED" . t))
@@ -61,7 +67,12 @@
 	("SOMEDAY" ("WAITING") ("INACTIVE") ("SOMEDAY" . t))
 	(done ("WAITING") ("INACTIVE") ("SOMEDAY"))
 	("TODO" ("WAITING") ("CANCELLED") ("INACTIVE") ("SOMEDAY"))
+	("TASK" ("WAITING") ("CANCELLED") ("INACTIVE") ("SOMEDAY"))
 	("NEXT" ("WAITING") ("CANCELLED") ("INACTIVE") ("SOMEDAY"))
+	("PROJ" ("WAITING") ("CANCELLED") ("INACTIVE") ("SOMEDAY"))
+	("AMOTIVATOR" ("WAITING") ("CANCELLED") ("INACTIVE") ("SOMEDAY"))
+	("TMOTIVATOR" ("WAITING") ("CANCELLED") ("INACTIVE") ("SOMEDAY"))
+	("CMOTIVATOR" ("WAITING") ("CANCELLED") ("INACTIVE") ("SOMEDAY"))
 	("DONE" ("WAITING") ("CANCELLED") ("INACTIVE") ("SOMEDAY"))))
 
 (defun gs/mark-next-done-parent-tasks-todo ()
@@ -77,7 +88,8 @@
         (while (org-up-heading-safe)
           (when (member (nth 2 (org-heading-components)) (list "NEXT" "DONE"))
             (org-todo "TODO")))))))
-(add-hook 'org-after-todo-state-change-hook 'gs/mark-next-done-parent-tasks-todo 'append)
+;; Note: I want to disable this for now
+;; (add-hook 'org-after-todo-state-change-hook 'gs/mark-next-done-parent-tasks-todo 'append)
 
 ;; == Capture Mode Settings ==
 ;; Define the custum capture templates
@@ -87,7 +99,7 @@
 	 ("b" "Blank" entry (file org-default-notes-file)
 	  "* %?\n%u")
 	 ("m" "Meeting" entry (file org-default-notes-file)
-	  "* MEETING with %? :MEETING:\n" :clock-in t :clock-resume t)
+	  "* Meeting with %? :MEETING:\n" :clock-in t :clock-resume t)
 	 ("d" "Diary" entry (file+datetree "~/org/diary.org")
 	  "* %?\n%U\n" :clock-in t :clock-resume t)
 	 ("D" "Daily Log" entry (file "~/org/daily-log.org")
@@ -125,7 +137,7 @@
 ;; == Habits ==
 (require 'org-habit)
 (add-to-list 'org-modules 'org-habit)
-(setq org-habit-graph-column 48)
+(setq org-habit-graph-column 44)
 (setq org-habit-show-habits-only-for-today t)
 
 ;; == Checklists ==
@@ -136,6 +148,10 @@
 ;; I might also need org-ref
 
 ;;;; bh/helper-functions
+
+(defun gs/is-project-p ()
+  "A task with a 'PROJ' keyword"
+  (member (nth 2 (org-heading-components)) '("PROJ")))
 
 (defun bh/is-project-p ()
   "Any task with a todo keyword subtask."
@@ -152,6 +168,28 @@
           (when (member (org-get-todo-state) org-todo-keywords-1)
             (setq has-subtask t))))
       (and is-a-task has-subtask))))
+
+(defun gs/find-project-task ()
+  "Any task with a todo keyword that is in a project subtree"
+  (save-restriction
+    (widen)
+    (let ((parent-task (save-excursion (org-back-to-heading 'invisible-ok) (point))))
+      (while (org-up-heading-safe)
+	(when (member (nth 2 (org-heading-components)) '("PROJ"))
+	  (setq parent-task (point))))
+      (goto-char parent-task)
+      parent-task)))
+
+(defun gs/is-project-subtree-p ()
+  "Any task with a todo keyword that is in a project subtree.
+Callers of this function already widen the buffer view."
+  (let ((task (save-excursion (org-back-to-heading 'invisible-ok)
+                              (point))))
+    (save-excursion
+      (gs/find-project-task)
+      (if (equal (point) task)
+          nil t))))
+
 
 (defun bh/find-project-task ()
   "Move point to the parent (project) task if any."

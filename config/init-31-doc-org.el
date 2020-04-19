@@ -127,7 +127,7 @@
 		 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
 		 ("\\paragraph{%s}" . "\\paragraph*{%s}")
 		 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-(add-to-list 'org-latex-classes
+    (add-to-list 'org-latex-classes
 	       '("mitthesis"
 		 "\\documentclass[12pt,twoside]{mitthesis}"
 		 ("\\chapter{%s}" . "\\chapter*{%s}")
@@ -136,6 +136,24 @@
 		 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
 		 ("\\paragraph{%s}" . "\\paragraph*{%s}")
 		 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+    (add-to-list 'org-latex-classes
+	       '("annotatedbib"
+		 "\\documentclass[10pt,oneside]{article}"
+		 ("\\section{%s}" . "\\section*{%s}")
+		 ("\\subsection{%s}" . "\\subsection*{%s}")
+		 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+		 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+		 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+		 ("\\paragraph{%s}" . "\\paragraph*{%s}")))
+    (add-to-list 'org-latex-classes
+	       '("ieeetran"
+		 "\\documentclass{IEEEtran}"
+		 ("\\section{%s}" . "\\section*{%s}")
+		 ("\\subsection{%s}" . "\\subsection*{%s}")
+		 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+		 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+		 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+		 ("\\paragraph{%s}" . "\\paragraph*{%s}")))
     )
 
   (setq org-highlight-latex-and-related '(latex))
@@ -179,6 +197,7 @@
    "c" 'org-agenda-goto-calendar
    "i" 'org-agenda-clock-in
    "o" 'org-agenda-clock-out
+   "E" 'org-agenda-entry-text-mode
    )
   (general-define-key
    :keymaps 'org-agenda-mode-map
