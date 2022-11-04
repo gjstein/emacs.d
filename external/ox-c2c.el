@@ -1,6 +1,6 @@
 ;;; ox-c2c.el --- Org exporter (uses Pandoc)
 
-(eval-when-compile (require 'cl))
+(eval-when-compile (require 'cl-lib))
 (require 'ox-md)
 
 (org-export-define-derived-backend 'cachestocaches 'md

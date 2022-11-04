@@ -285,7 +285,7 @@ show this warning instead."
 	("rm" "Agenda Review (motivators)"
 	 (,gs-org-agenda-block--motivators
 	  ,gs-org-agenda-block--end-of-agenda)
-	 ,gs-org-agenda-entry-display-settings)
+	 ,gs-org-agenda-display-settings)
 	))
 
 

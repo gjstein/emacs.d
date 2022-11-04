@@ -31,7 +31,9 @@
   :defer t
   :bind (("\C-c a" . org-agenda)
 	 ("\C-c c" . org-capture)
-	 ("\C-c j" . gs-helm-org-link-to-contact))
+	 ("\C-c j" . gs-helm-org-link-to-contact)
+	 ("\C-c \C-]" . org-ref-cite-insert-helm)
+	 )
   :config
 
   ;; Expansion for blocks "<s" -> "#+BEGIN_SRC"
@@ -69,7 +71,6 @@
    '(
      ;; (ipython . t)
      (python . t)
-     ;; (jupyter . t)
      (octave . t)
      (C . t)
      (shell . t)
@@ -81,6 +82,8 @@
   (setq org-confirm-babel-evaluate nil)
   ;; Display inline images after running code
   (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
+  ;; Don't indent code after editing
+  (setq org-edit-src-content-indentation 0)
 
   ;; Org + LaTeX
   (with-eval-after-load 'ox-latex
@@ -209,6 +212,7 @@
    "/" 'org-agenda-filter-by-tag
    "cs" '(gs-org-goto :which-key "org goto")
    "c/" '(helm-org-rifle :which-key "org-rifle")
+   "]" 'org-ref-cite-insert-helm
    )
 
 
@@ -241,7 +245,7 @@
   ;;  (kbd "<C-return>") 'gs-org-insert-heading-respect-content
   ;;  )
   (general-define-key
-   :prefix (concatenate 'string gjs-leader-key)
+   :prefix (cl-concatenate 'string gjs-leader-key)
    :keymaps 'org-mode-map
    :states '(normal motion)
    "i" '(org-clock-in :which-key "clock in")
@@ -264,8 +268,9 @@
   :init
   (setq reftex-default-bibliography '("~/org/resources/bibliography/references.bib"))
   ;; see org-ref for use of these variables
-  (setq org-ref-default-bibliography '("~/org/resources/bibliography/references.bib"))
+  (setq bibtex-completion-default-bibliography '("~/org/resources/bibliography/references.bib"))
   (setq org-ref-default-citation-link "citep")
+  :bind ("\C-c ]" . org-ref-cite-insert-helm)
   )
 
 (defun org-build-agenda ()
