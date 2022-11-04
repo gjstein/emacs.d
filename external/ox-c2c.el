@@ -19,6 +19,7 @@
     (write-region nil nil tmp-org-file)
     (switch-to-buffer "*Org C2C Export*")
     (erase-buffer)
+    (message tmp-org-file)
     (insert (org-c2c-run-pandoc tmp-org-file '~/org/resources/pandoc/cachestocaches.lua))
     (kill-buffer tmp-org-buffer)
     )
