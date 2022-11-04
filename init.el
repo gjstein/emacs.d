@@ -40,9 +40,7 @@
 (setq package-enable-at-startup nil)
 (setq package-archives (append package-archives
 			 '(("melpa" . "http://melpa.org/packages/")
-			 ("marmalade" . "http://marmalade-repo.org/packages/")
 			 ("gnu" . "http://elpa.gnu.org/packages/")
-			 ("org" . "http://orgmode.org/elpa/")
 			 ("elpy" . "http://jorgenschaefer.github.io/packages/"))))
 (package-initialize)
 
@@ -67,6 +65,7 @@
 (use-package exec-path-from-shell
   :ensure t
   :config (exec-path-from-shell-initialize))
+(when (memq window-system '(mac ns x)) (exec-path-from-shell-initialize))
 
 ;; === Face Customization ===
 (load-file "~/.emacs.d/config/init-10-face.el")
@@ -77,6 +76,18 @@
 ;; === Document Editing ===
 (load-file "~/.emacs.d/config/init-30-doc-gen.el")
 (load-file "~/.emacs.d/config/init-31-doc-org.el")
+
+;; ==accessability ==
+;; (require 'cl)
+;; (setq load-path (cons "~/projects/emacspeak/lisp" load-path))
+;; (setq emacspeak-directory "~/projects/emacspeak")
+;; (setq dtk-program "mac")
+;; (require 'emacspeak-setup)
+;; ; (setq mac-default-voice-string "betty")
+;; (require 'mac-voices)
+;; (emacspeak-tts-startup-hook)
+;; (dtk-set-rate 450 t)
+;; (setq emacspeak-speak-maximum-line-length 10000)
 
 ;; === Programming & Coding Functions ===
 (load-file "~/.emacs.d/config/init-40-coding-gen.el")
