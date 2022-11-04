@@ -18,20 +18,6 @@
 ;; Set default column view headings: Task Effort Clock_Summary
 (setq org-columns-default-format "%50ITEM(Task) %10Effort(Effort){:} %10CLOCKSUM %16TIMESTAMP_IA")
 
-
-;; ;; == Tags ==
-;; (setq org-tag-alist '((:startgroup)
-;; 		      ("@errand" . ?e)
-;; 		      ("@campus" . ?c)
-;; 		      ("@home" . ?h)
-;; 		      (:endgroup)
-;; 		      ("WAITING" . ?w)
-;; 		      ("PERSONAL" . ?P)
-;; 		      ("RRG" . ?W)
-;; 		      ("NOTE" . ?n)
-;; 		      ("AR" . ?a)
-;; 		      ))
-
 ;; Allow setting single tags without the menu
 (setq org-fast-tag-selection-single-key 'expert)
 
@@ -43,7 +29,7 @@
 (setq org-todo-keywords
       '((sequence "TODO(t)" "NEXT(n)" "PROJ(p)" "|" "DONE(d)")
 	(sequence "TASK(T)")
-	(sequence "AMOTIVATOR(MA)" "TMOTIVATOR(MT)" "CMOTIVATOR(MC)")
+	(sequence "AMOTIVATOR(MA)" "TMOTIVATOR(MT)" "CMOTIVATOR(MC)" "|")
 	(sequence "WAITING(w@/!)" "INACTIVE(i)" "SOMEDAY(s)" "|" "CANCELLED(c@/!)")))
 ;; Custom colors for the keywords
 (setq org-todo-keyword-faces
@@ -103,7 +89,7 @@
 	 ("d" "Diary" entry (file+datetree "~/org/diary.org")
 	  "* %?\n%U\n" :clock-in t :clock-resume t)
 	 ("D" "Daily Log" entry (file "~/org/daily-log.org")
-	  "* %u %?\n#+BEGIN: gjs-daily-clocktable :maxlevel 4 :date \"%u\" :link t :compact t \n#+END:\n\n*Summary*: \n\n*Problem*: \n\n*Insight*: \n\n*Tomorrow*: ")
+	  "* %u %?\n#+BEGIN: gjs-daily-clocktable :maxlevel 4 :date \"%u\" :link t :compact t \n#+END:\n\n*Jobs Done:*\n\n*Summary*: \n\n*Problem*: \n\n*Idea*: \n\n*Plan*: ")
 	 ("i" "Idea" entry (file org-default-notes-file)
 	  "* %? :IDEA: \n%u" :clock-in t :clock-resume t)
 	 ("n" "Next Task" entry (file+headline org-default-notes-file "Tasks")

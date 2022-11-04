@@ -20,7 +20,7 @@
 
 
 (use-package org
-  :ensure org-plus-contrib
+  :ensure t :ensure org-contacts :ensure org-contrib
   :init
   (add-hook 'org-mode-hook 'visual-line-mode)
   (add-hook 'org-mode-hook 'org-indent-mode)
@@ -64,26 +64,12 @@
 
   ;; Run/highlight code using babel in org-mode
 
-
-  (use-package ob-async
-    :ensure t
-    ;:load-path "/Users/Greg/Desktop/ob-async"
-    :config
-    (setq ob-async-no-async-languages-alist '("ipython" "jupyter-python"))
-    )
-
-  (use-package zmq
-    :ensure t)
-
-  (use-package jupyter
-    :after zmq
-    :ensure t)
-
   (org-babel-do-load-languages
    'org-babel-load-languages
    '(
+     ;; (ipython . t)
      (python . t)
-     (jupyter . t)
+     ;; (jupyter . t)
      (octave . t)
      (C . t)
      (shell . t)
@@ -108,6 +94,7 @@
 	  '(("frame" "lines")
 	    ("fontsize" "\\scriptsize")
 	    ("linenos" "")))
+    (add-to-list 'org-latex-minted-langs '(ipython "python"))
 
     ;; Ensure LaTeX export correctly produces the bibliography
     ;; (setq org-latex-pdf-process
@@ -154,7 +141,17 @@
 		 ("\\paragraph{%s}" . "\\paragraph*{%s}")
 		 ("\\paragraph{%s}" . "\\paragraph*{%s}")
 		 ("\\paragraph{%s}" . "\\paragraph*{%s}")))
-    )
+    (add-to-list 'org-latex-classes
+	       '("ieeeconf"
+		 "\\documentclass{ieeeconf}"
+		 ("\\section{%s}" . "\\section*{%s}")
+		 ("\\subsection{%s}" . "\\subsection*{%s}")
+		 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+		 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+		 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+		 ("\\paragraph{%s}" . "\\paragraph*{%s}")))
+
+  (require 'ox-beamer)
 
   (setq org-highlight-latex-and-related '(latex))
 
@@ -259,6 +256,7 @@
    )
   ;; some functions for timing
   )
+)
 
 (use-package org-ref
   :ensure t

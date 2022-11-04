@@ -21,47 +21,75 @@
       initial-scratch-message nil
       initial-major-mode 'markdown-mode)
 
+(use-package spacemacs-common
+  :ensure spacemacs-theme
+  :config
+  (setq spacemacs-theme-org-height nil)
+  (load-theme 'spacemacs-dark t))
+
 ;; == Load Custom Theme ==
 
-;;; Cyberpunk
-(use-package monokai-theme
-  :ensure t
-  :config
-  (setq monokai-height-minus-1 1.0
-	monokai-height-plus-1 1.0
-	monokai-height-plus-2 1.0
-	monokai-height-plus-3 1.0
-	monokai-height-plus-4 1.0)
-  (load-theme 'monokai t)
-;;  (add-hook 'after-make-frame-functions
-;;	    (lambda (frame)
-;;	      (if (display-graphic-p)
-;;		  nil
-;;		(load-theme 'monokai))))
-  )
+;; ;; Cyberpunk
+;; (use-package monokai-theme
+;;   :ensure t
+;;   :config
+;;   (setq monokai-height-minus-1 1.0
+;; 	monokai-height-plus-1 1.0
+;; 	monokai-height-plus-2 1.0
+;; 	monokai-height-plus-3 1.0
+;; 	monokai-height-plus-4 1.0)
+;;   (load-theme 'monokai t)
+;;   (add-hook 'after-make-frame-functions
+;; 	    (lambda (frame)
+;; 	      (if (display-graphic-p)
+;; 		  nil
+;; 		(load-theme 'monokai))))
+;;   )
 
-;; Solarized
-(use-package color-theme :ensure t)
-(use-package color-theme-solarized
-  :ensure t
-  :init
-  (set-frame-parameter nil 'background-mode 'dark)
-  ; (load-theme 'solarized t)
-  (defun gjstein-swap-theme-light-dark ()
-    "Swaps between solarized light and dark"
-    (interactive)
-    (load-theme 'solarized)
-    (if (eq 'light (frame-parameter nil 'background-mode))
-	(set-frame-parameter nil 'background-mode 'dark)
-      (set-frame-parameter nil 'background-mode 'light)
-      )
-    (enable-theme 'solarized)
-    )
-  )
+;; (use-package zenburn-theme
+;;   :ensure t
+;;   :config
+;;   (setq zenburn-override-colors-alist
+;;     '(("zenburn-bg" . "#111111")))
+;;   (load-theme 'zenburn t)
+;;   )
+
+;; (use-package tao-theme
+;;   :ensure t
+;;   :config
+;;   (load-theme 'tao-yin t)
+;;   ;; (setq tao-theme-use-sepia nil)
+;;   ;; (load-theme 'tao-yang t)
+;;   ;; (add-hook 'text-mode-hook
+;;   ;;              (lambda ()
+;;   ;;               (variable-pitch-mode 1)))
+;;   (set-face-attribute 'fixed-pitch nil :family "Iosevka Term")
+;;   ;; (set-face-attribute 'variable-pitch nil :family "Iosevka Term" :height 260)
+;;   )
+
+;; ;; Solarized
+;; (use-package color-theme :ensure t)
+;; (use-package color-theme-solarized
+;;   :ensure t
+;;   :init
+;;   (set-frame-parameter nil 'background-mode 'dark)
+;;   ; (load-theme 'solarized t)
+;;   (defun gjstein-swap-theme-light-dark ()
+;;     "Swaps between solarized light and dark"
+;;     (interactive)
+;;     (load-theme 'solarized)
+;;     (if (eq 'light (frame-parameter nil 'background-mode))
+;; 	(set-frame-parameter nil 'background-mode 'dark)
+;;       (set-frame-parameter nil 'background-mode 'light)
+;;       )
+;;     (enable-theme 'solarized)
+;;     )
+;;   )
+
 
 ;; I prefer using a smaller font size than the default (and 'Monaco')
 (if (eq system-type 'darwin)
-    (custom-set-faces '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 100 :width normal :foundry "nil" :family "Iosevka Light")))))
+    (custom-set-faces '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 240 :width normal :foundry "nil" :family "Iosevka Term")))))
   (custom-set-faces '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 110 :width normal :foundry "nil" :family "Ubuntu Mono"))))))
 
 ;; Set default fill column
@@ -179,7 +207,7 @@
    ;; Right segment (the unimportant stuff)
    '((org-clock)
      ((minor-modes :separator " ") :when active)
-     (mu4e-alert-segment)))
+     ))
 
   (spaceline-helm-mode)
   (setq-default mode-line-format '("%e" (:eval (spaceline-ml-gjstein)))))
@@ -189,7 +217,7 @@
   :after spaceline-config
   :config
   (setq
-   powerline-height (truncate (* 1.0 (frame-char-height)))
+   powerline-height (* 1.0 (frame-char-height))
    powerline-default-separator 'utf-8)
   )
 

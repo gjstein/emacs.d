@@ -27,6 +27,8 @@
   :diminish undo-tree-mode
   :config
   :init
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)
   (evil-mode 1)
   (define-key evil-ex-map "b " 'helm-mini)
   (define-key evil-ex-map "e " 'helm-find-files)
@@ -51,6 +53,16 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
   (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
   (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+  )
+
+
+(use-package evil-collection
+  ;; Use evil keybindings within magit
+  :after evil
+  :ensure t
+  :diminish evil-collection-unimpaired-mode
+  :config
+  (evil-collection-init)
   )
 
 (use-package general
@@ -92,33 +104,13 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
    "l" '(gjstein-open-ledger :which-key "Ledger")
    gjs-leader-key '(helm-M-x :which-key "M-x")
    )
-  )
-
-(use-package navigate
-  :ensure t
-  :after evil
-  :config
-  ;; Ensure that these shortcuts will also work in motion state
-  (define-key evil-motion-state-map
-    (kbd "C-h")
-    (lambda ()
-      (interactive)
-      (tmux-navigate "left")))
-  (define-key evil-motion-state-map
-    (kbd "C-j")
-    (lambda ()
-      (interactive)
-      (tmux-navigate "down")))
-  (define-key evil-motion-state-map
-    (kbd "C-k")
-    (lambda ()
-      (interactive)
-      (tmux-navigate "up")))
-  (define-key evil-motion-state-map
-    (kbd "C-l")
-    (lambda ()
-      (interactive)
-      (tmux-navigate "right")))
+  (general-define-key
+   :states '(motion)
+   "C-h" 'evil-window-left
+   "C-j" 'evil-window-down
+   "C-k" 'evil-window-up
+   "C-l" 'evil-window-right
+   )
   )
 
 (use-package evil-surround

@@ -129,22 +129,12 @@
 ;; == magit ==
 (use-package magit
   :ensure t
+  :after evil-collection
   :defer t
   :bind ("C-x g" . magit-status)
   :init
   (setq magit-diff-options (quote ("--word-diff")))
   (setq magit-diff-refine-hunk 'all)
-  )
-
-(use-package forge
-  :ensure t
-  :after magit
-  )
-
-(use-package evil-magit
-  ;; Use evil keybindings within magit
-  :ensure t
-  :after magit
   :config
   ;; Default commit editor opening in insert mode
   (add-hook 'with-editor-mode-hook 'evil-insert-state)
@@ -155,6 +145,11 @@
   (evil-define-key 'normal git-rebase-mode-map
     "l" 'git-rebase-show-commit
     )
+  )
+
+(use-package forge
+  :ensure t
+  :after magit
   )
 
 ;; == flycheck ==
