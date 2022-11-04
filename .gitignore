@@ -4,10 +4,13 @@ python-mode-6.1.3
 
 # Scratch directory
 scratch
+config/init-50-*.el
 
 # Completion Engines
 irony
 semanticdb
+forge-database.sqlite
+ac-comphist.dat
 
 # Auto-Created Files
 .smex-items
@@ -22,3 +25,11 @@ srecode-map.el
 .DS_Store
 /projectile-bookmarks.eld
 /vimish-fold/*
+request/*
+tramp
+transient/*
+elpy/*
+eshell/*
+image-dired/*
+.org-id-locations
+network-security.data
