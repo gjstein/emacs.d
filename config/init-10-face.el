@@ -138,7 +138,8 @@
   :config
   ;; Set some parameters of the spaceline
   (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
-  (setq powerline-default-separator 'bar)
+  ; (setq powerline-default-separator 'utf-8)
+  (setq powerline-default-separator 'nil)
 
   ;; Define a better buffer position line
   (spaceline-define-segment gjstein-buffer-position
