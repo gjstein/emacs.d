@@ -262,13 +262,15 @@
   )
 )
 
+(use-package helm-bibtex :ensure t :after org)
+
 (use-package org-ref
   :ensure t
   :after org
   :init
-  (setq reftex-default-bibliography '("~/org/resources/bibliography/references.bib"))
+  (setq reftex-default-bibliography '("~/org/resources/bibliography/refs.bib"))
   ;; see org-ref for use of these variables
-  (setq bibtex-completion-default-bibliography '("~/org/resources/bibliography/references.bib"))
+  (setq bibtex-completion-bibliography '("~/org/resources/bibliography/refs.bib"))
   (setq org-ref-default-citation-link "citep")
   :bind ("\C-c ]" . org-ref-cite-insert-helm)
   )
