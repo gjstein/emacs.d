@@ -22,6 +22,8 @@
 (setq evil-want-C-i-jump nil)
 
 ;; == Evil Mode ==
+(use-package undo-tree :ensure t :init (global-undo-tree-mode))
+
 (use-package evil
   :ensure t
   :diminish undo-tree-mode
@@ -32,6 +34,7 @@
   (evil-mode 1)
   (define-key evil-ex-map "b " 'helm-mini)
   (define-key evil-ex-map "e " 'helm-find-files)
+  (evil-set-undo-system 'undo-tree)
 
   ;; Resolve sentence jumping issue
   (setq sentence-end-double-space nil)
