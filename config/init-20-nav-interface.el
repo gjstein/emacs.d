@@ -20,6 +20,7 @@
 (require 'use-package)
 
 (setq evil-want-C-i-jump nil)
+(setq ffap-machine-p-known 'reject)
 
 ;; == Evil Mode ==
 (use-package undo-tree :ensure t :init (global-undo-tree-mode))
@@ -154,8 +155,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   :config
   (require 'helm)
   (require 'helm-files)
-  (require 'helm-config) ; Necessary for helm-mode
-  
+
   ;; Additional key bindings
   (bind-key "<tab>" 'helm-execute-persistent-action helm-map)
   (bind-key [escape] 'helm-keyboard-quit helm-map)

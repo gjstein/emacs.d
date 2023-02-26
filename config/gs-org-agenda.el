@@ -20,7 +20,7 @@
 
 ;;;; General Agenda Settings
 
-(setq org-agenda-files (quote ("~/org" "~/org/archive")))
+(setq org-agenda-files (quote ("~/org")))
 (setq org-agenda-tags-column org-tags-column)
 (setq org-agenda-sticky t)
 (setq org-agenda-inhibit-startup nil)

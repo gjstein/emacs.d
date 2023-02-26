@@ -12,6 +12,9 @@
 (setq org-tags-column 8)
 (setq org-latex-prefer-user-labels t)
 
+;; Show overview when open
+(setq org-startup-folded t)
+
 ;; Dim blocked tasks (and other settings)
 (setq org-enforce-todo-dependencies t)
 
@@ -123,7 +126,7 @@
 ;; == Habits ==
 (require 'org-habit)
 (add-to-list 'org-modules 'org-habit)
-(setq org-habit-graph-column 44)
+(setq org-habit-graph-column 50)
 (setq org-habit-show-habits-only-for-today t)
 
 ;; == Checklists ==
